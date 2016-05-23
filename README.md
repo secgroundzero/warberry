@@ -17,7 +17,7 @@ To get a list of all options and switches use:
 
 sudo python warberry.py -h
 
-'''
+```
 Parameters:
 -h,  --help         [*] Print this help banner
 -m,  --man          [*] Prints WarBerry's Man Page
@@ -31,8 +31,7 @@ Parameters:
 example usage: sudo python warberry.py -A
                sudo python warberry.py --attack
                sudo python warberry.py -C
-'''
-
+```
 
 
 #### Installation
