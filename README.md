@@ -22,9 +22,18 @@ sudo python warberry.py -h
 
 #### Installation
 
+Change the hostname of the RaspberryPi to WarBerry
+- sudo nano /etc/hosts
+- sudo nano /etc/hostname
+
+Create a directory under /home/pi
+- sudo mkdir WarBerry
+
+Create the Results subdirectory in /WarBerry
+- sudo mkdir Results
+ 
 Download WarBerry by cloning the Git repository:
     git clone https://github.com/secgroundzero/warberry.git
-
 
 
 #### Dependencies
@@ -39,9 +48,35 @@ Download WarBerry by cloning the Git repository:
 - sudo apt-get install sg3-utils 
 - sudo apt-get install netdiscover 
 - sudo apt-get install macchanger 
-- sudo apt-get install nikto 
-- sudo apt-get install hydra 
-- sudo apt-get install onesixtyone 
-- sudo apt-get install john 
-- sudo apt-get install w3af-console 
-- sudo apt-get install arp-scan
+
+#### Extra Tools for Post Exploitation. Best to install in /home/pi/WarBerry/Tools/ directory
+
+- sudo apt-get install onesixtyone
+- sudo pip install ipaddress
+- sudo apt-get install ppp
+- sudo apt-get install sg3-utils
+- sudo apt-get install macchanger
+- sudo apt-get install nikto
+- sudo apt-get install hydra
+- sudo apt-get install john
+- sudo apt-get install w3af-console
+- sudo git clone https://github.com/stasinopoulos/commix.git 
+- sudo git clone https://github.com/sqlmapproject/sqlmap.git 
+- sudo git clone https://github.com/CoreSecurity/impacket.git
+
+#### Aircrack Installation
+- sudo apt-get -y install libssl-dev 
+- sudo wget http://download.aircrack-ng.org/aircrack-ng-1.2-beta1.tar.gz sudo 
+- tar -zxvf aircrack-ng-1.2-beta1.tar.gz cd 
+- aircrack-ng-1.2-beta1 
+- sudo make 
+- sudo make install 
+- sudo airodump-ng-oui-update 
+- sudo apt-get -y install iw 
+- sudo wget https://download.sysinternals.com/files/SysinternalsSuite.zip 
+- sudo git clone https://github.com/samratashok/nishang.git 
+- sudo git clone https://github.com/SpiderLabs/Responder.git 
+- sudo git clone https://github.com/sophron/wifiphisher.git 
+- sudo git clone https://github.com/DanMcInerney/net-creds.git 
+- sudo git clone https://github.com/Dionach/CMSmap 
+- sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
