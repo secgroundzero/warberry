@@ -1,5 +1,6 @@
 # WarBerryPi 
-@sec_groundzero
+
+**[Twitter - @sec_groundzero](https://www.twitter.com/sec_groundzero)**
 
 
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/Warberry_Logo_Transparent.png)
