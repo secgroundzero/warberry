@@ -17,6 +17,22 @@ To get a list of all options and switches use:
 
 sudo python warberry.py -h
 
+'''
+Parameters:
+-h,  --help         [*] Print this help banner
+-m,  --man          [*] Prints WarBerry's Man Page
+-A,  --attack       [*] Run All Enumeration Scripts
+-S,  --sniffer      [*] Run Sniffing Modules Only
+-C,  --clear        [*] Clear Output Directories
+-F,  --fulltcp      [*] Full TCP Port Scan
+-T,  --toptcp       [*] Top Port Scan
+-U,  --topudp       [*] Top UDP Port Scan
+
+example usage: sudo python warberry.py -A
+               sudo python warberry.py --attack
+               sudo python warberry.py -C
+'''
+
 
 
 #### Installation
