@@ -1,5 +1,4 @@
 # WarBerryPi @sec_groundzero
-WarBerryPi - Tactical Exploitation
 
 
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/Warberry_Logo_Transparent.png)
