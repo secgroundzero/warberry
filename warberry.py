@@ -267,9 +267,9 @@ def nbtscan(CIDR):
 
 if __name__ == '__main__':
 
-        #try:
-         main(sys.argv[1])
-        #except:
-                #subprocess.call('clear', shell = True)
-                #banner_full()
-                #print "errror"
+        try:
+        	main(sys.argv[1])
+        except:
+                subprocess.call('clear', shell = True)
+                banner_full()
+                
