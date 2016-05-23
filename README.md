@@ -15,7 +15,7 @@ The WarBerry script is a collection of scanning tools put together to provide th
 
 To get a list of all options and switches use:
 
-sudo python warberry.py -h
+"sudo python warberry.py -h"
 
 ```
 Parameters:
@@ -36,18 +36,18 @@ example usage: sudo python warberry.py -A
 
 #### Installation
 
-Change the hostname of the RaspberryPi to WarBerry
-- sudo nano /etc/hosts
-- sudo nano /etc/hostname
+Change the hostname of the RaspberryPi to ***WarBerry
+- "sudo nano /etc/hosts"
+- "sudo nano /etc/hostname"
 
 Create a directory under /home/pi
-- mkdir WarBerry
+-"sudo mkdir WarBerry"
 
 Create the Results subdirectory in /WarBerry
-- sudo mkdir Results
+- "sudo mkdir Results"
  
 Download WarBerry by cloning the Git repository:
-    git clone https://github.com/secgroundzero/warberry.git
+    "sudo git clone https://github.com/secgroundzero/warberry.git"
 
 
 #### Dependencies
