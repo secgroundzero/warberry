@@ -12,6 +12,8 @@ in the network that could lead to detection and to be as efficient as possible.
 The WarBerry script is a collection of scanning tools put together to provide that functionality.
 
 
-Usage:
+Usage
 
-use sudo python warberry.py -h 
+To get a list of all options and switches use:
+
+sudo python warberry.py -h
