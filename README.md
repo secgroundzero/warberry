@@ -16,7 +16,7 @@ The WarBerry script is a collection of scanning tools put together to provide th
 
 To get a list of all options and switches use:
 
-"sudo python warberry.py -h"
+```sudo python warberry.py -h```
 
 ```
 Parameters:
