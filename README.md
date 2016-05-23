@@ -26,7 +26,7 @@ Change the hostname of the RaspberryPi to WarBerry
 - sudo nano /etc/hostname
 
 Create a directory under /home/pi
-	mkdir WarBerry
+- mkdir WarBerry
 
 Create the Results subdirectory in /WarBerry
 - sudo mkdir Results
