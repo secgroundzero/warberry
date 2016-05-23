@@ -2,6 +2,9 @@
 
 **[@sec_groundzero](https://www.twitter.com/sec_groundzero)**
 
+[![Python 2.6|2.7](https://img.shields.io/badge/python-2.6|2.7-yellow.svg)](https://www.python.org/)
+[![Twitter](https://img.shields.io/badge/twitter-@sec_groundzero-blue.svg)](https://twitter.com/sec_groundzero)
+
 
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/Warberry_Logo_Transparent.png)
 
