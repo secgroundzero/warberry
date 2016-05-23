@@ -29,19 +29,19 @@ Download WarBerry by cloning the Git repository:
 
 #### Dependencies
 
-sudo apt-get install nbtscan 
-sudo apt-get install python-scapy 
-sudo apt-get install tcpdump 
-sudo apt-get install nmap 
-sudo pip install python-nmap 
-sudo pip install ipaddress 
-sudo apt-get install ppp 
-sudo apt-get install sg3-utils 
-sudo apt-get install netdiscover 
-sudo apt-get install macchanger 
-sudo apt-get install nikto 
-sudo apt-get install hydra 
-sudo apt-get install onesixtyone 
-sudo apt-get install john 
-sudo apt-get install w3af-console 
-sudo apt-get install arp-scan
+- sudo apt-get install nbtscan 
+- sudo apt-get install python-scapy 
+- sudo apt-get install tcpdump 
+- sudo apt-get install nmap 
+- sudo pip install python-nmap 
+- sudo pip install ipaddress 
+- sudo apt-get install ppp 
+- sudo apt-get install sg3-utils 
+- sudo apt-get install netdiscover 
+- sudo apt-get install macchanger 
+- sudo apt-get install nikto 
+- sudo apt-get install hydra 
+- sudo apt-get install onesixtyone 
+- sudo apt-get install john 
+- sudo apt-get install w3af-console 
+- sudo apt-get install arp-scan
