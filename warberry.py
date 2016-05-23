@@ -12,7 +12,7 @@ requests.packages.urllib3.disable_warnings()
 import subprocess
 import os, os.path
 import sys, getopt
-sys.path.append('/home/pi/WarBerry/resources/')
+sys.path.append('/home/pi/WarBerry/warberry/resources/')
 import socket
 import fcntl
 import struct
