@@ -4,6 +4,7 @@
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/Warberry_Logo_Transparent.png)
 
 
+[![Twitter](http://www.twitter.com/commixproject)
 
 The WarBerry was built with one goal in mind; to be used in red teaming engagement where we want to obtain as much information 
 as possible in a short period of time with being as stealth as possible. 
