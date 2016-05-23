@@ -66,9 +66,9 @@ Download WarBerry by cloning the Git repository:
 
 #### Aircrack Installation
 - sudo apt-get -y install libssl-dev 
-- sudo wget http://download.aircrack-ng.org/aircrack-ng-1.2-beta1.tar.gz sudo 
-- tar -zxvf aircrack-ng-1.2-beta1.tar.gz cd 
-- aircrack-ng-1.2-beta1 
+- sudo wget http://download.aircrack-ng.org/aircrack-ng-1.2-beta1.tar.gz 
+- sudo tar -zxvf aircrack-ng-1.2-beta1.tar.gz 
+- cd aircrack-ng-1.2-beta1 
 - sudo make 
 - sudo make install 
 - sudo airodump-ng-oui-update 
