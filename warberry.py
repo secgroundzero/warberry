@@ -77,6 +77,7 @@ def main(argv):
                 nbtscan(CIDR)
                 with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
                     status.write("Completed NBTScan\n")
+                namechange()
                 scanner_targetted(CIDR)
                 with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
                     status.write("Completed targetted scanning\n")
@@ -315,10 +316,13 @@ def nbtscan(CIDR):
        print bcolors.OKGREEN + "      [ NAMESERVER ENUMERATION MODULE ]\n" + bcolors.ENDC
 
        subprocess.call('sudo nbtscan -r %s > /home/pi/WarBerry/Results/nameservers' %CIDR , shell = True )
+       subprocess.call("sudo cat /home/pi/WarBerry/Results/nameservers | awk {'print $2'} > /home/pi/WarBerry/Results/mvp_names", shell=True)
+
        print " "
        with open('/home/pi/WarBerry/Results/nameservers', 'r') as nameservers:
             names = nameservers.read()
             print names
+
 
 if __name__ == '__main__':
 

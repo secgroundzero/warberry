@@ -80,10 +80,13 @@ class bcolors:
 
 def hostnames(CIDR):
 
+
+
+
 	print bcolors.OKGREEN + "      [ HOSTNAMES ENUMERATION MODULE ]\n" + bcolors.ENDC
 	hostname = socket.gethostname()
 	print "Current Hostname:" + bcolors.TITLE + " %s" %hostname + bcolors.ENDC
-	print bcolors.WARNING + "[!] If you want to continue undetected stop the script and change /etc/hosts and /etc/hostname" + bcolors.ENDC
+	#print bcolors.WARNING + "[!] If you want to continue undetected stop the script and change /etc/hosts and /etc/hostname" + bcolors.ENDC
 	print " "
 
 	print "Searching for hostnames in %s\n" %CIDR
@@ -94,9 +97,40 @@ def hostnames(CIDR):
 			hosts = hostnames.readlines()
 			for host in hosts:
 				print bcolors.OKGREEN + "[+] Found Hostname: %s" %host.strip() + bcolors.ENDC
+
 	except:
 		print bcolors.FAIL + "No Hostnames Found" + bcolors.ENDC
 	print " "
+
+
+def namechange():
+
+	mvp_hosts = ['DEMO', 'DEV', 'PRINTER', 'BACKUP', 'DC', 'DC1', 'DC2']
+
+
+	with open('/home/pi/WarBerry/Results/mvps', 'a') as mvps:
+		with open('/home/pi/WarBerry/Results/mvp_names', 'r') as hostnames:
+			hosts = hostnames.readlines()
+			for host in hosts:
+				for mvp in mvp_hosts:
+					if host.strip()==mvp.strip():
+						print bcolors.OKGREEN + "[+] Found interesting hostname %s" %mvp.strip() + bcolors.ENDC
+						mvps.write(host.strip()+'\n')
+						mvp_found = True
+
+	if mvp_found != True:
+		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same Hostname" + bcolors.ENDC
+
+	elif mvp_found == True:
+		with open('/home/pi/WarBerry/Results/mvps', 'r') as hostnames:
+			mvp = hostnames.readline()
+			with open('/etc/hosts', 'w') as hosts:
+				print bcolors.WARNING + "[*] Changing Hostame from " + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
+				hosts.write('127.0.0.1  localhost\n::1          locahost ip6-localhost ip6-loopback\nff02::1            ip6-allnodes\nff02::2           ip6-allrouters\n\n127.0.0.1     %s' %mvp.strip())
+			with open('/etc/hostname', 'w') as hostname:
+				hostname.write(mvp.strip())
+		subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
+		print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
 
 
 def static_bypass():

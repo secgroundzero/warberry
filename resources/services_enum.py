@@ -218,7 +218,7 @@ def pcap_parser():
 
         subprocess.call("sudo python /home/pi/WarBerry/Tools/net-creds/net-creds.py -p /home/pi/WarBerry/Results/capture.pcap > /home/pi/WarBerry/Results/pcap_results", shell = True)
 
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/pcap_results/\n" + bcolors.ENDC
+        print bcolors.OKGREEN + "[+] Done! Results saved in /Results/pcap_results/\n" + bcolors.ENDC
 
 
 def webs_prep():

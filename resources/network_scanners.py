@@ -114,7 +114,7 @@ def scanner_targetted(CIDR):
                         print('----------------------------------------------------')
                         print bcolors.OKGREEN + ('   *** Oracle DB Found : %s via port 1521 ***' % (host)) + bcolors.ENDC
                         print bcolors.OKGREEN + ('   *** Oracle DB Found : %s via port 1521 ***' % (host)) + bcolors.ENDC
-                        print bcolors.TITLE + "[*] Default usernames on Oracle DBs are SYS, SYSTEM, SCOTT\n" + bcolors.ENDC
+                        print bcolors.TITLE + "[*] Default user on Oracle DBs are SYS, SYSTEM, SCOTT\n" + bcolors.ENDC
                         oracle.write('%s\n'  %host)
 
         print "[+] Scanning for NFS..."
