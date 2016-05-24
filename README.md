@@ -42,6 +42,8 @@ Change the hostname of the RaspberryPi to **WarBerry**
 - sudo nano /etc/hosts
 - sudo nano /etc/hostname
 
+Reboot the WarBerry for the changes to take effect
+
 Create a directory under /home/pi
 - sudo mkdir WarBerry
 
