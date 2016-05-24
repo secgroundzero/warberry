@@ -26,6 +26,7 @@ import socket
 import json
 from urllib import urlopen
 import ftplib
+import time
 #External modules
 from banners import *
 from network_scanners import *
@@ -236,19 +237,40 @@ def clear_output():
         no = set(['no','n'])
 
         choice = raw_input(bcolors.WARNING + "[!] " + bcolors.ENDC + "You are about to delete all previous results. Do you want to continue? y/n: ")
-        #choice = raw_input().lower()
+
+        work_path = '/home/pi/WarBerry/Results/'
+        responder_path = '/home/pi/WarBerry/Tools/Responder/logs/'
+
+
         if choice in yes:
-		work_path = '/home/pi/WarBerry/Results/'
-		if os.listdir(work_path)!=[]:
-    			subprocess.call('sudo rm -rf /home/pi/WarBerry/Results/* ', shell = True)
-                	print bcolors.WARNING + '[*] All previous results in /home/pi/WarBerry/Results removed' + bcolors.ENDC
-		else:
-			print  bcolors.WARNING + '[*] No previous results found' + bcolors.ENDC
+
+            if os.listdir(work_path)!=[]:
+                subprocess.call('sudo rm -rf /home/pi/WarBerry/Results/* ', shell = True)
+                print bcolors.WARNING + '[*] All previous results in /home/pi/WarBerry/Results removed\n'+ bcolors.ENDC
+            elif os.listdir(responder_path) !=[]:
+                if os.path.isdir("/home/pi/WarBerry/old_responder_logs") == True:
+                    subprocess.call("sudo mv /home/pi/WarBerry/Tools/Responder/logs/* /home/pi/WarBerry/old_Responder_logs", shell = True)
+                    print bcolors.WARNING + "[*] Previous Responder logs moved to /home/pi/WarBerry/old_Responder_logs" + bcolors.ENDC
+                else:
+                    subprocess.call("sudo mkdir /home/pi/WarBerry/old_Responder_logs/", shell=True)
+                    subprocess.call("sudo mv /home/pi/WarBerry/Tools/Responder/logs/* /home/pi/WarBerry/old_Responder_logs/",shell=True)
+                    print bcolors.WARNING + "[*] Previous Responder logs moved to /home/pi/WarBerry/old_Responder_logs/" + bcolors.ENDC
+            elif os.listdir(work_path) == [] and os.listdir(responder_path) == []:
+                print  bcolors.WARNING + '[*] No previous results found' + bcolors.ENDC
 
         elif choice in no:
-                print bcolors.OKGREEN + "[-] Results files left intact" + bcolors.ENDC
+            print bcolors.OKGREEN + "[-] Results files left intact" + bcolors.ENDC
+
         else:
-                sys.stdout.write("Please respond with 'y/yes' or 'n/no'\n")
+
+            sys.stdout.write("Please respond with 'y/yes' or 'n/no'\n")
+
+
+
+
+
+
+
 
 
 
@@ -300,9 +322,9 @@ def nbtscan(CIDR):
 
 if __name__ == '__main__':
 
-        try:
-        	main(sys.argv[1])
-        except:
-                subprocess.call('clear', shell = True)
-                banner_full()
+        #try:
+    main(sys.argv[1])
+        #except:
+        #        subprocess.call('clear', shell = True)
+         #       banner_full()
                 
