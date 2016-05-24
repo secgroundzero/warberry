@@ -63,26 +63,59 @@ def main(argv):
             else:
                 netmask = netmask_recon('eth0')
                 external_IP_recon()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed IP Recon\n")
                 sniffer()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed sniffing network packets\n")
                 pcap_parser()
                 CIDR = subnet(int_ip, netmask)
                 hostnames(CIDR)
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed hostnames search\n")
                 nbtscan(CIDR)
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed NBTScan\n")
                 scanner_targetted(CIDR)
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed targetted scanning\n")
                 shares_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed enumerating shares\n")
                 smb_users()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed enumerating users\n")
                 http_title_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed enumerating HTTP Titles\n")
                 nfs_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed NFS Enumeration\n")
                 waf_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed WAF Enumeration\n")
                 mysql_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed MYSQL Enumeration\n")
                 mssql_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed MSSQL Enumeration\n")
                 ftp_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed FTP Enumeration\n")
                 snmp_enum()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed SNMP Enumeration\n")
                 wifi_scan()
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Completed wifi networks scan\n")
                 print ""
                 print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
                 print " "
+                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                    status.write("Entering poisoning mode\n")
                 poison()
+
 		
         elif argv == '-T' or argv == '--toptcp':
             subprocess.call('clear', shell = True)
