@@ -1,3 +1,19 @@
+"""
+This file is part of the WarBerry tool.
+Copyright (c) 2016 Yiannis Ioannides (@sec_groundzero).
+https://github.com/secgroundzero/warberry
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
+
 #!/usr/bin/python
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
@@ -125,11 +141,12 @@ def namechange():
 		with open('/home/pi/WarBerry/Results/mvps', 'r') as hostnames:
 			mvp = hostnames.readline()
 			with open('/etc/hosts', 'w') as hosts:
-				print bcolors.WARNING + "[*] Changing Hostame from " + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
-				hosts.write('127.0.0.1  localhost\n::1          locahost ip6-localhost ip6-loopback\nff02::1            ip6-allnodes\nff02::2           ip6-allrouters\n\n127.0.0.1     %s' %mvp.strip())
+				print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
+				hosts.write('127.0.0.1\tlocalhost\n::1\tlocahost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
 			with open('/etc/hostname', 'w') as hostname:
 				hostname.write(mvp.strip())
 		subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
+		subprocess.call('sudo systemctl daemon-reload', shell=True)
 		print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
 
 
@@ -273,7 +290,7 @@ def macbypass(unique_CIDR):
 	print bcolors.OKGREEN + "      [ MAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for MAC Addresses\n"
-	subprocess.call("  grep -o -E /'([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/' > /home/pi/WarBerry/Results/macs_discovered" %unique_CIDR, shell = True)
+	subprocess.call("sudo netdiscover -i eth0 -P -r  %s | grep -o -E /'([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/' > /home/pi/WarBerry/Results/macs_discovered" %unique_CIDR, shell = True)
 
 	subprocess.call("sudo sort /home/pi/WarBerry/Results/macs_discovered | uniq > /home/pi/WarBerry/Results/unique_macs", shell=True)
 	subprocess.call("sudo rm /home/pi/WarBerry/Results/macs_discovered", shell=True)
@@ -287,7 +304,9 @@ def macbypass(unique_CIDR):
 	with open('/home/pi/WarBerry/Results/unique_macs', 'r') as macs:
 		for mac in macs:
 			print bcolors.TITLE + "Attempting to change MAC Address to %s" %mac
-			subprocess.call("sudo maccchanger --m %s") %mac
+			subprocess.call("sudo ifdown eth0", shell = True)
+			subprocess.call("sudo maccchanger -m %s eth0" %mac, shell = True)
+			subprocess.call('sudo ifup eth0', shell = True)
 			for i in range(0, line_count):
 				newline = randint(0, line_count)
 
@@ -302,5 +321,15 @@ def macbypass(unique_CIDR):
 						print bcolors.OKGREEN + "[+] Success. IP %s is valid and %s is reachable" % (static.strip(), used.strip()) + bcolors.ENDC
 						return static.strip()
 					else:
-							print bcolors.FAIL + "Unable to bypass MAC Filtering. Exiting" + bcolors.ENDC
+							print bcolors.FAIL + "Unable to bypass Filtering." + bcolors.ENDC
+							nacbypass(unique_CIDR)
+
+
+
+def nacbypass(unique_CIDR):
+
+	print bcolors.OKGREEN + "      [ NAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC
+
+	print "ARP Scanning Network for MAC Addresses\n"
+	subprocess.call("sudo netdiscover -i eth0 -P -r  %s | awk {print $2, $5} > /home/pi/WarBerry/Results/nsmes_macs" %unique_CIDR, shell = True)
 

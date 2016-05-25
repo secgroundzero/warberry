@@ -1,6 +1,6 @@
 # WarBerryPi 
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/Warberry_Logo_Transparent.png)
-
+[![GPLv3 License](https://img.shields.io/badge/License-GPLv3-red.svg)
 
 [![Python 2.6|2.7](https://img.shields.io/badge/python-2.6|2.7-yellow.svg)](https://www.python.org/)
 [![Twitter](https://img.shields.io/badge/twitter-@sec_groundzero-blue.svg)](https://twitter.com/sec_groundzero)
@@ -70,10 +70,6 @@ Download WarBerry by cloning the Git repository:
 #### Extra Tools for Post Exploitation. Best to install in /home/pi/WarBerry/Tools/ directory
 
 - sudo apt-get install onesixtyone
-- sudo pip install ipaddress
-- sudo apt-get install ppp
-- sudo apt-get install sg3-utils
-- sudo apt-get install macchanger
 - sudo apt-get install nikto
 - sudo apt-get install hydra
 - sudo apt-get install john

@@ -1,3 +1,18 @@
+"""
+This file is part of the WarBerry tool.
+Copyright (c) 2016 Yiannis Ioannides (@sec_groundzero).
+https://github.com/secgroundzero/warberry
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import subprocess
 import os, os.path
 import sys, getopt
@@ -219,85 +234,6 @@ def pcap_parser():
         subprocess.call("sudo python /home/pi/WarBerry/Tools/net-creds/net-creds.py -p /home/pi/WarBerry/Results/capture.pcap > /home/pi/WarBerry/Results/pcap_results", shell = True)
 
         print bcolors.OKGREEN + "[+] Done! Results saved in /Results/pcap_results/\n" + bcolors.ENDC
-
-
-def webs_prep():
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers80'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers80 | uniq > /home/pi/WarBerry/Results/webservers80_hosts", shell=True)
-
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers443'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers443 | uniq > /home/pi/WarBerry/Results/webservers443_hosts", shell=True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers8080'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers8080 | uniq > /home/pi/WarBerry/Results/webservers8080_hosts", shell=True)
-
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers4443'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers4443 | uniq > /home/pi/WarBerry/Results/webservers4443_hosts", shell=True)
-
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers8081'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers8081 | uniq > /home/pi/WarBerry/Results/webservers8081_hosts", shell=True)
-
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers8181'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers8181_hosts | uniq > /home/pi/WarBerry/Results/webservers8181_hosts", shell=True)
-
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers9090'):
-                subprocess.call("sudo sort /home/pi/WarBerry/Results/webservers9090 | uniq > /home/pi/WarBerry/Results/webservers9090_hosts", shell=True)
-
-
-def nikto_scan():
-
-        print bcolors.OKGREEN + "      [ WEBSERVERS VULNERABILITY SCANNING MODULE ]\n" + bcolors.ENDC#
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers80_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers80_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 80 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers443_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers443_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 443 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers8080_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers8080_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 8080 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers4443_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers4443_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 4443 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers8081_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers8081_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 8081 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers8181_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers8181_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 8181 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        if os.path.isfile('/home/pi/WarBerry/Results/webservers9090_hosts'):
-                with open('/home/pi/WarBerry/Results/webservers9090_hosts') as sites:
-                        hosts = sites.readlines()
-                        for host in hosts:
-                                subprocess.call('sudo nikto -h %s -port 9090 -C all -o /home/pi/WarBerry/Results/%s_nikto_results.txt' %(host, host),shell = True)
-
-        else:
-                print bcolors.WARNING + "No Webservers found\n" + bcolors.ENDC
 
 
 def poison():
