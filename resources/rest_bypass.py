@@ -26,7 +26,7 @@ requests.packages.urllib3.disable_warnings()
 import subprocess
 import os, os.path
 import sys, getopt
-sys.path.append('/home/pi/WarBerry/resources/')
+sys.path.append('/home/pi/WarBerry/warberry/resources/')
 import socket
 import fcntl
 import struct
@@ -67,7 +67,7 @@ requests.packages.urllib3.disable_warnings()
 import subprocess
 import os, os.path
 import sys, getopt
-sys.path.append('/home/pi/WarBerry/resources/')
+sys.path.append('/home/pi/WarBerry/warberry/resources/')
 sys.path.append('/home/pi/WarBerry/')
 import socket
 import fcntl
@@ -95,10 +95,6 @@ class bcolors:
 
 
 def hostnames(CIDR):
-
-
-
-
 	print bcolors.OKGREEN + "      [ HOSTNAMES ENUMERATION MODULE ]\n" + bcolors.ENDC
 	hostname = socket.gethostname()
 	print "Current Hostname:" + bcolors.TITLE + " %s" %hostname + bcolors.ENDC
@@ -123,7 +119,7 @@ def namechange():
 
 	mvp_hosts = ['DEMO', 'DEV', 'PRINTER', 'BACKUP', 'DC', 'DC1', 'DC2']
 
-
+	mvp_found=False
 	with open('/home/pi/WarBerry/Results/mvps', 'a') as mvps:
 		with open('/home/pi/WarBerry/Results/mvp_names', 'r') as hostnames:
 			hosts = hostnames.readlines()
@@ -142,7 +138,7 @@ def namechange():
 			mvp = hostnames.readline()
 			with open('/etc/hosts', 'w') as hosts:
 				print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
-				hosts.write('127.0.0.1\tlocalhost\n::1\tlocahost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
+				hosts.write('127.0.0.1\tlocalhost\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
 			with open('/etc/hostname', 'w') as hostname:
 				hostname.write(mvp.strip())
 		subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
@@ -155,7 +151,7 @@ def static_bypass():
 	print bcolors.OKGREEN + "      [ STATIC IP SETUP MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for IPs\n"
-	subprocess.call("sudo netdiscover -i eth0 -P -l /home/pi/WarBerry/resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > /home/pi/WarBerry/Results/ips_discovered", shell = True)
+	subprocess.call("sudo netdiscover -i eth0 -P -l /home/pi/WarBerry/warberry/resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > /home/pi/WarBerry/Results/ips_discovered", shell = True)
 
 	if os.stat('/home/pi/WarBerry/Results/ips_discovered').st_size !=0:
 		discover = open("/home/pi/WarBerry/Results/ips_discovered","r")
@@ -234,7 +230,7 @@ def set_static(CIDR):
 	print "\nARP Scanning based on targetted CIDR\n"
 	subprocess.call("sudo sort /home/pi/WarBerry/Results/CIDR | uniq > /home/pi/WarBerry/Results/unique_CIDR", shell=True)
 	subprocess.call("sudo rm /home/pi/WarBerry/Results/CIDR", shell=True)
-	subprocess.call("sudo netdiscover -i eth0 -P -l /home/pi/WarBerry/resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > /home/pi/WarBerry/Results/used_ips", shell=True)
+	subprocess.call("sudo netdiscover -i eth0 -P -l /home/pi/WarBerry/warberry/resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > /home/pi/WarBerry/Results/used_ips", shell=True)
 
 	with open('/home/pi/WarBerry/Results/avail_ips', 'w') as avail:
 		with open('/home/pi/WarBerry/Results/unique_subnets', 'r') as subs:
@@ -331,5 +327,109 @@ def nacbypass(unique_CIDR):
 	print bcolors.OKGREEN + "      [ NAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for MAC Addresses\n"
-	subprocess.call("sudo netdiscover -i eth0 -P -r  %s | awk {print $2, $5} > /home/pi/WarBerry/Results/nsmes_macs" %unique_CIDR, shell = True)
+	#subprocess.call("sudo netdiscover -i eth0 -P -r  %s | awk {print $2, $5} > /home/pi/WarBerry/Results/nsmes_macs" %unique_CIDR, shell = True)
 
+	badwords = ['NBT', 'for', 'address', 'server', '<unknown>', '']
+	goodwords = ['PRINTER', 'DEMO', 'DEV', 'DC', 'DC1', 'DC2']
+
+	#cidr = "192.168.3.1/24"
+
+	subprocess.call("sudo tcpdump -i eth0 -vvv port 137 -c 10 > network_traffic");
+	search = ".netbios"
+	subprocess.call("grep %s network_traffic > ips_found" % search, shell=True)
+	ip_net = []
+	with open('/home/pi/WarBerry/warberry/ips_found', 'r') as a:
+		ips = a.readlines()
+		for line in ips:
+			ip_net.append(line.split('n')[0].strip()[:-1])
+
+	search = "Name="
+	subprocess.call("grep %network_traffic > names_found " % search, shell=True)
+	n = []
+	with open('/home/pi/WarBerry/warberry/names_found', 'r') as a:
+		names = a.readlines();
+		for line in names:
+			n.append(line.split(' ')[0].split('=')[1])
+
+	names = []
+	for i in range(len(n)):
+		if (i % 2 == 0):
+			names.append(n[i])
+
+	subprocess.call("sudo netdiscover -P -r %s | awk {'print $1,$2'} > /home/pi/WarBerry/warberry/ips_macs" % unique_CIDR,shell=True)
+
+	with open('/home/pi/WarBerry/warberry/ips_macs', 'r') as ip_m:
+		ip_mac = ip_m.readlines()
+		macs = [None] * len(ip_net)
+		for line in ip_mac:
+			found = False
+			for i in range(len(ip_net)):
+				if (line.split(' ')[0] == ip_net[i]):
+					found = True
+					macs[i] = line.split(' ')[1]
+				else:
+					found = False
+					macs[i] = '-'
+	Fname = []
+	Fmac = []
+
+	for i in range(len(macs)):
+		if (macs[i] != "-"):
+			Fname.append(names[i])
+			Fmac.append(macs[i])
+
+	for word in goodwords:
+		for name in Fname:
+			if word == name:
+				ic = Fname.index(name)
+				print "Changing hostname to %s and MAC address to %s" % (name, Fmac[ic])
+				with open('/etc/hosts', 'w') as hosts:
+					hosts.write('127.0.0.1\tlocalhost\n::1\tlocahost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1\t%s' % name)
+				with open('/etc/hostname', 'w') as hostname:
+					hostname.write(name)
+					subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
+					subprocess.call('sudo systemctl daemon-reload', shell=True)
+				subprocess.call('sudo ifdown eth0', shell=True)
+				subprocess.call('sudo macchanger -m %s eth0' % Fmac[ic], shell=True)
+				subprocess.call('sudo ifup eth0', shell=True)
+
+	with open('/home/pi/WarBerry/Results/used_ips', 'r') as used:
+		used_ips = used.readlines()
+		with open('/home/pi/WarBerry/Results/statics', 'w') as statics:
+			with open('/home/pi/WarBerry/Results/avail_ips', 'r') as avail_ips:
+				for available in avail_ips:
+					isUsed = False
+					for used in used_ips:
+						if ((available.strip() == used.strip()) and (isUsed == False)):
+							print bcolors.FAIL + "[-] IP %s is in use, excluding from static list" % used.strip() + bcolors.ENDC
+							isUsed = True
+						if isUsed==False:
+							statics.write(available)
+
+				with open('/home/pi/WarBerry/Results/statics') as static:
+					total_frees = sum(1 for _ in static)
+					if total_frees > 0:
+						print bcolors.TITLE + '\n%s Available IPs to choose from.' % total_frees + bcolors.ENDC
+					else:
+						print bcolors.FAIL + "No free IPs Found\n" + bcolors.ENDC
+
+	with open('/home/pi/WarBerry/Results/statics', 'r') as statics:
+		line_count = (sum(1 for _ in statics))
+		for i in range(0, line_count):
+			newline = randint(0, line_count)
+
+			static = linecache.getline('/home/pi/WarBerry/Results/statics', newline)
+			print bcolors.WARNING + "[*] Attempting to set random static ip %s" % static.strip() + bcolors.ENDC
+			subprocess.call(["ifconfig", "eth0", static.strip(), "netmask", netmask.strip()])
+
+	for used in reversed(open('/home/pi/WarBerry/Results/used_ips').readlines()):
+		print "[*] Pinging %s to ensure that we are live..." % used.strip()
+		ping_response = subprocess.call(['ping', '-c', '5', '-W', '3', used.strip()], stdout=open(os.devnull, 'w'),
+										stderr=open(os.devnull, 'w'))
+
+		if ping_response == 0:
+			print bcolors.OKGREEN + "[+] Success. IP %s is valid and %s is reachable" % (
+			static.strip(), used.strip()) + bcolors.ENDC
+		# return static.strip()
+		else:
+			print bcolors.WARNING + "[-] Failed. IP %s is not valid" % static.strip() + bcolors.ENDC
