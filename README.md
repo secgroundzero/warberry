@@ -95,7 +95,7 @@ read from the file.
 - sudo git clone https://github.com/samratashok/nishang.git
 - sudo git clone https://github.com/SpiderLabs/Responder.git
 - sudo git clone https://github.com/sophron/wifiphisher.git
-- sudo git clone https://github.com/Dionach/CMSmap
+- sudo git clone https://github.com/Dionach/CMSmap.git
 - sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
 
 
@@ -110,4 +110,3 @@ read from the file.
 - sudo airodump-ng-oui-update 
 - sudo apt-get -y install iw 
 - sudo wget https://download.sysinternals.com/files/SysinternalsSuite.zip 
-
