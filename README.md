@@ -41,6 +41,7 @@ example usage: sudo python warberry.py -A
 Optional: Change the hostname of the RaspberryPi to **WarBerry** 
 
 ```sudo nano /etc/hosts```
+
 ```sudo nano /etc/hostname```
 
 Reboot the WarBerry for the changes to take effect
