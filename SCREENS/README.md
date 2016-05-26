@@ -10,6 +10,7 @@
 
 ### Script for autorunning with a switch
 
+'''
 #!/usr/bin/env python2.7
 import RPi.GPIO as GPIO
 import subprocess
@@ -30,3 +31,4 @@ except KeyboardInterrupt:
     GPIO.cleanup()       # clean up GPIO on CTRL+C exit
 GPIO.cleanup()           # clean up GPIO on normal exit
 
+'''
