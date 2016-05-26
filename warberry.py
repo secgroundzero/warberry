@@ -134,7 +134,7 @@ def main(argv):
                     status.write("Entering poisoning mode\n")
                 poison()
 
-		
+
         elif argv == '-T' or argv == '--toptcp':
             subprocess.call('clear', shell = True)
             banner()
@@ -238,7 +238,7 @@ def subnet(int_ip, netmask):
 def external_IP_recon():
 
         try:
-                site = urllib2.urlopen("http://checkip.dyndns.org/", timeout = 1)
+                site = urllib2.urlopen("http://checkip.dyndns.org/", timeout = 10)
                 url = site.read()
                 grab = re.findall('([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)', url)
                 address = grab[0]
@@ -347,4 +347,3 @@ if __name__ == '__main__':
         #except:
         #        subprocess.call('clear', shell = True)
          #       banner_full()
-                
