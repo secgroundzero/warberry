@@ -74,6 +74,7 @@ read from the file.
 - sudo apt-get install nmap 
 - sudo pip install python-nmap 
 - sudo pip install ipaddress 
+- sudo pip install netaddr
 - sudo apt-get install ppp 
 - sudo apt-get install sg3-utils 
 - sudo apt-get install netdiscover 

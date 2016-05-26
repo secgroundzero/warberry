@@ -43,6 +43,7 @@ import json
 from urllib import urlopen
 import ftplib
 import time
+from netaddr import *
 #External modules
 from banners import *
 from network_scanners import *
@@ -177,13 +178,13 @@ def main(argv):
 
 def dhcp_check():
 
-	print bcolors.OKGREEN + "      [ DHCP SERVICE CHECK MODULE ]\n" + bcolors.ENDC
+    print bcolors.OKGREEN + "      [ DHCP SERVICE CHECK MODULE ]\n" + bcolors.ENDC
 
-	dhcp_out = subprocess.check_output(['ps', '-A'])
-	if "dhcp" in dhcp_out:
-		status = bcolors.FAIL + "Running - Not Stealth" + bcolors.ENDC
-	else:
-		status = bcolors.OKGREEN + "Not Running - Stealth" + bcolors.ENDC
+    dhcp_out = subprocess.check_output(['ps', '-A'])
+    if "dhcp" in dhcp_out:
+        status = bcolors.FAIL + "Running - Not Stealth" + bcolors.ENDC
+    else:
+        status = bcolors.OKGREEN + "Not Running - Stealth" + bcolors.ENDC
 
         print "DHCP Service Status... %s\n" %status
 
@@ -195,7 +196,8 @@ def iprecon(ifname):
         int_ip =  socket.inet_ntoa(fcntl.ioctl(s.fileno(),0x8915, struct.pack('256s', ifname[:15]))[20:24])
         netmask = socket.inet_ntoa(fcntl.ioctl(socket.socket(socket.AF_INET, socket.SOCK_DGRAM), 35099, struct.pack('256s', ifname))[20:24])
 
-        if ("192." or "172." or "10.") in int_ip:
+        # If IP is Private
+        if not ip_validate(int_ip):
                 print '[+] Internal IP obtained on %s:' %ifname + bcolors.OKGREEN + " %s" %int_ip + bcolors.ENDC + ' netmask ' + bcolors.OKGREEN + '%s' %netmask + bcolors.ENDC
                 return int_ip
         else:
@@ -203,6 +205,9 @@ def iprecon(ifname):
                 return (static_bypass())
 
 
+def ip_validate(ip_addr): #Check if IP is public
+    ip_addr = IPAddress(ip_addr)
+    return ip_addr.is_unicast() and not ip_addr.is_private() and not ip_addr.is_loopback() and not ip_addr.is_reserved() and not ip_addr.is_hostmask()
 
 def netmask_recon(ifname):
 
@@ -245,7 +250,7 @@ def external_IP_recon():
                 print 'External IP obtained: ' + bcolors.OKGREEN + '%s\n' %address + bcolors.ENDC
         except:
                 print bcolors.WARNING + "[!] Could not reach the outside world. Possibly behind a firewall or some kind filtering\n" + bcolors.ENDC
-		return
+        return
 
 
 def clear_output():
