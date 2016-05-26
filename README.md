@@ -83,9 +83,17 @@ read from the file.
 - sudo apt-get install hydra
 - sudo apt-get install john
 - sudo apt-get install w3af-console
+- sudo apt-get install ettercap-text-only
 - sudo git clone https://github.com/stasinopoulos/commix.git 
 - sudo git clone https://github.com/sqlmapproject/sqlmap.git 
 - sudo git clone https://github.com/CoreSecurity/impacket.git
+- sudo git clone https://github.com/samratashok/nishang.git
+- sudo git clone https://github.com/SpiderLabs/Responder.git
+- sudo git clone https://github.com/sophron/wifiphisher.git
+- sudo git clone https://github.com/Dionach/CMSmap
+- sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
+
+
 
 #### Aircrack Installation
 - sudo apt-get -y install libssl-dev 
@@ -97,8 +105,4 @@ read from the file.
 - sudo airodump-ng-oui-update 
 - sudo apt-get -y install iw 
 - sudo wget https://download.sysinternals.com/files/SysinternalsSuite.zip 
-- sudo git clone https://github.com/samratashok/nishang.git 
-- sudo git clone https://github.com/SpiderLabs/Responder.git 
-- sudo git clone https://github.com/sophron/wifiphisher.git 
-- sudo git clone https://github.com/Dionach/CMSmap 
-- sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
+
