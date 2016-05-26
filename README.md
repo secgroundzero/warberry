@@ -38,7 +38,8 @@ example usage: sudo python warberry.py -A
 
 #### Installation
 
-Change the hostname of the RaspberryPi to **WarBerry** *Optional*
+Change the hostname of the RaspberryPi to **WarBerry** Optional
+
 ```sudo nano /etc/hosts```
 - sudo nano /etc/hostname
 
