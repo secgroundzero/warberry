@@ -66,6 +66,8 @@ Download WarBerry by cloning the Git repository:
 - sudo apt-get install sg3-utils 
 - sudo apt-get install netdiscover 
 - sudo apt-get install macchanger 
+- sudo git clone https://github.com/DanMcInerney/net-creds.git #install in /home/pi/WarBerry/Tools/
+
 
 #### Extra Tools for Post Exploitation. Best to install in /home/pi/WarBerry/Tools/ directory
 
@@ -91,6 +93,5 @@ Download WarBerry by cloning the Git repository:
 - sudo git clone https://github.com/samratashok/nishang.git 
 - sudo git clone https://github.com/SpiderLabs/Responder.git 
 - sudo git clone https://github.com/sophron/wifiphisher.git 
-- sudo git clone https://github.com/DanMcInerney/net-creds.git 
 - sudo git clone https://github.com/Dionach/CMSmap 
 - sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
