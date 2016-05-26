@@ -327,26 +327,22 @@ def nacbypass(unique_CIDR):
 	print bcolors.OKGREEN + "      [ NAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for MAC Addresses\n"
-	#subprocess.call("sudo netdiscover -i eth0 -P -r  %s | awk {print $2, $5} > /home/pi/WarBerry/Results/nsmes_macs" %unique_CIDR, shell = True)
 
-	badwords = ['NBT', 'for', 'address', 'server', '<unknown>', '']
 	goodwords = ['PRINTER', 'DEMO', 'DEV', 'DC', 'DC1', 'DC2']
 
-	#cidr = "192.168.3.1/24"
-
-	subprocess.call("sudo tcpdump -i eth0 -vvv port 137 -c 10 > network_traffic");
+	subprocess.call("sudo tcpdump -i eth0 -vvv port 137 -c 10 > /home/pi/WarBerry/Results/network_traffic");
 	search = ".netbios"
-	subprocess.call("grep %s network_traffic > ips_found" % search, shell=True)
+	subprocess.call("grep %s /home/pi/WarBerry/Results/network_traffic > /home/pi/WarBerry/Results/ips_found" %search, shell=True)
 	ip_net = []
-	with open('/home/pi/WarBerry/warberry/ips_found', 'r') as a:
+	with open('/home/pi/WarBerry/Results/ips_found', 'r') as a:
 		ips = a.readlines()
 		for line in ips:
 			ip_net.append(line.split('n')[0].strip()[:-1])
 
 	search = "Name="
-	subprocess.call("grep %network_traffic > names_found " % search, shell=True)
+	subprocess.call("grep %s /home/pi/WarBerry/Results/network_traffic > /home/pi/WarBerry/Results/names_found " %search, shell=True)
 	n = []
-	with open('/home/pi/WarBerry/warberry/names_found', 'r') as a:
+	with open('/home/pi/WarBerry/Results/names_found', 'r') as a:
 		names = a.readlines();
 		for line in names:
 			n.append(line.split(' ')[0].split('=')[1])
@@ -356,9 +352,9 @@ def nacbypass(unique_CIDR):
 		if (i % 2 == 0):
 			names.append(n[i])
 
-	subprocess.call("sudo netdiscover -P -r %s | awk {'print $1,$2'} > /home/pi/WarBerry/warberry/ips_macs" % unique_CIDR,shell=True)
+	subprocess.call("sudo netdiscover -P -r %s | awk {'print $1,$2'} > /home/pi/WarBerry/Results/ips_macs" % unique_CIDR,shell=True)
 
-	with open('/home/pi/WarBerry/warberry/ips_macs', 'r') as ip_m:
+	with open('/home/pi/WarBerry/Results/ips_macs', 'r') as ip_m:
 		ip_mac = ip_m.readlines()
 		macs = [None] * len(ip_net)
 		for line in ip_mac:
@@ -424,12 +420,10 @@ def nacbypass(unique_CIDR):
 
 	for used in reversed(open('/home/pi/WarBerry/Results/used_ips').readlines()):
 		print "[*] Pinging %s to ensure that we are live..." % used.strip()
-		ping_response = subprocess.call(['ping', '-c', '5', '-W', '3', used.strip()], stdout=open(os.devnull, 'w'),
-										stderr=open(os.devnull, 'w'))
+		ping_response = subprocess.call(['ping', '-c', '5', '-W', '3', used.strip()], stdout=open(os.devnull, 'w'),stderr=open(os.devnull, 'w'))
 
 		if ping_response == 0:
-			print bcolors.OKGREEN + "[+] Success. IP %s is valid and %s is reachable" % (
-			static.strip(), used.strip()) + bcolors.ENDC
-		# return static.strip()
+			print bcolors.OKGREEN + "[+] Success. IP %s is valid and %s is reachable" % (static.strip(), used.strip()) + bcolors.ENDC
+
 		else:
 			print bcolors.WARNING + "[-] Failed. IP %s is not valid" % static.strip() + bcolors.ENDC
