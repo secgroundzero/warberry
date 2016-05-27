@@ -110,4 +110,3 @@ read from the file.
 - sudo airodump-ng-oui-update 
 - sudo apt-get -y install iw 
 - sudo wget https://download.sysinternals.com/files/SysinternalsSuite.zip 
-
