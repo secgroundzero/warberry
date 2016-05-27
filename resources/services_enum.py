@@ -241,8 +241,4 @@ def poison():
        print " "
        print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
 
-       subprocess.call('sudo python ../Tools/Responder/Responder.py -I eth0', shell = True)
-
-
-
-
+       subprocess.call('sudo python Responder.py -I eth0', cwd=r'../Tools/Responder/', shell = True)
