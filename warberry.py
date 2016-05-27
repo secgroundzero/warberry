@@ -21,6 +21,7 @@ logging.info("finished")
 logging.captureWarnings(True)
 #Suppress Scapy IPv6 Warnings
 import requests.packages.urllib3
+import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
 
@@ -28,7 +29,8 @@ requests.packages.urllib3.disable_warnings()
 import subprocess
 import os, os.path
 import sys, getopt
-sys.path.append('/home/pi/WarBerry/warberry/resources/')
+#sys.path.append('/home/pi/WarBerry/warberry/resources/')
+sys.path.append('./resources/')
 import socket
 import fcntl
 import struct
@@ -43,6 +45,7 @@ import json
 from urllib import urlopen
 import ftplib
 import time
+from netaddr import *
 #External modules
 from banners import *
 from network_scanners import *
@@ -80,57 +83,57 @@ def main(argv):
             else:
                 netmask = netmask_recon('eth0')
                 external_IP_recon()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed IP Recon\n")
                 sniffer()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing network packets\n")
                 pcap_parser()
                 CIDR = subnet(int_ip, netmask)
                 hostnames(CIDR)
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed hostnames search\n")
                 nbtscan(CIDR)
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed NBTScan\n")
                 namechange()
                 scanner_targetted(CIDR)
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
-                    status.write("Completed targetted scanning\n")
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed targeted scanning\n")
                 shares_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed enumerating shares\n")
                 smb_users()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed enumerating users\n")
                 http_title_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed enumerating HTTP Titles\n")
                 nfs_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed NFS Enumeration\n")
                 waf_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed WAF Enumeration\n")
                 mysql_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed MYSQL Enumeration\n")
                 mssql_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed MSSQL Enumeration\n")
                 ftp_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed FTP Enumeration\n")
                 snmp_enum()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed SNMP Enumeration\n")
                 wifi_scan()
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Completed wifi networks scan\n")
                 print ""
                 print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
                 print " "
-                with open('/home/pi/WarBerry/Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'a') as status:
                     status.write("Entering poisoning mode\n")
                 poison()
 
@@ -177,14 +180,13 @@ def main(argv):
 
 def dhcp_check():
 
-	print bcolors.OKGREEN + "      [ DHCP SERVICE CHECK MODULE ]\n" + bcolors.ENDC
+    print bcolors.OKGREEN + "      [ DHCP SERVICE CHECK MODULE ]\n" + bcolors.ENDC
 
-	dhcp_out = subprocess.check_output(['ps', '-A'])
-	if "dhcp" in dhcp_out:
-		status = bcolors.FAIL + "Running - Not Stealth" + bcolors.ENDC
-	else:
-		status = bcolors.OKGREEN + "Not Running - Stealth" + bcolors.ENDC
-
+    dhcp_out = subprocess.check_output(['ps', '-A'])
+    if "dhcp" in dhcp_out:
+        status = bcolors.FAIL + "Running - Not Stealth" + bcolors.ENDC
+    else:
+        status = bcolors.OKGREEN + "Not Running - Stealth" + bcolors.ENDC
         print "DHCP Service Status... %s\n" %status
 
 def iprecon(ifname):
@@ -238,14 +240,14 @@ def subnet(int_ip, netmask):
 def external_IP_recon():
 
         try:
-                site = urllib2.urlopen("http://checkip.dyndns.org/", timeout = 1)
+                site = urllib2.urlopen("http://checkip.dyndns.org/", timeout = 5)
                 url = site.read()
                 grab = re.findall('([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)', url)
                 address = grab[0]
                 print 'External IP obtained: ' + bcolors.OKGREEN + '%s\n' %address + bcolors.ENDC
         except:
                 print bcolors.WARNING + "[!] Could not reach the outside world. Possibly behind a firewall or some kind filtering\n" + bcolors.ENDC
-		return
+        return
 
 
 def clear_output():
@@ -255,23 +257,23 @@ def clear_output():
 
         choice = raw_input(bcolors.WARNING + "[!] " + bcolors.ENDC + "You are about to delete all previous results. Do you want to continue? y/n: ")
 
-        work_path = '/home/pi/WarBerry/Results/'
-        responder_path = '/home/pi/WarBerry/Tools/Responder/logs/'
+        work_path = '../Results/'
+        responder_path = '../Tools/Responder/logs/'
 
 
         if choice in yes:
 
             if os.listdir(work_path)!=[]:
-                subprocess.call('sudo rm -rf /home/pi/WarBerry/Results/* ', shell = True)
-                print bcolors.WARNING + '[*] All previous results in /home/pi/WarBerry/Results removed\n'+ bcolors.ENDC
+                subprocess.call('sudo rm -rf ../Results/* ', shell = True)
+                print bcolors.WARNING + '[*] All previous results in ../Results removed\n'+ bcolors.ENDC
             elif os.listdir(responder_path) !=[]:
-                if os.path.isdir("/home/pi/WarBerry/old_responder_logs") == True:
-                    subprocess.call("sudo mv /home/pi/WarBerry/Tools/Responder/logs/* /home/pi/WarBerry/old_Responder_logs", shell = True)
-                    print bcolors.WARNING + "[*] Previous Responder logs moved to /home/pi/WarBerry/old_Responder_logs" + bcolors.ENDC
+                if os.path.isdir("../old_responder_logs") == True:
+                    subprocess.call("sudo mv ../Tools/Responder/logs/* ../old_Responder_logs", shell = True)
+                    print bcolors.WARNING + "[*] Previous Responder logs moved to ../WarBerry/old_Responder_logs" + bcolors.ENDC
                 else:
-                    subprocess.call("sudo mkdir /home/pi/WarBerry/old_Responder_logs/", shell=True)
-                    subprocess.call("sudo mv /home/pi/WarBerry/Tools/Responder/logs/* /home/pi/WarBerry/old_Responder_logs/",shell=True)
-                    print bcolors.WARNING + "[*] Previous Responder logs moved to /home/pi/WarBerry/old_Responder_logs/" + bcolors.ENDC
+                    subprocess.call("sudo mkdir ../old_Responder_logs/", shell=True)
+                    subprocess.call("sudo mv ../Tools/Responder/logs/* ../old_Responder_logs/",shell=True)
+                    print bcolors.WARNING + "[*] Previous Responder logs moved to ../old_Responder_logs/" + bcolors.ENDC
             elif os.listdir(work_path) == [] and os.listdir(responder_path) == []:
                 print  bcolors.WARNING + '[*] No previous results found' + bcolors.ENDC
 
@@ -283,19 +285,11 @@ def clear_output():
             sys.stdout.write("Please respond with 'y/yes' or 'n/no'\n")
 
 
-
-
-
-
-
-
-
-
 def sniffer():
 
         print " "
         packet_count = 20
-        pcap_location = "/home/pi/WarBerry/Results/capture.pcap"
+        pcap_location = "../Results/capture.pcap"
         print bcolors.OKGREEN + "      [ NETWORK SNIFFING MODULE ]\n" + bcolors.ENDC
         print "Sniffer will begin capturing %d packets" %packet_count #Change the count number accordingly
         packets = sniff(iface="eth0", count= packet_count)
@@ -305,18 +299,18 @@ def sniffer():
 
 def wifi_scan():
 
-    subprocess.call("sudo rm /home/pi/WarBerry/Results/model", shell=True)
-    subprocess.call("sudo cat /proc/cpuinfo | grep Revision | awk {'print $3'} > /home/pi/WarBerry/Results/model", shell=True)
+    #subprocess.call("sudo rm ../Results/model", shell=True)
+    subprocess.call("sudo cat /proc/cpuinfo | grep Revision | awk {'print $3'} > ../Results/model", shell=True)
 
-    with open('/home/pi/WarBerry/Results/model', 'r') as pi_model:
+    with open('../Results/model', 'r') as pi_model:
         for model in pi_model:
             if model.strip() == "a02082":
                 print " "
                 print bcolors.OKGREEN + "      [ Wi-Fi ENUMERATION MODULE ]\n" + bcolors.ENDC
 
-                subprocess.call("sudo iwlist wlan0 scan | grep ESSID | awk {'print $1'} > /home/pi/WarBerry/Results/wifis", shell = True)
-                with open('/home/pi/WarBerry/Results/wifis', 'r') as wifis:
-                    if os.stat('/home/pi/WarBerry/Results/wifis').st_size != 0:
+                subprocess.call("sudo iwlist wlan0 scan | grep ESSID | awk {'print $1'} > ../Results/wifis", shell = True)
+                with open('../Results/wifis', 'r') as wifis:
+                    if os.stat('../Results/wifis').st_size != 0:
                         for wifi in wifis:
                             print bcolors.OKGREEN + "[+] Found Wireless Network: %s" %wifi.strip() + bcolors.ENDC
                     else:
@@ -331,11 +325,11 @@ def nbtscan(CIDR):
        print " "
        print bcolors.OKGREEN + "      [ NAMESERVER ENUMERATION MODULE ]\n" + bcolors.ENDC
 
-       subprocess.call('sudo nbtscan -r %s > /home/pi/WarBerry/Results/nameservers' %CIDR , shell = True )
-       subprocess.call("sudo cat /home/pi/WarBerry/Results/nameservers | awk {'print $2'} > /home/pi/WarBerry/Results/mvp_names", shell=True)
+       subprocess.call('sudo nbtscan -r %s > ../Results/nameservers' %CIDR , shell = True )
+       subprocess.call("sudo cat ../Results/nameservers | awk {'print $2'} > ../Results/mvp_names", shell=True)
 
        print " "
-       with open('/home/pi/WarBerry/Results/nameservers', 'r') as nameservers:
+       with open('../Results/nameservers', 'r') as nameservers:
             names = nameservers.read()
             print names
 

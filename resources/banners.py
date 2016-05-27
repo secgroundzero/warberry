@@ -105,7 +105,7 @@ the name will resemble other machines in the netowork.
 started the DHCP service we have a valid IP. If we dont it will attempt to obtain a valid IP by
 observing the range of the network and setting the WarBerry's IP to a free one statically. If this
 does not success the script will proceed by observing the MAC addresses inside the network and begin
-mimicin one by one until the WarBerry obtains a valid IP. 
+mimicking one by one until the WarBerry obtains a valid IP.
 
 
 4) Nmap scans - This module will perform scans to enumerate for the following:
@@ -149,7 +149,7 @@ MAC addresses allow the WarBerry to obtain a valid internal IP.
 
 -B, --tcpudp        [*] TCP & UDP Port Scan           [+] UDP Scan Network Scan
 
-All results from the scans are saved at /home/pi/WarBerry/Results
+All results from the scans are saved at ../Results
 
 
 

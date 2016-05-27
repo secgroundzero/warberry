@@ -46,7 +46,7 @@ Optional: Change the hostname of the RaspberryPi to **WarBerry**
 
 Reboot the WarBerry for the changes to take effect
 
-Create a directory under /home/pi
+Optional: Create a directory under /home/pi
 
 ```sudo mkdir WarBerry```
 
@@ -65,6 +65,13 @@ The tool in case of MAC address filtering enumerates by default the subnets spec
 This is done for the tool to run quicker.
 If you want to enumerate more subnets either add the subnets in that file or change line 154 in rest_bypass.py so that it does not
 read from the file.
+
+
+### Running Status
+
+If you are connecting through SSH you can check the status of the attacks by checking the results_status file under Results. The file gets
+updated after each phase is completed.
+
 
 #### Dependencies
 
@@ -89,6 +96,8 @@ read from the file.
 - sudo apt-get install john
 - sudo apt-get install w3af-console
 - sudo apt-get install ettercap-text-only
+- sudo apt-get install cryptcat
+- sudo apt-get install ike-scan
 - sudo git clone https://github.com/stasinopoulos/commix.git 
 - sudo git clone https://github.com/sqlmapproject/sqlmap.git 
 - sudo git clone https://github.com/CoreSecurity/impacket.git
@@ -97,7 +106,7 @@ read from the file.
 - sudo git clone https://github.com/sophron/wifiphisher.git
 - sudo git clone https://github.com/Dionach/CMSmap.git
 - sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
-
+- sudo git clone https://github.com/offensive-security/exploit-database.git
 
 
 #### Aircrack Installation
