@@ -14,7 +14,7 @@ GNU General Public License for more details.
 """
 
 
-#!/usr/bin/python
+#!/usr/bin/env python
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 logging.info("finished")
