@@ -16,18 +16,19 @@ GNU General Public License for more details.
 
 class bcolors:
 
-    HEADER   =  '\033[95m'
-    OKBLUE   =  '\033[34m'
-    OKGREEN  =  '\033[32m'
-    WARNING  =  '\033[93m'
-    FAIL     =  '\033[31m'
-    ENDC     =  '\033[0m'
-    BOLD     =  '\033[1m'
-    TITLE    =  '\033[96m'
+    HEADER  = '\033[95m'
+    OKBLUE  = '\033[34m'
+    OKGREEN = '\033[32m'
+    WARNING = '\033[93m'
+    FAIL    = '\033[31m'
+    ENDC    = '\033[0m'
+    BOLD    = '\033[1m'
+    TITLE   = '\033[96m'
+
 
 def banner():
 
-        print bcolors.TITLE + ( '''
+    print bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -42,10 +43,9 @@ v1.2                              @sec_groundzero
 ''') + bcolors.ENDC
 
 
-
 def banner_full():
 
-        print bcolors.TITLE + ( '''
+    print bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -76,7 +76,7 @@ example usage: sudo python warberry.py -A
 
 def banner_full_help():
 
-        print bcolors.TITLE + ( '''
+    print bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -86,22 +86,22 @@ def banner_full_help():
 
 [-] Warberry Man Page [-]
 
--A,  --attack       [*] Run All Enumeration Scripts   
+-A,  --attack       [*] Run All Enumeration Scripts
 
 This module will run all enumeration scripts which consist of:
 
 1) DHCP Service Enumeration. This is only an informational script which checks if the DHCP
-service is running. If the service is running before we perfom basic tasks such as changing 
+service is running. If the service is running before we perfom basic tasks such as changing
 our hostname we might alert the Blue Teams of our presense.
 
-1) Sniffing module which sniffs network traffic and saves the results to /Results capture.pcap. 
+1) Sniffing module which sniffs network traffic and saves the results to /Results capture.pcap.
 This file can be used later on to extract usefull information that was captured from the wire.
 
 2) NBT Scan - Netbios Scanner which scans the network for advertised NETBIOS names. This is used
-to change the hostname of the WarBerry in order to not look suspicious inside the network as 
+to change the hostname of the WarBerry in order to not look suspicious inside the network as
 the name will resemble other machines in the netowork.
 
-3) IP Enumeration module. This script will check to see if after we have changed our hostname and 
+3) IP Enumeration module. This script will check to see if after we have changed our hostname and
 started the DHCP service we have a valid IP. If we dont it will attempt to obtain a valid IP by
 observing the range of the network and setting the WarBerry's IP to a free one statically. If this
 does not success the script will proceed by observing the MAC addresses inside the network and begin
@@ -154,5 +154,3 @@ All results from the scans are saved at ../Results
 
 
 ''') + bcolors.ENDC
-
-
