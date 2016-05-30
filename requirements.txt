@@ -3,4 +3,3 @@ requests
 scapy
 netaddr
 pcapy
-dnet-real
