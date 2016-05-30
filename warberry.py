@@ -197,14 +197,17 @@ def iprecon(ifname):
         int_ip =  socket.inet_ntoa(fcntl.ioctl(s.fileno(),0x8915, struct.pack('256s', ifname[:15]))[20:24])
         netmask = socket.inet_ntoa(fcntl.ioctl(socket.socket(socket.AF_INET, socket.SOCK_DGRAM), 35099, struct.pack('256s', ifname))[20:24])
 
-        if ("192." or "172." or "10.") in int_ip:
+        # If IP is Private
+        if not ip_validate(int_ip):
                 print '[+] Internal IP obtained on %s:' %ifname + bcolors.OKGREEN + " %s" %int_ip + bcolors.ENDC + ' netmask ' + bcolors.OKGREEN + '%s' %netmask + bcolors.ENDC
                 return int_ip
         else:
                 print bcolors.FAIL + "[!] Invalid IP obtained." + bcolors.ENDC + " Checking if we can bypass with static IP.\n"
                 return (static_bypass())
 
-
+def ip_validate(ip_addr): #Check if IP is public
+    ip_addr = IPAddress(ip_addr)
+    return not ip_addr.is_private() and not ip_addr.is_loopback() and not ip_addr.is_reserved() and not ip_addr.is_hostmask()
 
 def netmask_recon(ifname):
 
