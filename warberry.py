@@ -24,13 +24,14 @@ import socket
 import struct
 import subprocess
 import sys
+from urllib2 import urlopen
 
 import requests.packages.urllib3
 from scapy.all import sniff, wrpcap
-from urllib2 import urlopen
 
 from resources import services_enum
 from resources.banners import banner_full, banner_full_help, banner
+from resources.console_colors import bcolors
 from resources.network_scanners import scanner_targetted, scanner_full, scanner_top, scanner_tcp_full
 from resources.rest_bypass import hostnames, namechange, static_bypass
 
@@ -39,17 +40,6 @@ logging.info("finished")
 logging.captureWarnings(True)
 
 requests.packages.urllib3.disable_warnings()
-
-
-class bcolors(object):
-    HEADER = '\033[95m'
-    OKBLUE = '\033[34m'
-    OKGREEN = '\033[32m'
-    WARNING = '\033[93m'
-    FAIL = '\033[31m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    TITLE = '\033[96m'
 
 
 def main(argv):

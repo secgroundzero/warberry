@@ -20,6 +20,8 @@ import socket
 import subprocess
 from random import randint
 
+from console_colors import bcolors
+
 import requests.packages.urllib3
 # !/usr/bin/python
 import logging
@@ -30,17 +32,6 @@ logging.captureWarnings(True)
 
 
 requests.packages.urllib3.disable_warnings()
-
-
-class bcolors(object):
-    HEADER = '\033[95m'
-    OKBLUE = '\033[34m'
-    OKGREEN = '\033[32m'
-    WARNING = '\033[93m'
-    FAIL = '\033[31m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    TITLE = '\033[96m'
 
 
 def hostnames(cidr):
