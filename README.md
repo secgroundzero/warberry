@@ -86,6 +86,7 @@ updated after each phase is completed.
 - sudo apt-get install python-scapy 
 - sudo apt-get install tcpdump 
 - sudo apt-get install nmap 
+- sudo pip install netaddr
 - sudo pip install python-nmap 
 - sudo pip install ipaddress 
 - sudo apt-get install ppp 
