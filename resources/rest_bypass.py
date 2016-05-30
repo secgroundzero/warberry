@@ -130,7 +130,7 @@ def create_subnet():
 
     print("\nCreating CIDRs based on IPs captured\n")
 
-    CIDR = ""
+    cidr = ""
 
     for ip in int_ip:
         a = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -139,9 +139,9 @@ def create_subnet():
         netmask = net.split('.')
         net_start = [str(int(ipaddr[x]) & int(netmask[x]))
                      for x in range(0, 4)]
-        CIDR = '.'.join(net_start) + '/' + net_length(netmask)
+        cidr = '.'.join(net_start) + '/' + net_length(netmask)
         with open('../Results/CIDR', 'w') as netlength:
-            netlength.write(CIDR)
+            netlength.write(cidr)
         netlength.close()
 
     with open('../Results/subnets', 'w') as subnets:
@@ -158,7 +158,7 @@ def create_subnet():
         for sub in subs:
             print(bcolors.OKGREEN + "[+] Found subnet: %s" % sub.strip() + bcolors.ENDC)
 
-    return set_static(CIDR)
+    return set_static(cidr)
 
 
 def net_length(netmask):
@@ -168,8 +168,8 @@ def net_length(netmask):
     return str(len(binary_str.rstrip('0')))
 
 
-def set_static(CIDR):
-    length = CIDR.split('/')[1]
+def set_static(cidr):
+    length = cidr.split('/')[1]
 
     bits = 0
     for i in range(32 - int(length), 32):
@@ -197,7 +197,7 @@ def set_static(CIDR):
                         if (available.strip() == used_ip.strip()) and (isUsed is False):
                             print(bcolors.FAIL + "[-] IP %s is in use, excluding from static list" % used_ip.strip() + bcolors.ENDC)
                             isUsed = True
-                    if isUsed == False:
+                    if not isUsed:
                         statics.write(available)
 
     with open('../Results/statics') as static:
@@ -228,11 +228,11 @@ def set_static(CIDR):
             macbypass(unique_CIDR)
 
 
-def macbypass(unique_CIDR):
+def macbypass(unique_cidr):
     print(bcolors.OKGREEN + "      [ MAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC)
 
     print("ARP Scanning Network for MAC Addresses\n")
-    subprocess.call("sudo netdiscover -i eth0 -P -r  %s | grep -o -E /'([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/' > ../Results/macs_discovered" % unique_CIDR, shell=True)
+    subprocess.call("sudo netdiscover -i eth0 -P -r  %s | grep -o -E /'([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/' > ../Results/macs_discovered" % unique_cidr, shell=True)
 
     subprocess.call("sudo sort ../Results/macs_discovered | uniq > ../Results/unique_macs", shell=True)
     subprocess.call("sudo rm ../Results/macs_discovered", shell=True)
@@ -266,10 +266,10 @@ def macbypass(unique_CIDR):
                         return static.strip()
                     else:
                         print(bcolors.FAIL + "Unable to bypass Filtering." + bcolors.ENDC)
-                        nacbypass(unique_CIDR)
+                        nacbypass(unique_cidr)
 
 
-def nacbypass(unique_CIDR):
+def nacbypass(unique_cidr):
     print(bcolors.OKGREEN + "      [ NAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC)
 
     print("ARP Scanning Network for MAC Addresses\n")
@@ -298,7 +298,7 @@ def nacbypass(unique_CIDR):
         if i % 2 == 0:
             names.append(n[i])
 
-    subprocess.call("sudo netdiscover -P -r %s | awk {'print $1,$2'} > ../Results/ips_macs" % unique_CIDR, shell=True)
+    subprocess.call("sudo netdiscover -P -r %s | awk {'print $1,$2'} > ../Results/ips_macs" % unique_cidr, shell=True)
 
     with open('../Results/ips_macs', 'r') as ip_m:
         ip_mac = ip_m.readlines()
