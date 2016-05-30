@@ -46,6 +46,7 @@ from urllib import urlopen
 import ftplib
 import time
 from netaddr import *
+import argparse
 #External modules
 from banners import *
 from network_scanners import *
@@ -63,15 +64,36 @@ class bcolors:
     BOLD     =  '\033[1m'
     TITLE    =  '\033[96m'
 
+def parser_error(errmsg):
+	banner()
+	print "Usage: python "+sys.argv[0]+" [Options] use -h for help"
+	print bcolors.WARNING+"Error: "+errmsg+bcolors.ENDC
+	sys.exit()
 
-def main(argv):
-        if argv == '-h' or argv == '--help':
-            subprocess.call('clear', shell = True)
-            banner_full()
-        elif argv == '-m' or argv == '--man':
-            subprocess.call('clear', shell = True)
-            banner_full_help()
-        elif argv== '-A' or argv == '--attack':
+def parse_args():
+	#parse the arguments
+	parser = argparse.ArgumentParser(epilog = '\tExample: \r\nsudo python '+sys.argv[0]+" -A -i eth0")
+	parser.error = parser_error
+	parser._optionals.title = "OPTIONS"
+	parser.add_argument('-m', '--man', help='Prints WarBerry\'s Man Page', action='store_true')
+	parser.add_argument('-A', '--attack', help='Run All Enumeration Scripts',action='store_true',)
+	parser.add_argument('-S', '--sniffer', help='Run Sniffing Modules Only',action='store_true',)
+	parser.add_argument('-B', '--tcpudp', help='Performs UDP Scan Network Scan',action='store_true',)
+	parser.add_argument('-C', '--clear', help='Clear Output Directories',action='store_true',)
+	parser.add_argument('-F', '--fulltcp', help='Full TCP Port Scan',action='store_true',)
+	parser.add_argument('-T', '--toptcp', help='Top Port Scan',action='store_true',)
+	parser.add_argument('-U', '--topudp', help='Top UDP Port Scan',action='store_true',)
+	parser.add_argument('-i', '--interface', help="Set Interface", default='eth0')
+
+	return parser.parse_args()
+
+def main():
+        args = parse_args()
+        print args
+        man = args.man
+        interface = args.interface
+
+        if args.attack:
             subprocess.call('clear', shell = True)
             banner()
             if not os.geteuid() == 0:
@@ -138,7 +160,7 @@ def main(argv):
                 poison()
 
 		
-        elif argv == '-T' or argv == '--toptcp':
+        elif args.toptcp:
             subprocess.call('clear', shell = True)
             banner()
             int_ip = internal_IP_recon('eth0')
@@ -147,7 +169,7 @@ def main(argv):
             CIDR = subnet(int_ip, netmask)
             scanner_top(CIDR)
             print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-        elif argv == '-B' or argv == '--tcpudp':
+        elif args.tcpudp:
             subprocess.call('clear', shell = True)
             banner()
             int_ip = internal_IP_recon('eth0')
@@ -156,7 +178,7 @@ def main(argv):
             CIDR = subnet(int_ip, netmask)
             scanner_full(CIDR)
             print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-        elif argv == '-F' or argv == '--fulltcp':
+        elif args.fulltcp:
             subprocess.call('clear', shell = True)
             banner()
             int_ip = internal_IP_recon('eth0')
@@ -165,17 +187,14 @@ def main(argv):
             CIDR = subnet(int_ip, netmask)
             scanner_tcp_full(CIDR)
             print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-        elif argv == '-S' or argv == '--sniffer':
+        elif args.sniffer:
             subprocess.call('clear', shell = True)
             sniffer()
-        elif argv == '-C' or argv == '--clear':
-            clear_output()
-        elif argv == ' ':
+        elif args.man:
             subprocess.call('clear', shell = True)
-            banner()
+            banner_full_help()
         else:
-            print bcolors.WARNING + "[!] Invalid Module Selected. Use -h or --help for the help function\n" + bcolors.ENDC
-
+            banner_full_help()
 
 
 def dhcp_check():
@@ -337,7 +356,7 @@ def nbtscan(CIDR):
 if __name__ == '__main__':
 
         #try:
-    main(sys.argv[1])
+    main()
         #except:
         #        subprocess.call('clear', shell = True)
          #       banner_full()
