@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 This file is part of the WarBerry tool.
 Copyright (c) 2016 Yiannis Ioannides (@sec_groundzero).
@@ -13,21 +14,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
+from console_colors import bcolors
 
-class bcolors:
-
-    HEADER   =  '\033[95m'
-    OKBLUE   =  '\033[34m'
-    OKGREEN  =  '\033[32m'
-    WARNING  =  '\033[93m'
-    FAIL     =  '\033[31m'
-    ENDC     =  '\033[0m'
-    BOLD     =  '\033[1m'
-    TITLE    =  '\033[96m'
 
 def banner():
-
-        print bcolors.TITLE + ( '''
+    print(bcolors.TITLE + ('''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -39,13 +30,11 @@ def banner():
 
 v1.2                              @sec_groundzero
 
-''') + bcolors.ENDC
-
+''') + bcolors.ENDC)
 
 
 def banner_full():
-
-        print bcolors.TITLE + ( '''
+    print(bcolors.TITLE + ('''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -71,12 +60,11 @@ example usage: sudo python warberry.py -A
 
 [*] Parameter selection is mandatory
 
-''') + bcolors.ENDC
+''') + bcolors.ENDC)
 
 
 def banner_full_help():
-
-        print bcolors.TITLE + ( '''
+    print(bcolors.TITLE + ('''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -153,6 +141,4 @@ All results from the scans are saved at ../Results
 
 
 
-''') + bcolors.ENDC
-
-
+''') + bcolors.ENDC)

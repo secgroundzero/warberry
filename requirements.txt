@@ -1,0 +1,5 @@
+python-nmap
+requests
+scapy
+netaddr
+pcapy
