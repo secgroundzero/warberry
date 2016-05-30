@@ -43,7 +43,18 @@ example usage: sudo python warberry.py -A
 ```
 
 
-#### Installation
+#### Auto Installation
+
+```
+sudo apt-get intall git
+mkdir /home/pi/WarBerry
+cd /home/pi/WarBerry
+sudo git clone https://github.com/secgroundzero/warberry.git
+cd warberry/
+sudo bash bootstrap.sh
+```
+
+#### Manual Installation
 
 Optional: Change the hostname of the RaspberryPi to **WarBerry** 
 
@@ -63,8 +74,43 @@ Create the Results subdirectory in /WarBerry
  
 Download WarBerry by cloning the Git repository:
 
+```sudo apt-get intall git```
 ```sudo git clone https://github.com/secgroundzero/warberry.git```
 
+##### Dependencies
+
+- sudo apt-get install nbtscan
+- sudo apt-get install python-scapy
+- sudo apt-get install tcpdump
+- sudo apt-get install nmap
+- sudo pip install python-nmap
+- sudo pip install ipaddress
+- sudo apt-get install ppp
+- sudo apt-get install sg3-utils
+- sudo apt-get install netdiscover
+- sudo apt-get install macchanger
+- sudo git clone https://github.com/DanMcInerney/net-creds.git #install in /home/pi/WarBerry/Tools/
+
+
+##### Extra Tools for Post Exploitation. Best to install in /home/pi/WarBerry/Tools/ directory
+
+- sudo apt-get install onesixtyone
+- sudo apt-get install nikto
+- sudo apt-get install hydra
+- sudo apt-get install john
+- sudo apt-get install w3af-console
+- sudo apt-get install ettercap-text-only
+- sudo apt-get install cryptcat
+- sudo apt-get install ike-scan
+- sudo git clone https://github.com/stasinopoulos/commix.git
+- sudo git clone https://github.com/sqlmapproject/sqlmap.git
+- sudo git clone https://github.com/CoreSecurity/impacket.git
+- sudo git clone https://github.com/samratashok/nishang.git
+- sudo git clone https://github.com/SpiderLabs/Responder.git
+- sudo git clone https://github.com/sophron/wifiphisher.git
+- sudo git clone https://github.com/Dionach/CMSmap.git
+- sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
+- sudo git clone https://github.com/offensive-security/exploit-database.git
 
 ### Important
 
@@ -80,43 +126,7 @@ If you are connecting through SSH you can check the status of the attacks by che
 updated after each phase is completed.
 
 
-#### Dependencies
-
-- sudo apt-get install nbtscan 
-- sudo apt-get install python-scapy 
-- sudo apt-get install tcpdump 
-- sudo apt-get install nmap 
-- sudo pip install python-nmap 
-- sudo pip install ipaddress 
-- sudo apt-get install ppp 
-- sudo apt-get install sg3-utils 
-- sudo apt-get install netdiscover 
-- sudo apt-get install macchanger 
-- sudo git clone https://github.com/DanMcInerney/net-creds.git #install in /home/pi/WarBerry/Tools/
-
-
-#### Extra Tools for Post Exploitation. Best to install in /home/pi/WarBerry/Tools/ directory
-
-- sudo apt-get install onesixtyone
-- sudo apt-get install nikto
-- sudo apt-get install hydra
-- sudo apt-get install john
-- sudo apt-get install w3af-console
-- sudo apt-get install ettercap-text-only
-- sudo apt-get install cryptcat
-- sudo apt-get install ike-scan
-- sudo git clone https://github.com/stasinopoulos/commix.git 
-- sudo git clone https://github.com/sqlmapproject/sqlmap.git 
-- sudo git clone https://github.com/CoreSecurity/impacket.git
-- sudo git clone https://github.com/samratashok/nishang.git
-- sudo git clone https://github.com/SpiderLabs/Responder.git
-- sudo git clone https://github.com/sophron/wifiphisher.git
-- sudo git clone https://github.com/Dionach/CMSmap.git
-- sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
-- sudo git clone https://github.com/offensive-security/exploit-database.git
-
-
-#### Aircrack Installation
+#### Aircrack Manual Installation
 - sudo apt-get -y install libssl-dev 
 - sudo wget http://download.aircrack-ng.org/aircrack-ng-1.2-beta1.tar.gz 
 - sudo tar -zxvf aircrack-ng-1.2-beta1.tar.gz 
