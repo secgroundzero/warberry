@@ -99,7 +99,7 @@ def scanner_targetted(CIDR):
         for host in nm.all_hosts():
                 with open('../Results/mssql', 'a') as mssql:
                         print('----------------------------------------------------')
-                        print bcolors.OKGREEN + ('   *** MSSQL DB Found : %s via port 1433 ***' % (host)) + ENDC
+                        print bcolors.OKGREEN + ('   *** MSSQL DB Found : %s via port 1433 ***' % (host)) + bcolors.ENDC
                         print bcolors.TITLE + "[*] Default user for MSSQL installations is SA\n" + bcolors.ENDC
                         mssql.write('%s\n'  %host)
 
