@@ -36,7 +36,7 @@ import re
 from scapy.all import *
 from socket import inet_aton
 import socket
-from banners import *
+from info_banners import *
 import nmap
 import random
 from random import randint

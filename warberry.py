@@ -46,7 +46,7 @@ import ftplib
 import time
 from netaddr import *
 #External modules
-from banners import *
+from info_banners import *
 from network_scanners import *
 from services_enum import *
 from rest_bypass import *
@@ -280,7 +280,7 @@ def clear_output():
             if os.listdir(work_path)!=[]:
                 subprocess.call('sudo rm -rf ../Results/* ', shell = True)
                 print bcolors.WARNING + '[*] All previous results in ../Results removed\n'+ bcolors.ENDC
-            elif os.listdir(responder_path) !=[]:
+            elif os.listdir(responder_path)!=[]:
                 if os.path.isdir("../old_responder_logs") == True:
                     subprocess.call("sudo mv ../Tools/Responder/logs/* ../old_Responder_logs", shell = True)
                     print bcolors.WARNING + "[*] Previous Responder logs moved to ../WarBerry/old_Responder_logs" + bcolors.ENDC
@@ -298,9 +298,7 @@ def clear_output():
 
             sys.stdout.write("Please respond with 'y/yes' or 'n/no'\n")
 
-
 def sniffer(iface):
-
         print " "
         packet_count = 20
         pcap_location = "../Results/capture.pcap"

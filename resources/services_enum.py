@@ -21,6 +21,7 @@ import fcntl
 import struct
 import re
 import nmap
+from info_banners import *
 from socket import inet_aton
 import socket
 from console_colors import bcolors
@@ -237,11 +238,13 @@ def pcap_parser():
 
 def poison(iface):
 
-       print " "
-       print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
+        print " "
+        print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
 
-       subprocess.call('sudo python Responder.py -I %s' %iface, cwd=r'../Tools/Responder/', shell=True)
-
+        try:
+                subprocess.call('sudo python Responder.py -I %s' %iface, cwd=r'../Tools/Responder/', shell=True)
+        except:
+                subprocess.call('sudo mv ../Tools/Responder/logs/* ../Results/Responder_logs', shell = True)
 
 
 

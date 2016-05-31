@@ -23,7 +23,7 @@ import struct
 import re
 import nmap
 from socket import inet_aton
-from banners import *
+from info_banners import *
 from services_enum import *
 from console_colors import bcolors
 
