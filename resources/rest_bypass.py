@@ -81,7 +81,7 @@ def namechange():
 						mvp_found = True
 
 	if mvp_found != True:
-		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same Hostname" + bcolors.ENDC
+		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same hostname" + bcolors.ENDC
 
 	elif mvp_found == True:
 		with open('../Results/mvps', 'r') as mvps:
