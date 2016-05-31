@@ -6,8 +6,6 @@
 ##
 
 APT_GET_CMD=$(which apt-get)
-OLD_HOSTNAME="$( hostname )"
-NEW_HOSTNAME="WarBerry"
 WARBERRYDIR=/home/pi/WarBerry
 VENVDIR=/opt/warberry
 GITREPOS=("https://github.com/DanMcInerney/net-creds.git"
@@ -32,14 +30,6 @@ if [ "$(id -u)" != "0" ]; then
 	exit 1
 fi
 
-echo "CHANGING HOSTNAME FROM $OLD_HOSTNAME TO $NEW_HOSTNAME..."
-hostname "$NEW_HOSTNAME"
-if [ -n "$( grep "$OLD_HOSTNAME" /etc/hosts )" ]; then
- sed -i "s/$OLD_HOSTNAME/$NEW_HOSTNAME/g" /etc/hosts
-else
- echo -e "$( hostname -I | awk '{ print $1 }' )\t$NEW_HOSTNAME" >> /etc/hosts
-fi
-
 echo "CREATING DIRECTORIES..."
 mkdir -p $WARBERRYDIR/{Results,Tools}
 
@@ -47,7 +37,7 @@ if [[ ! -z $APT_GET_CMD ]]; then
     echo """
         PERFORMING BASIC DEPENDENCIES INSTALLATION...
     """
-    apt-get -y update && apt-get -y upgrade;
+    apt-get -y update;
     apt-get -y install nbtscan   \
                     curl         \
                     tcpdump      \
@@ -77,12 +67,11 @@ if [[ ! -z $APT_GET_CMD ]]; then
     pip install --upgrade pip;
     pip install virtualenv;
     /usr/local/bin/virtualenv $VENVDIR;
-    echo "source $VENVDIR/bin/activate" >> /home/pi/.bashrc
 
     echo """
         INSTALLING PYTHON PACKAGES...
     """
-    /opt/warberry/bin/pip install scapy python-nmap;
+    /opt/warberry/bin/pip install scapy python-nmap ipaddress;
 
     echo """
         CLONING GIT PACKAGES TO WarBerry/Tools directory...
@@ -92,15 +81,16 @@ if [[ ! -z $APT_GET_CMD ]]; then
     for f in "${GITREPOS[@]}"; do `git clone $f`; done
 
     echo """
+        ADDING warberry TO PATH...
+    """
+    ln -s $WARBERRYDIR/warberry/warberry.sh /usr/local/bin/warberry;
+
+    echo """
         DONE!
     """
     echo """
-
         WarBerry IS READY TO ROCK!
-        Run warberry.py via /opt/warberry/python warberry.py
-
-        NOTE: WarBerry should activate virtualenv on next reboot so next time python warberry.py will work like a charm.
-
+        You can run now WarBerry via warberry command.
     """
 else
     echo "ERROR: can't find apt."
