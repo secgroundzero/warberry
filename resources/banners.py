@@ -25,6 +25,7 @@ class bcolors:
     BOLD     =  '\033[1m'
     TITLE    =  '\033[96m'
 
+
 def banner():
 
         print bcolors.TITLE + ( '''
@@ -40,7 +41,6 @@ def banner():
 v1.2                              @sec_groundzero
 
 ''') + bcolors.ENDC
-
 
 
 def banner_full():

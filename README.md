@@ -14,7 +14,7 @@ The WarBerry script is a collection of scanning tools put together to provide th
 
 
 
-####Disclamer
+####Disclaimer
 This tool is only for academic purposes and testing  under controlled environments. Do not use without obtaining proper authorization
 from the network owner of the network under testing.
 The author bears no responsibility for any misuse of the tool.
