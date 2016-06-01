@@ -91,11 +91,11 @@ def namechange():
 			else:
 				with open('../Results/mvps', 'r') as hostnames:
 					mvp = hostnames.readline()
+					with open('/etc/hostname', 'w') as hostname:
+						hostname.write(mvp.strip())
 					with open('/etc/hosts', 'w') as hosts:
 						print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
 						hosts.write('127.0.0.1\tlocalhost\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
-					with open('/etc/hostname', 'w') as hostname:
-						hostname.write(mvp.strip())
 				subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
 				subprocess.call('sudo systemctl daemon-reload', shell=True)
 				print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC

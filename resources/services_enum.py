@@ -241,10 +241,7 @@ def poison(iface):
         print " "
         print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
 
-        try:
-                subprocess.call('sudo python Responder.py -I %s' %iface, cwd=r'../Tools/Responder/', shell=True)
-        except:
-                subprocess.call('sudo mv ../Tools/Responder/logs/* ../Results/Responder_logs', shell = True)
-
+        subprocess.call('sudo python Responder.py -I %s' %iface, cwd=r'../Tools/Responder/', shell=True)
+        
 
 
