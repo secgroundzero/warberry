@@ -51,7 +51,8 @@ from network_scanners import *
 from services_enum import *
 from rest_bypass import *
 from console_colors import bcolors
-
+from network_thread_scanner import *
+#from service_thread_Enumeration import *
 
 def main(argv):
         if argv == '-h' or argv == '--help':
@@ -90,7 +91,8 @@ def main(argv):
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed NBTScan\n")
                 namechange()
-                scanner_targetted(CIDR)
+                #scanner_targetted(CIDR)
+                scanner_thread(CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed targeted scanning\n")
                 shares_enum()
@@ -104,10 +106,10 @@ def main(argv):
                     status.write("Completed enumerating HTTP Titles\n")
                 nfs_enum()
                 with open('../Results/running_status', 'a') as status:
-                    status.write("Completed NFS Enumeration\n")
+                   status.write("Completed NFS Enumeration\n")
                 waf_enum()
                 with open('../Results/running_status', 'a') as status:
-                    status.write("Completed WAF Enumeration\n")
+                   status.write("Completed WAF Enumeration\n")
                 mysql_enum()
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed MYSQL Enumeration\n")
@@ -137,7 +139,9 @@ def main(argv):
                 iface = 'eth0'
             else:
                 iface = 'eth1'
-            int_ip = internal_IP_recon(iface)
+            int_ip = iprecon(iface)
+	    if (int_ip==None):
+                exit
             netmask = netmask_recon(iface)
             print external_IP_recon()
             CIDR = subnet(int_ip, netmask)
@@ -150,7 +154,9 @@ def main(argv):
                 iface = 'eth0'
             else:
                 iface = 'eth1'
-            int_ip = internal_IP_recon(iface)
+            int_ip = iprecon(iface)
+	    if (int_ip==None):
+                exit
             netmask = netmask_recon(iface)
             print external_IP_recon()
             CIDR = subnet(int_ip, netmask)
@@ -163,7 +169,7 @@ def main(argv):
                 iface = 'eth0'
             else:
                 iface = 'eth1'
-            int_ip = internal_IP_recon(iface)
+            int_ip = iprecon(iface)
             netmask = netmask_recon(iface)
             print external_IP_recon()
             CIDR = subnet(int_ip, netmask)
@@ -347,8 +353,10 @@ def nbtscan(CIDR):
 
 if __name__ == '__main__':
 
-        #try:
-    main(sys.argv[1])
-        #except:
-        #        subprocess.call('clear', shell = True)
-         #       banner_full()
+    try:
+        main(sys.argv[1])
+    except KeyboardInterrupt:
+        subprocess.call("sudo mkdir ../Results/Responder_logs", shell=True)
+        subprocess.call("sudo mv ../Tools/Responder/logs/* ../Results/Responder_logs/",shell=True)
+        subprocess.call('clear', shell=True)
+        banner_full()
