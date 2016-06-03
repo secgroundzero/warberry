@@ -71,6 +71,8 @@ def scanner_targetted(CIDR):
                 print bcolors.WARNING + "[!]" + bcolors.ENDC + " SVN Results File Exists. New results will be appended "
         if os.path.isfile('../Results/snmp'):
                 print bcolors.WARNING + "[!]" + bcolors.ENDC + " SNMP Results File Exists. New results will be appended "
+        if os.path.isfile('../Results/voip'):
+                print bcolors.WARNING + "[!]" + bcolors.ENDC + " VOIP Results File Exists. New results will be appended "
 
         print "\n[*] Beginning Scanning Subnet %s" %CIDR
         print " "
@@ -279,6 +281,13 @@ def scanner_targetted(CIDR):
                         print bcolors.OKGREEN + ('   *** SNMP Found : %s via port 161 ***' % (host)) + bcolors.ENDC
                         snmp.write('%s\n' % host)
 
+        print "[+] Scanning for VOIP..."
+        nm.scan(hosts=CIDR, arguments='-T4 -Pn -p5060 --open')
+        for host in nm.all_hosts():
+                with open('../Results/voip', 'a') as snmp:
+                        print('----------------------------------------------------')
+                        print bcolors.OKGREEN + ('   *** VOIP Found : %s via port 5060 ***' % (host)) + bcolors.ENDC
+                        snmp.write('%s\n' % host)
 
 def scanner_full(CIDR):
 
