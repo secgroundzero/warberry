@@ -110,7 +110,7 @@ mimicking one by one until the WarBerry obtains a valid IP.
 
 4) Nmap scans - This module will perform scans to enumerate for the following:
 
-- Windows Machines                     - MongoDB Databases
+- Windows Machines                     - MongoDB Databases                    - VOIP
 - FTP                                  - VNC
 - MSSQL Databases                      - DNS
 - MYSQL Databases                      - PHPMyAdmin
