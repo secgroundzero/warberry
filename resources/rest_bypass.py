@@ -26,7 +26,6 @@ requests.packages.urllib3.disable_warnings()
 import subprocess
 import os, os.path
 import sys, getopt
-#sys.path.append('/home/pi/WarBerry/warberry/resources/')
 sys.path.append('./resources/')
 import socket
 import fcntl
@@ -37,41 +36,19 @@ import re
 from scapy.all import *
 from socket import inet_aton
 import socket
-from banners import *
+from info_banners import *
 import nmap
 import random
 from random import randint
 import linecache
 from warberry import *
-
-class bcolors:
-
-    HEADER   =  '\033[95m'
-    OKBLUE   =  '\033[34m'
-    OKGREEN  =  '\033[32m'
-    WARNING  =  '\033[93m'
-    FAIL     =  '\033[31m'
-    ENDC     =  '\033[0m'
-    BOLD     =  '\033[1m'
-    TITLE    =  '\033[96m'
-
-
-class bcolors:
-    HEADER   =  '\033[95m'
-    OKBLUE   =  '\033[34m'
-    OKGREEN  =  '\033[32m'
-    WARNING  =  '\033[93m'
-    FAIL     =  '\033[31m'
-    ENDC     =  '\033[0m'
-    BOLD     =  '\033[1m'
-    TITLE    =  '\033[96m'
+from console_colors import bcolors
 
 
 def hostnames(CIDR):
 	print bcolors.OKGREEN + "      [ HOSTNAMES ENUMERATION MODULE ]\n" + bcolors.ENDC
 	hostname = socket.gethostname()
 	print "Current Hostname:" + bcolors.TITLE + " %s" %hostname + bcolors.ENDC
-	#print bcolors.WARNING + "[!] If you want to continue undetected stop the script and change /etc/hosts and /etc/hostname" + bcolors.ENDC
 	print " "
 
 	print "Searching for hostnames in %s\n" %CIDR
@@ -91,7 +68,7 @@ def hostnames(CIDR):
 def namechange():
 
 	mvp_hosts = ['DEMO', 'DEV', 'PRINTER', 'BACKUP', 'DC', 'DC1', 'DC2']
-
+	hostname = socket.gethostname()
 	mvp_found=False
 	with open('../Results/mvps', 'a') as mvps:
 		with open('../Results/mvp_names', 'r') as hostnames:
@@ -99,32 +76,37 @@ def namechange():
 			for host in hosts:
 				for mvp in mvp_hosts:
 					if host.strip()==mvp.strip():
-						print bcolors.OKGREEN + "[+] Found interesting hostname %s" %mvp.strip() + bcolors.ENDC
+						print bcolors.OKGREEN + "[+] Found interesting hostname %s\n" %mvp.strip() + bcolors.ENDC
 						mvps.write(host.strip()+'\n')
 						mvp_found = True
 
 	if mvp_found != True:
-		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same Hostname" + bcolors.ENDC
+		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same hostname" + bcolors.ENDC
 
 	elif mvp_found == True:
-		with open('../Results/mvps', 'r') as hostnames:
-			mvp = hostnames.readline()
-			with open('/etc/hosts', 'w') as hosts:
-				print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
-				hosts.write('127.0.0.1\tlocalhost\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
-			with open('/etc/hostname', 'w') as hostname:
-				hostname.write(mvp.strip())
-		subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
-		subprocess.call('sudo systemctl daemon-reload', shell=True)
-		print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
+		with open('../Results/mvps', 'r') as mvps:
+			mvp = mvps.readline()
+			if mvp.strip() == hostname:
+				print bcolors.TITLE + "[*] Hostname is stealthy as is. Keeping the same" + bcolors.ENDC
+			else:
+				with open('../Results/mvps', 'r') as hostnames:
+					mvp = hostnames.readline()
+					with open('/etc/hostname', 'w') as hostname:
+						hostname.write(mvp.strip())
+					with open('/etc/hosts', 'w') as hosts:
+						print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
+						hosts.write('127.0.0.1\tlocalhost\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
+				subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
+				subprocess.call('sudo systemctl daemon-reload', shell=True)
+				print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
 
 
-def static_bypass():
+def static_bypass(ifname):
 
 	print bcolors.OKGREEN + "      [ STATIC IP SETUP MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for IPs\n"
-	subprocess.call("sudo netdiscover -i eth0 -P -l ./resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > ../Results/ips_discovered", shell = True)
+	subprocess.call("sudo netdiscover -i %s -P -l ./resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > ../Results/ips_discovered" %ifname, shell = True)
 
 	if os.stat('../Results/ips_discovered').st_size !=0:
 		discover = open("../Results/ips_discovered","r")
@@ -137,22 +119,29 @@ def static_bypass():
 		discover = open("../Results/ips_discovered","w")
 
 		for ip in ips:
-			if ("192.168." or "172." or "10.") in ip:
+			if not ip_validate(ip):
 				print bcolors.OKGREEN + "[+] %s is valid" %ip.strip() + bcolors.ENDC
 				discover.write(ip)
 			else:
 				print bcolors.FAIL + "[-] %s is invalid" %ip.strip() + bcolors.ENDC
 
 		discover.close()
-		return(create_subnet())
+		return(create_subnet(ifname))
 	else:
 		print bcolors.FAIL + "[-] No IPs captured! Exiting" + bcolors.ENDC
 		return
 
-def create_subnet():
+
+def ip_validate(ip):
+	ip_addr = IPAddress(ip)
+	return not ip_addr.is_private() and not ip_addr.is_loopback() and not ip_addr.is_reserved() and not ip_addr.is_hostmask()
+
+
+
+def create_subnet(ifname):
 
 	with open('../Results/ips_discovered', 'r') as disc:
-    		int_ip = disc.readlines()
+		int_ip = disc.readlines()
 
 	print "\nCreating CIDRs based on IPs captured\n"
 
@@ -182,17 +171,17 @@ def create_subnet():
 		for sub in subs:
 			print bcolors.OKGREEN + "[+] Found subnet: %s" %sub.strip() + bcolors.ENDC
 
-	return(set_static(CIDR))
+	return(set_static(CIDR, ifname))
 
 def net_length(netmask):
 
-        binary_str = ''
-        for octet in netmask:
-                binary_str += bin(int(octet))[2:].zfill(8)
-        return str(len(binary_str.rstrip('0')))
+		binary_str = ''
+		for octet in netmask:
+			binary_str += bin(int(octet))[2:].zfill(8)
+		return str(len(binary_str.rstrip('0')))
 
 
-def set_static(CIDR):
+def set_static(CIDR, ifname):
 	length = CIDR.split('/')[1]
 
 	bits = 0
@@ -203,7 +192,7 @@ def set_static(CIDR):
 	print "\nARP Scanning based on targetted CIDR\n"
 	subprocess.call("sudo sort ../Results/CIDR | uniq > ../Results/unique_CIDR", shell=True)
 	subprocess.call("sudo rm ../Results/CIDR", shell=True)
-	subprocess.call("sudo netdiscover -i eth0 -P -l ./resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > ../Results/used_ips", shell=True)
+	subprocess.call("sudo netdiscover -i %s -P -l ./resources/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > ../Results/used_ips" %ifname, shell=True)
 
 	with open('../Results/avail_ips', 'w') as avail:
 		with open('../Results/unique_subnets', 'r') as subs:
@@ -239,7 +228,7 @@ def set_static(CIDR):
 
 			static = linecache.getline('../Results/statics', newline)
 			print bcolors.WARNING + "[*] Attempting to set random static ip %s" % static.strip() + bcolors.ENDC
-			subprocess.call(["ifconfig", "eth0", static.strip(), "netmask", netmask.strip()])
+			subprocess.call(["ifconfig", ifname, static.strip(), "netmask", netmask.strip()])
 
 			for used in reversed(open('../Results/used_ips').readlines()):
 				print "[*] Pinging %s to ensure that we are live..." % used.strip()
@@ -250,16 +239,16 @@ def set_static(CIDR):
 				else:
 					print bcolors.WARNING + "[-] Failed. IP %s is not valid" % static.strip() + bcolors.ENDC
 			print "Attempting to bypass MAC Filtering\n"
-			macbypass(unique_CIDR)
+			macbypass(unique_CIDR, ifname)
 
 
 
-def macbypass(unique_CIDR):
+def macbypass(unique_CIDR, ifname):
 
 	print bcolors.OKGREEN + "      [ MAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for MAC Addresses\n"
-	subprocess.call("sudo netdiscover -i eth0 -P -r  %s | grep -o -E /'([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/' > ../Results/macs_discovered" %unique_CIDR, shell = True)
+	subprocess.call("sudo netdiscover -i %s -P -r  %s | grep -o -E /'([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}/' > ../Results/macs_discovered" %(unique_CIDR,ifname), shell = True)
 
 	subprocess.call("sudo sort ../Results/macs_discovered | uniq > ../Results/unique_macs", shell=True)
 	subprocess.call("sudo rm ../Results/macs_discovered", shell=True)
@@ -273,15 +262,15 @@ def macbypass(unique_CIDR):
 	with open('../Results/unique_macs', 'r') as macs:
 		for mac in macs:
 			print bcolors.TITLE + "Attempting to change MAC Address to %s" %mac
-			subprocess.call("sudo ifdown eth0", shell = True)
-			subprocess.call("sudo maccchanger -m %s eth0" %mac, shell = True)
-			subprocess.call('sudo ifup eth0', shell = True)
+			subprocess.call("sudo ifdown %s" %ifname, shell = True)
+			subprocess.call("sudo maccchanger -m %s %s" %(mac, ifname), shell = True)
+			subprocess.call('sudo ifup %s'%ifname, shell = True)
 			for i in range(0, line_count):
 				newline = randint(0, line_count)
 
 				static = linecache.getline('../Results/statics', newline)
 				print bcolors.WARNING + "[*] Attempting to set random static ip %s" % static.strip() + bcolors.ENDC
-				subprocess.call(["ifconfig", "eth0", static.strip(), "netmask", netmask.strip()])
+				subprocess.call(["ifconfig", ifname, static.strip(), "netmask", netmask.strip()])
 
 				for used in reversed(open('../Results/used_ips').readlines()):
 					print "[*] Pinging %s to ensure that we are live..." % used.strip()
@@ -291,11 +280,11 @@ def macbypass(unique_CIDR):
 						return static.strip()
 					else:
 							print bcolors.FAIL + "Unable to bypass Filtering." + bcolors.ENDC
-							nacbypass(unique_CIDR)
+							nacbypass(unique_CIDR, ifname)
 
 
 
-def nacbypass(unique_CIDR):
+def nacbypass(unique_CIDR, ifname):
 
 	print bcolors.OKGREEN + "      [ NAC FILTERING BYPASS MODULE ]\n" + bcolors.ENDC
 
@@ -303,7 +292,7 @@ def nacbypass(unique_CIDR):
 
 	goodwords = ['PRINTER', 'DEMO', 'DEV', 'DC', 'DC1', 'DC2']
 
-	subprocess.call("sudo tcpdump -i eth0 -vvv port 137 -c 10 > ../Results/network_traffic");
+	subprocess.call("sudo tcpdump -i %s -vvv port 137 -c 10 > ../Results/network_traffic"%ifname);
 	search = ".netbios"
 	subprocess.call("grep %s ../Results/network_traffic > ../Results/ips_found" %search, shell=True)
 	ip_net = []
@@ -316,7 +305,7 @@ def nacbypass(unique_CIDR):
 	subprocess.call("grep %s ../Results/network_traffic > ../Results/names_found " %search, shell=True)
 	n = []
 	with open('../Results/names_found', 'r') as a:
-		names = a.readlines();
+		names = a.readlines()
 		for line in names:
 			n.append(line.split(' ')[0].split('=')[1])
 
@@ -358,9 +347,9 @@ def nacbypass(unique_CIDR):
 					hostname.write(name)
 					subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
 					subprocess.call('sudo systemctl daemon-reload', shell=True)
-				subprocess.call('sudo ifdown eth0', shell=True)
-				subprocess.call('sudo macchanger -m %s eth0' % Fmac[ic], shell=True)
-				subprocess.call('sudo ifup eth0', shell=True)
+				subprocess.call('sudo ifdown %s'%ifname, shell=True)
+				subprocess.call('sudo macchanger -m %s %s' %(Fmac[ic], ifname), shell=True)
+				subprocess.call('sudo ifup %s'%ifname, shell=True)
 
 	with open('../Results/used_ips', 'r') as used:
 		used_ips = used.readlines()
@@ -389,7 +378,7 @@ def nacbypass(unique_CIDR):
 
 			static = linecache.getline('../Results/statics', newline)
 			print bcolors.WARNING + "[*] Attempting to set random static ip %s" % static.strip() + bcolors.ENDC
-			subprocess.call(["ifconfig", "eth0", static.strip(), "netmask", netmask.strip()])
+			subprocess.call(["ifconfig", ifname, static.strip(), "netmask", netmask.strip()])
 
 	for used in reversed(open('../Results/used_ips').readlines()):
 		print "[*] Pinging %s to ensure that we are live..." % used.strip()

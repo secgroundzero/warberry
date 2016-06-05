@@ -21,19 +21,10 @@ import fcntl
 import struct
 import re
 import nmap
+from info_banners import *
 from socket import inet_aton
 import socket
-
-class bcolors:
-
-    HEADER   =  '\033[95m'
-    OKBLUE   =  '\033[34m'
-    OKGREEN  =  '\033[32m'
-    WARNING  =  '\033[93m'
-    FAIL     =  '\033[31m'
-    ENDC     =  '\033[0m'
-    BOLD     =  '\033[1m'
-    TITLE    =  '\033[96m'
+from console_colors import bcolors
 
 
 def shares_enum():
@@ -59,6 +50,7 @@ def shares_enum():
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/shares" + bcolors.ENDC
 
+
 def smb_users():
 
         if os.path.isfile('../Results/windows'):
@@ -78,6 +70,7 @@ def smb_users():
                         nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-users -p U:137,T:139 --open -o ../Results/smb_users')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/smb_users" + bcolors.ENDC
+
 
 def http_title_enum():
 
@@ -99,6 +92,7 @@ def http_title_enum():
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
 
+
 def waf_enum():
 
         if os.path.isfile('../Results/webs'):
@@ -119,6 +113,7 @@ def waf_enum():
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
 
+
 def nfs_enum():
 
         if os.path.isfile('../Results/nfs'):
@@ -137,6 +132,7 @@ def nfs_enum():
                         nm.scan(hosts=share, arguments='-Pn -sV -T4 --script afp-showmount -p111 --open -o ../Results/nfs_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/nfs_enum" + bcolors.ENDC
+
 
 def mysql_enum():
 
@@ -157,6 +153,7 @@ def mysql_enum():
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/mysql_enum" + bcolors.ENDC
 
+
 def mssql_enum():
 
         if os.path.isfile('../Results/mssql'):
@@ -175,6 +172,7 @@ def mssql_enum():
                         nm.scan(hosts=db, arguments='-Pn -T4 -sV --script ms-sql-info -p1433 --open -o ../Results/mssql_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/mssql_enum" + bcolors.ENDC
+
 
 def ftp_enum():
 
@@ -228,20 +226,22 @@ def pcap_parser():
         if os.path.isfile('../Results/pcap_results'):
                 print bcolors.WARNING + "[!] PCAP Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        print bcolors.TITLE + "[*] Looking for interesting data in /Results/capture.pcap\n" + bcolors.ENDC
+        print bcolors.TITLE + "[*] Looking for interesting data in /Results/capture.pcap" + bcolors.ENDC
 
         subprocess.call("sudo python ../Tools/net-creds/net-creds.py -p ../Results/capture.pcap > ../Results/pcap_results", shell = True)
 
-        print bcolors.OKGREEN + "[+] Done! Results saved in /Results/pcap_results\n" + bcolors.ENDC
+        if os.stat('../Results/pcap_results').st_size == 0:
+                print bcolors.WARNING + "[-] No interesting data found in the PCAP file\n" + bcolors.ENDC
+        else:
+                print bcolors.OKGREEN + "[+] Done! Results saved in /Results/pcap_results\n" + bcolors.ENDC
 
 
-def poison():
+def poison(iface):
 
-       print " "
-       print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
+        print " "
+        print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
 
-       subprocess.call('sudo python Responder.py -I eth0', cwd=r'../Tools/Responder/', shell=True)
-
-
+        subprocess.call('sudo python Responder.py -I %s' %iface, cwd=r'../Tools/Responder/', shell=True)
+        
 
 
