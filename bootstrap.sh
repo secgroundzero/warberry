@@ -2,12 +2,11 @@
 
 ##
 ## WarBerry bootstrap script
-## Ver. 0.0.1
+## Ver. 1.0.0
 ##
 
 APT_GET_CMD=$(which apt-get)
 WARBERRYDIR=/home/pi/WarBerry
-VENVDIR=/opt/warberry
 GITREPOS=("https://github.com/DanMcInerney/net-creds.git"
           "https://github.com/stasinopoulos/commix.git"
           "https://github.com/sqlmapproject/sqlmap.git"
@@ -22,7 +21,6 @@ GITREPOS=("https://github.com/DanMcInerney/net-creds.git"
 echo """
 
         STARTING WarBerry INSTALLATION SCRIPT...
-
 """
 
 if [ "$(id -u)" != "0" ]; then
@@ -65,13 +63,11 @@ if [[ ! -z $APT_GET_CMD ]]; then
         BOOTSTRAPPING PYTHON UTILS...
     """
     pip install --upgrade pip;
-    pip install virtualenv;
-    /usr/local/bin/virtualenv $VENVDIR;
 
     echo """
         INSTALLING PYTHON PACKAGES...
     """
-    /opt/warberry/bin/pip install scapy python-nmap ipaddress;
+    pip2 install scapy python-nmap ip2address netaddr optparse-pretty pybluez;
 
     echo """
         CLONING GIT PACKAGES TO WarBerry/Tools directory...
@@ -80,17 +76,11 @@ if [[ ! -z $APT_GET_CMD ]]; then
     cd  $WARBERRYDIR/Tools;
     for f in "${GITREPOS[@]}"; do `git clone $f`; done
 
-    echo """
-        ADDING warberry TO PATH...
-    """
-    ln -s $WARBERRYDIR/warberry/warberry.sh /usr/local/bin/warberry;
-
-    echo """
+   echo """
         DONE!
-    """
-    echo """
+
         WarBerry IS READY TO ROCK!
-        You can run now WarBerry via warberry command.
+    
     """
 else
     echo "ERROR: can't find apt."
