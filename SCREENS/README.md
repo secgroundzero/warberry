@@ -2,25 +2,24 @@
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/2.png)
 
 
-### Flowcharts
+## Flowcharts
 
-# Static IP Bypass
+### Static IP Bypass
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry static.png)
 
-# MAC Address Filtering Bypass
+### MAC Address Filtering Bypass
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry mac bypass.png)
 
-# NAC Filtering Bypass
+### NAC Filtering Bypass
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry nac bypass.png)
-
-
-
-### Connect to GND and port 23 pins on the RPi.
-![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2394.JPG)
 
 
 ### Running the tool with a switch
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2393.JPG)
+
+
+### Connect to GND and port 23 pins on the RPi.
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2394.JPG)
 
 
 ### Script for autorunning with a switch
