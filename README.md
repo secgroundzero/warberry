@@ -50,12 +50,12 @@ example usage: sudo python warberry.py -A
 ```
 
 
-#### Auto installation of dependecies
+#### Auto installation of dependencies
 
 ```sudo bash bootstrap.sh```
 
 
-#### Manual Installation of dependecies
+#### Manual Installation of dependencies
 
 Optional: Change the hostname of the RaspberryPi to **WarBerry** 
 
