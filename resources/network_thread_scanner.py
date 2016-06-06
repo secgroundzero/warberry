@@ -4,15 +4,15 @@ import nmap
 import threading 
 import time
 
-path_file=['../Results/windows','../Results/ftp', '../Results/mssql', '../Results/mysql', '../Results/oracle', '../Results/nfs', '../Results/webservers80','../Results/webservers443', '../Results/webservers8080','../Results/webservers4443','../Results/webservers8081', '../Results/webservers8181', '../Results/webservers9090','../Results/printers', '../Results/telnet', '../Results/mongo', '../Results/vnc', '../Results/dns', '../Results/phpmyadmin','../Results/tightvnc','../Results/websphere','../Results/firebird', '../Results/xserver', '../Results/svn', '../Results/snmp']
+path_file=['../Results/windows','../Results/ftp', '../Results/mssql', '../Results/mysql', '../Results/oracle', '../Results/nfs', '../Results/webservers80','../Results/webservers443', '../Results/webservers8080','../Results/webservers4443','../Results/webservers8081', '../Results/webservers8181', '../Results/webservers9090','../Results/printers', '../Results/telnet', '../Results/mongo', '../Results/vnc', '../Results/dns', '../Results/phpmyadmin','../Results/tightvnc','../Results/websphere','../Results/firebird', '../Results/xserver', '../Results/svn', '../Results/snmp','../Results/voip','../Results/rlogin','../Results/openvpn','../Results/ipsec''../Results/ldap','../Results/pop3','../Results/smtp']
 
-result_file = ['windows', 'ftp', 'mssql','mysql', 'oracle', 'nfs','webservers80', 'webservers443','webservers8080', 'webservers4443', 'webservers8081', 'webservers8181','webservers9090', 'printers','telnet', 'mongo', 'vnc', 'dns', 'phpmyadmin','tightvnc', 'websphere','firebird', 'xserver', 'svn', 'snmp'] 
+result_file = ['windows', 'ftp', 'mssql','mysql', 'oracle', 'nfs','webservers80', 'webservers443','webservers8080', 'webservers4443', 'webservers8081', 'webservers8181','webservers9090', 'printers','telnet', 'mongo', 'vnc', 'dns', 'phpmyadmin','tightvnc', 'websphere','firebird', 'xserver', 'svn', 'snmp','voip','rlogin','openvpn','ipsec','ldap','pop3','smtp']
 
-message=["[*] You may want to check for open shares here\n", "[*] You may want to try log in as user ANONYMOUS\n", "[*] Default user for MSSQL installations is SA\n", "[*] Default creds for MYSQL are U:root P:blank\n", "[*] Default user on Oracle DBs are SYS, SYSTEM, SCOTT\n", "[*] You can view NFS contents by showmount -e <IP>\n", "","","","","","","","","","","","","","", "[*] Default logins for Websphere are U:system P:manager\n","[*] Default logins on Firebird DB are U:SYSDBA P:masterkey\n","","",""] 
+message=["[*] You may want to check for open shares here\n", "[*] You may want to try log in as user ANONYMOUS\n", "[*] Default user for MSSQL installations is SA\n", "[*] Default creds for MYSQL are U:root P:blank\n", "[*] Default user on Oracle DBs are SYS, SYSTEM, SCOTT\n", "[*] You can view NFS contents by showmount -e <IP>\n", "","","","","","","","","","","","","","", "[*] Default logins for Websphere are U:system P:manager\n","[*] Default logins on Firebird DB are U:SYSDBA P:masterkey\n","","","","","","","","","",""]
 
-name = ['Windows Hosts', 'FTP', 'MSSQL Databases','MySQL Databases', 'Oracle Databases', 'NFS','Web Servers 80', 'Web Servers 443','Web Servers 8080', 'Web Servers 4443','Web Servers 8081', 'Web Servers 8181','Web Servers 9090', 'Printers','Telnet', 'Mongo Databases', 'VNC','DNS', 'PHPMyAdmin','Tight VNC', 'IBM WebSphere','Firebird Databases', 'XServer', 'SVN Repositories','SNMP'] 
+name = ['Windows Hosts', 'FTP', 'MSSQL Databases','MySQL Databases', 'Oracle Databases', 'NFS','Web Servers 80', 'Web Servers 443','Web Servers 8080', 'Web Servers 4443','Web Servers 8081', 'Web Servers 8181','Web Servers 9090', 'Printers','Telnet', 'Mongo Databases', 'VNC','DNS', 'PHPMyAdmin','Tight VNC', 'IBM WebSphere','Firebird Databases', 'XServer', 'SVN Repositories','SNMP','VOIP','rLogin','OpenVPN','IPSec','LDAP','POP3','SMTP']
 
-port=['445', '21', '1433', '3306', '1521', '111', '80', '443', '8080', '4443', '8081', '8181', '9090', '8611,8612,5222,5223', '23', '27017,27018,27019,28017', '5900', '53', '8089', '5800', '9443', '3050', '6000', '3690', '161'] 
+port=['445', '21', '1433', '3306', '1521', '111', '80', '443', '8080', '4443', '8081', '8181', '9090', '8611,8612,5222,5223', '23', '27017,27018,27019,28017', '5900', '53', '8089', '5800', '9443', '3050', '6000', '3690', '161','5060','513','1194','500','389','110','25']
 
 class bcolors:
     HEADER = '\033[95m'
@@ -37,8 +37,7 @@ class ScanThread(threading.Thread):
     def run(self):
         file=self.path_file
         if os.path.isfile(file):
-            self.output= " "
-            self.output=self.output+ bcolors.WARNING + "[!]" + bcolors.ENDC + self.name+ " Results File Exists. New results will be appended"
+            self.output=self.output + bcolors.WARNING + "[!] " + bcolors.ENDC + self.name + " Results File Exists. New results will be appended\n"
         
         scan_targetted(self)
         return self.output
@@ -47,7 +46,7 @@ def scan_targetted(self):
     self.output=self.output+ "[+] Scanning for "+ self.name + " ..."
     scanning(self)
     if (os.path.isfile(self.path_file)):
-        self.output = self.output + bcolors.TITLE + "[+] Done! Results saved in /Results/"+self.result_file+"\n" + bcolors.ENDC
+        self.output = self.output + bcolors.TITLE + "\n[+] Done! Results saved in /Results/"+self.result_file+"\n" + bcolors.ENDC
 
 def scanning(self):
     nm=nmap.PortScanner()

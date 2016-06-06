@@ -38,7 +38,7 @@ def banner():
 
             TACTICAL EXPLOITATION
 
-v1.2                              @sec_groundzero
+v2.0                              @sec_groundzero
 
 ''') + bcolors.ENDC
 
@@ -55,21 +55,26 @@ def banner_full():
 
 [-] Warberry Usage [-]
 
-Parameters:
--h,  --help         [*] Print this help banner
--m,  --man          [*] Prints WarBerry's Man Page
--A,  --attack       [*] Run All Enumeration Scripts
--S,  --sniffer      [*] Run Sniffing Modules Only
--C,  --clear        [*] Clear Output Directories
--F,  --fulltcp      [*] Full TCP Port Scan
--T,  --toptcp       [*] Top Port Scan
--B,  --tcpudp       [*] Top TCP & UDP Port Scan
+Options:
+
+  --version                             show program's version number and exit
+  -h, --help                            show this help message and exit
+  -a ATTACKTYPE, --attack=ATTACKTYPE    Attack Mode. Default: --attack
+  -p PACKETS, --packets=PACKETS         Number of Network Packets to capture
+  -i IFACE, --interface=IFACE           Network Interface to use. Default: eth0
+  -P, --poison                          Turn Poisoning on/off. Default: On
+  -H, --hostname                        Change WarBerry hostname Default: Off
+  -e, --enumeration                     Turn enumeration mode on/off. Default: On
+  -r, --recon                           Recon only mode. No port scans
+  -S, --sniffer                         Sniffer only mode.
+  -C, --clear                           Clear previous output folders in ../Results
+  -m, --man                             Print WarBerry man pages
+
 
 example usage: sudo python warberry.py -A
                sudo python warberry.py --attack
-               sudo python warberry.py -C
+               sudo python warberry.py -r
 
-[*] Parameter selection is mandatory
 
 ''') + bcolors.ENDC
 
@@ -86,72 +91,100 @@ def banner_full_help():
 
 [-] Warberry Man Page [-]
 
--A,  --attack       [*] Run All Enumeration Scripts   
 
-This module will run all enumeration scripts which consist of:
+FLAG SPECIFICATION
+-------------------
+-p --poison : This flag in ON by default. This means that after all the enumeration scripts are completed, Responder will
+kick in and attempt to poison users to obtain credentials.
 
-1) DHCP Service Enumeration. This is only an informational script which checks if the DHCP
-service is running. If the service is running before we perfom basic tasks such as changing 
-our hostname we might alert the Blue Teams of our presense.
+-r --recon : This flag is OFF by default. When this flag is set only the reconnaissance modules will run. This modules are:
+. Internal IP recon
+. Network sniffer. Default is a 20 packet capture but it can be changed with the -p parameter
+. CIDR creation
+. Network Names Scan
+. Hostnames emumeration based on CIDR
+. Change of hostname. The name will be changed accordingly by default based on the names capture. This can be turned off
+    using this -H flag
+. Nearby wifi enumeration
 
-1) Sniffing module which sniffs network traffic and saves the results to /Results capture.pcap. 
-This file can be used later on to extract usefull information that was captured from the wire.
+-H --hostname: This flag is OFF by default. When enabled, the hostname change will not be performed and the WarBerry will
+    keep its initial hostname. The change is recommended for remaining hidden in the network.
 
-2) NBT Scan - Netbios Scanner which scans the network for advertised NETBIOS names. This is used
-to change the hostname of the WarBerry in order to not look suspicious inside the network as 
-the name will resemble other machines in the netowork.
+-S --sniffer: When this flag is enabled only the network packet sniffer will run. Default is a 20 packet capture but
+    it can be changed with the -p parameter
 
-3) IP Enumeration module. This script will check to see if after we have changed our hostname and 
-started the DHCP service we have a valid IP. If we dont it will attempt to obtain a valid IP by
-observing the range of the network and setting the WarBerry's IP to a free one statically. If this
-does not success the script will proceed by observing the MAC addresses inside the network and begin
-mimicking one by one until the WarBerry obtains a valid IP.
+-i --interface : Set the interface for the scripts to run on. Default is eth0.
+
+-a --attack : Set the attack mode. Default is -A. The modes are explained below.
 
 
-4) Nmap scans - This module will perform scans to enumerate for the following:
+-F, --fulltcp       [*] Full TCP Network Scan         [+] Performs a Full TCP Network Scan
+-T, --toptcp        [*] Top Ports Network Scan        [+] Performs a scan on the top 1000 TCP Ports
+-B, --tcpudp        [*] TCP & UDP Port Scan           [+] UDP Scan Network Scan
 
-- Windows Machines                     - MongoDB Databases
-- FTP                                  - VNC
-- MSSQL Databases                      - DNS
-- MYSQL Databases                      - PHPMyAdmin
+
+-A, --attack
+
+This mode will run all enumeration scripts which consist of:
+
+.DHCP Service Enumeration. This is only an informational script which checks if the DHCP
+    service is running. If the service is running before we perfom basic tasks such as changing
+    our hostname we might alert the Blue Teams of our presence.
+
+. Internal IP recon. Verify if a valid internal IP is obtained. If not check the BYPASS section below.
+    If yes then the CIDR for that IP is created.
+. External IP recon. Check if a valid external IP is obtained.
+. Sniffing module which sniffs network traffic and saves the results to /Results capture.pcap.
+    This file can be used later on to extract useful information that was captured from the wire.
+    The default number of network packets captured is 20. This can be change with the -s flag.
+. PCAP Parser. This module parses the pcap file obtained before for any useful information.
+. Hostnames enumeration. Scan for hostnames in the network
+. Hostname change. This module parses the list of network names obtained and checks if they match any of the "interesting"
+    names in our list. If so the hostname of the WarBerry is changed based on the first match found". This module runs
+    by default but it can be switched off with the -H flag.
+. Scanner module for the following services:
+
+- Windows Machines                     - MongoDB Databases              - VOIP
+- FTP                                  - VNC                            - rlogin
+- MSSQL Databases                      - DNS                            - OpenVPN
+- MYSQL Databases                      - PHPMyAdmin                     - IPSec
 - Oracle Databases                     - TightVNC
 - NFS                                  - IBM Websphere
 - WebServers                           - Firebird Databases
 - Printers                             - XServer
 - SVN                                  - SNMP
 
-5) Enumeration Modules - This set of modules will attempt to enumerate the following based on the previous results:
+. Enumeration Modules - This set of modules will attempt to enumerate the following based on the previous results:
 
 - Windows open shares contents enumeration
 - Windows users through SMB
 - HTTP WebServers titles enumeration
+- Web application firewalls
+- NFS
+- MYSQL
+- MSSQL
+- FTP
+- SNMP
 
-[*] IP Configuration & Setup
+    The enumeration module will run by default. It can be turned off using the -e flag
 
-The first phase of the enumeration begins by checking if the DHCP Service is running as described in [1]. After the
-initial network reconnaisance is performed the WarBerry attempts to enable the DHCP service and obtain an IP through
-this method. If the IP is found not to be a valid internal IP then the WarBerry enumerates IPs by observing network
-packets and builds the CIDR based on those IP. The script then performs a scan to find which host is down in order to
-set a static IP of one host that is down and once again checks if the IP is valid. The script will go through the entire
-list of unused IPs found and check if any of those will work. If none of the IPs work then the script proceeds by
-enumerating all MAC addresses in the network and attempts to change its own MAC to one of those in order to bypass
-any MAC filtering in place. The script goes through the entire list of MAC addresses found and checks if any of those
-MAC addresses allow the WarBerry to obtain a valid internal IP.
-
--S,  --sniffer      [*] Run Sniffing Modules Only     [+] Network packet sniffer for a predefined number of packets and exits
-[*] Change the number of packets in warberry.py accordingly - Default=20
-
--C, --clear         [*] Clear Output Directories      [+] Clears all previous results output directories
-
--F, --fulltcp       [*] Full TCP Network Scan         [+] Performs a Full TCP Network Scan
-
--T, --toptcp        [*] Top Ports Network Scan        [+] Performs a scan on the top 1000 TCP Ports
-
--B, --tcpudp        [*] TCP & UDP Port Scan           [+] UDP Scan Network Scan
+. Nearby wifi networks enumeration.
+    This is useful for phishing campaigns
+. Nearby wifi networks enumeration
+    This is useful for phishing campaigns
+. Poisoning modules for credentials harvesting
 
 All results from the scans are saved at ../Results
 
 
+RESTRICTIONS BYPASS MODES
+-------------------------
+
+Static IP Bypass
+
+MAC Address Filtering Bypass
+
+NAC Filtering Bypass
 
 ''') + bcolors.ENDC
 

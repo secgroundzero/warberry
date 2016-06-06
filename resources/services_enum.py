@@ -72,25 +72,33 @@ def smb_users():
         print bcolors.TITLE + "[+] Done! Results saved in /Results/smb_users" + bcolors.ENDC
 
 
+def webs_prep():
+        if (os.path.isfile('../Results/webservers80') or os.path.isfile('../Results/webservers8080')
+            or os.path.isfile('../Results/webservers8181') or os.path.isfile('../Results/webservers443')
+            or os.path.isfile('../Results/webservers4443')or os.path.isfile('../Results/webservers9090')):
+                subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
+        else:
+                return
+
 def http_title_enum():
 
-        print " "
-        print bcolors.OKGREEN + "      [ HTTP TITLE ENUMERATION MODULE ]\n" + bcolors.ENDC
 
-        subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell = True)
+        if os.path.isfile('../Results/webs'):
+                print " "
+                print bcolors.OKGREEN + "      [ HTTP TITLE ENUMERATION MODULE ]\n" + bcolors.ENDC
 
-        if os.path.isfile('../Results/http_titles'):
-                print bcolors.WARNING + "[!] HTTP Titles Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+                if os.path.isfile('../Results/http_titles'):
+                        print bcolors.WARNING + "[!] HTTP Titles Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
 
-        with open('../Results/web_hosts') as webs:
-                for host in webs:
-                        print "[*] Enumerating HTTP Title on %s" %host.strip()
-                        nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 -sC -p80,8080,443,4443,8081,8181,9090 --open -o ../Results/http_titles')
+                with open('../Results/web_hosts') as webs:
+                        for host in webs:
+                                print "[*] Enumerating HTTP Title on %s" %host.strip()
+                                nm = nmap.PortScanner()
+                                nm.scan(hosts=host, arguments='-Pn -T4 -sC -p80,8080,443,4443,8081,8181,9090 --open -o ../Results/http_titles')
 
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
+                print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
 
 
 def waf_enum():
