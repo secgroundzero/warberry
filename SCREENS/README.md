@@ -1,19 +1,20 @@
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/1.png)
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/2.png)
 
-### Running the tool with a switch
-![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2393.JPG)
-
 
 ### Flowcharts
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry static.png)
-![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry mac bypass)
-![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry nac bypass)
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry mac bypass.png)
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry nac bypass.png)
 
 
 
 ### Connect to GND and port 23 pins on the RPi.
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2394.JPG)
+
+
+### Running the tool with a switch
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2393.JPG)
 
 
 ### Script for autorunning with a switch
