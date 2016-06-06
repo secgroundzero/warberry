@@ -4,6 +4,14 @@
 ### Running the tool with a switch
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2393.JPG)
 
+
+### Flowcharts
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry static.png)
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry mac bypass)
+![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry nac bypass)
+
+
+
 ### Connect to GND and port 23 pins on the RPi.
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/IMG_2394.JPG)
 
