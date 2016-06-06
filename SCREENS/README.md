@@ -3,8 +3,14 @@
 
 
 ### Flowcharts
+
+# Static IP Bypass
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry static.png)
+
+# MAC Address Filtering Bypass
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry mac bypass.png)
+
+# NAC Filtering Bypass
 ![alt tag](https://github.com/secgroundzero/warberry/blob/master/SCREENS/warberry nac bypass.png)
 
 
