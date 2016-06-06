@@ -24,26 +24,38 @@ The author bears no responsibility for any misuse of the tool.
 
 To get a list of all options and switches use:
 
-```sudo python warberry.py -h```
+```python warberry.py -h```
 
 ```
-Parameters:
--h,  --help         [*] Print this help banner
--m,  --man          [*] Prints WarBerry's Man Page
--A,  --attack       [*] Run All Enumeration Scripts
--S,  --sniffer      [*] Run Sniffing Modules Only
--C,  --clear        [*] Clear Output Directories
--F,  --fulltcp      [*] Full TCP Port Scan
--T,  --toptcp       [*] Top Port Scan
--U,  --topudp       [*] Top UDP Port Scan
+
+Options:
+
+  --version             		show program's version number and exit
+  -h, --help            		show this help message and exit
+  -a ATTACKTYPE, --attack=ATTACKTYPE	Attack Mode. Default: --attack
+  -p PACKETS, --packets=PACKETS		Number of Network Packets to capture
+  -i IFACE, --interface=IFACE		Network Interface to use. Default: eth0
+  -P, --poison          		Turn Poisoning on/off. Default: On
+  -H, --hostname        		Change WarBerry hostname Default: Off
+  -e, --enumeration     		Turn enumeration mode on/off. Default: On
+  -r, --recon           		Recon only mode. No port scans
+  -S, --sniffer         		Sniffer only mode.
+  -C, --clear           		Clear previous output folders in ../Results
+  -m, --man             		Print WarBerry man pages
+
 
 example usage: sudo python warberry.py -A
                sudo python warberry.py --attack
-               sudo python warberry.py -C
+               sudo python warberry.py -r
 ```
 
 
-#### Installation
+#### Auto installation of dependecies
+
+```sudo bash bootstrap.sh```
+
+
+#### Manual Installation of dependecies
 
 Optional: Change the hostname of the RaspberryPi to **WarBerry** 
 
@@ -87,6 +99,8 @@ updated after each phase is completed.
 - sudo apt-get install tcpdump 
 - sudo apt-get install nmap 
 - sudo pip install python-nmap 
+- sudo apt-get install python-bluez
+- sudo pip install optparse-pretty
 - sudo pip install netaddr
 - sudo pip install ipaddress 
 - sudo apt-get install ppp 
