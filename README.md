@@ -129,6 +129,7 @@ updated after each phase is completed.
 - sudo git clone https://github.com/Dionach/CMSmap.git
 - sudo git clone https://github.com/PowerShellMafia/PowerSploit.git
 - sudo git clone https://github.com/offensive-security/exploit-database.git
+- sudo wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 
 
 #### Aircrack Installation
@@ -140,4 +141,3 @@ updated after each phase is completed.
 - sudo make install 
 - sudo airodump-ng-oui-update 
 - sudo apt-get -y install iw 
-- sudo wget https://download.sysinternals.com/files/SysinternalsSuite.zip 
