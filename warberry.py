@@ -74,12 +74,13 @@ v2.0                              @sec_groundzero
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
     parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC)
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="Number of Network Packets to capture")
-    parser.add_option("-i", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
+    parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
+    parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T4", help="Port scan intensity." + bcolors.WARNING + " Default: T4" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
     parser.add_option("-P", "--poison", action="store_false",dest="poison",default=True, help="Turn Poisoning on/off."+ bcolors.WARNING + " Default: On" + bcolors.ENDC)
     parser.add_option("-H", "--hostname", action="store_false", dest="hostname", default= True, help="Change WarBerry hostname" + bcolors.WARNING + " Default: On" + bcolors.ENDC)
-    parser.add_option("-e", "--enumeration", action="store_true",dest="enum", default=False, help="Turn enumeration mode on/off." + bcolors.WARNING + " Default: On" + bcolors.ENDC)
-    parser.add_option("-r", "--recon", action="store_true", dest="reconmode", default=False,help="Recon only mode. No port scans")
-    parser.add_option("-S", "--sniffer", action="store_true", dest="sniffer", default=False,help="Sniffer only mode.")
+    parser.add_option("-e", "--enumeration", action="store_true",dest="enum", default=False, help="Disable enumeration mode on/off." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-r", "--recon", action="store_true", dest="reconmode", default=False,help="Enable Recon only mode. No port scans" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-S", "--sniffer", action="store_true", dest="sniffer", default=False,help="Sniffer only mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-C", "--clear", action="store_true", dest="clear", default=False, help="Clear previous output folders in ../Results")
     parser.add_option("-m", "--man", action="store_true", dest="manpage", default=False, help="Print WarBerry man pages")
 
@@ -124,7 +125,8 @@ v2.0                              @sec_groundzero
             if options.hostname == True:
                 namechange()
             if options.reconmode == False:
-                scanner_thread(CIDR)
+                intensity = options.intensity
+                scanner_thread(CIDR, intensity)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed targeted scanning\n")
                 if options.enum == False:
