@@ -116,6 +116,7 @@ updated after each phase is completed.
 - sudo apt-get install nikto
 - sudo apt-get install hydra
 - sudo apt-get install john
+- sudo apt-get install bridge-utils
 - sudo apt-get install w3af-console
 - sudo apt-get install ettercap-text-only
 - sudo apt-get install cryptcat
