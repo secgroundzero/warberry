@@ -51,7 +51,7 @@ def scan_targetted(self):
 
 def scanning(self):
     nm=nmap.PortScanner()
-    arg= "-Pn -p"+self.port + " " + self.intensity + "--open"
+    arg= "-Pn -p"+self.port + " " + self.intensity + " --open"
     nm.scan(hosts=self.CIDR, arguments=arg)
     for host in nm.all_hosts():
         writeFile=self.path_file
