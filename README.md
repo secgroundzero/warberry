@@ -78,6 +78,10 @@ Download WarBerry by cloning the Git repository:
 ```sudo git clone https://github.com/secgroundzero/warberry.git```
 
 
+### Reporting 
+Download the /WarBeery/RESULTS folder into the REPORTING/RESULTS folder and open reporting.html.
+
+
 ### Important
 
 The tool in case of MAC address filtering enumerates by default the subnets specified under ***/home/pi/WarBerry/warberry/discover***.
