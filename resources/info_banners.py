@@ -61,7 +61,8 @@ Options:
   -h, --help                            show this help message and exit
   -a ATTACKTYPE, --attack=ATTACKTYPE    Attack Mode. Default: --attack
   -p PACKETS, --packets=PACKETS         Number of Network Packets to capture
-  -i IFACE, --interface=IFACE           Network Interface to use. Default: eth0
+  -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
+  -i INTENSITY, --intensity=INTENSITY   Port scan intensity. Default: T4
   -P, --poison                          Turn Poisoning on/off. Default: On
   -H, --hostname                        Change WarBerry hostname Default: Off
   -e, --enumeration                     Turn enumeration mode on/off. Default: On
@@ -107,13 +108,14 @@ kick in and attempt to poison users to obtain credentials.
     using this -H flag
 . Nearby wifi enumeration
 
+-i --intensity : Set the insensity of the scanning module. Accepted values are -T1,-T2,-T3,-T4
 -H --hostname: This flag is OFF by default. When enabled, the hostname change will not be performed and the WarBerry will
     keep its initial hostname. The change is recommended for remaining hidden in the network.
 
 -S --sniffer: When this flag is enabled only the network packet sniffer will run. Default is a 20 packet capture but
     it can be changed with the -p parameter
 
--i --interface : Set the interface for the scripts to run on. Default is eth0.
+-I --interface : Set the interface for the scripts to run on. Default is eth0.
 
 -a --attack : Set the attack mode. Default is -A. The modes are explained below.
 
@@ -130,7 +132,6 @@ This mode will run all enumeration scripts which consist of:
 .DHCP Service Enumeration. This is only an informational script which checks if the DHCP
     service is running. If the service is running before we perfom basic tasks such as changing
     our hostname we might alert the Blue Teams of our presence.
-
 . Internal IP recon. Verify if a valid internal IP is obtained. If not check the BYPASS section below.
     If yes then the CIDR for that IP is created.
 . External IP recon. Check if a valid external IP is obtained.
