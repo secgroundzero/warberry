@@ -57,6 +57,7 @@ if [[ ! -z $APT_GET_CMD ]]; then
                     make         \
                     g++          \
                     iw           \
+		    bridge-utils \
                     ettercap-text-only;
 
     echo """
