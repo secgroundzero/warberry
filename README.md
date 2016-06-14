@@ -37,10 +37,11 @@ Options:
   -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
   -i INTENSITY, --intensity=INTENSITY   Port scan intensity. Default: T4
   -P, --poison                          Turn Poisoning on/off. Default: On
-  -H, --hostname                        Change WarBerry hostname Default: Off
-  -e, --enumeration                     Turn enumeration mode on/off. Default: On
-  -r, --recon                           Recon only mode. No port scans
-  -S, --sniffer                         Sniffer only mode.
+  -H, --hostname                        Do not change WarBerry hostname Default: Off
+  -e, --enumeration                     Disable enumeration mode on/off. Default: Off
+  -M, --malicious       		Enable Malicious only mode. Default: Off
+  -r, --recon                           Enable Recon only mode. Default: Off
+  -S, --sniffer                         Enable Sniffer only mode. Default: Off
   -C, --clear                           Clear previous output folders in ../Results
   -m, --man                             Print WarBerry man pages
 
