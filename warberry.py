@@ -76,11 +76,12 @@ v2.0                              @sec_groundzero
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="Number of Network Packets to capture")
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
     parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T4", help="Port scan intensity." + bcolors.WARNING + " Default: T4" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
-    parser.add_option("-P", "--poison", action="store_false",dest="poison",default=True, help="Turn Poisoning on/off."+ bcolors.WARNING + " Default: On" + bcolors.ENDC)
-    parser.add_option("-H", "--hostname", action="store_false", dest="hostname", default= True, help="Change WarBerry hostname" + bcolors.WARNING + " Default: On" + bcolors.ENDC)
-    parser.add_option("-e", "--enumeration", action="store_true",dest="enum", default=False, help="Disable enumeration mode on/off." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
-    parser.add_option("-r", "--recon", action="store_true", dest="reconmode", default=False,help="Enable Recon only mode. No port scans" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
-    parser.add_option("-S", "--sniffer", action="store_true", dest="sniffer", default=False,help="Sniffer only mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-P", "--poison", action="store_false",dest="poison",default=True, help="Turn Poisoning off."+ bcolors.WARNING + " Default: On" + bcolors.ENDC)
+    parser.add_option("-H", "--hostname", action="store_false", dest="hostname", default= True, help="Do not change WarBerry hostname" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-e", "--enumeration", action="store_true",dest="enum", default=False, help="Disable enumeration mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-M", "--malicious", action="store_true", dest="malicious", default=False, help="Enable Malicious only mode" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-r", "--recon", action="store_true", dest="reconmode", default=False,help="Enable Recon only mode. " + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-S", "--sniffer", action="store_true", dest="sniffer", default=False,help="Enable Sniffer only mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-C", "--clear", action="store_true", dest="clear", default=False, help="Clear previous output folders in ../Results")
     parser.add_option("-m", "--man", action="store_true", dest="manpage", default=False, help="Print WarBerry man pages")
 
@@ -106,71 +107,78 @@ v2.0                              @sec_groundzero
         if (int_ip == None):
             exit
         else:
-            netmask = netmask_recon(iface)
-            external_IP_recon()
-            with open('../Results/running_status', 'a') as status:
-                status.write("Completed IP Recon\n")
-            packets = options.packets
-            sniffer(iface, packets)
-            with open('../Results/running_status', 'a') as status:
-                status.write("Completed sniffing network packets\n")
-            pcap_parser()
-            CIDR = subnet(int_ip, netmask)
-            hostnames(CIDR)
-            with open('../Results/running_status', 'a') as status:
-                status.write("Completed hostnames search\n")
-            nbtscan(CIDR)
-            with open('../Results/running_status', 'a') as status:
-                status.write("Completed NBTScan\n")
-            if options.hostname == True:
-                namechange()
-            if options.reconmode == False:
-                intensity = options.intensity
-                scanner_thread(CIDR, intensity)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed targeted scanning\n")
-                if options.enum == False:
-                    shares_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed enumerating shares\n")
-                    smb_users()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed enumerating users\n")
-                    webs_prep()
-                    http_title_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed enumerating HTTP Titles\n")
-                    nfs_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed NFS Enumeration\n")
-                    waf_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed WAF Enumeration\n")
-                    mysql_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed MYSQL Enumeration\n")
-                    mssql_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed MSSQL Enumeration\n")
-                    ftp_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed FTP Enumeration\n")
-                    snmp_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed SNMP Enumeration\n")
-            bluetooth_scan()
-            with open('../Results/running_status', 'a') as status:
-                status.write("Completed bluetooth scan\n")
-            wifi_scan()
-            with open('../Results/running_status', 'a') as status:
-                status.write("Completed wifi networks scan\n")
-                print ""
-            print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-            print " "
-            if options.poison == True:
+            if options.malicious == True:
+                netmask = netmask_recon(iface)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Entering poisoning mode\n")
                     poison(iface)
+                netmask = netmask_recon(iface)
+            else:
+                netmask = netmask_recon(iface)
+                external_IP_recon()
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed IP Recon\n")
+                packets = options.packets
+                sniffer(iface, packets)
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed sniffing network packets\n")
+                pcap_parser()
+                CIDR = subnet(int_ip, netmask)
+                hostnames(CIDR)
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed hostnames search\n")
+                nbtscan(CIDR)
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed NBTScan\n")
+                if options.hostname == True:
+                    namechange()
+                if options.reconmode == False:
+                    intensity = options.intensity
+                    scanner_thread(CIDR, intensity)
+                    with open('../Results/running_status', 'a') as status:
+                        status.write("Completed targeted scanning\n")
+                    if options.enum == False:
+                        shares_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed enumerating shares\n")
+                        smb_users()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed enumerating users\n")
+                        webs_prep()
+                        http_title_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed enumerating HTTP Titles\n")
+                        nfs_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed NFS Enumeration\n")
+                        waf_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed WAF Enumeration\n")
+                        mysql_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed MYSQL Enumeration\n")
+                        mssql_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed MSSQL Enumeration\n")
+                        ftp_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed FTP Enumeration\n")
+                        snmp_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed SNMP Enumeration\n")
+                bluetooth_scan()
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed bluetooth scan\n")
+                wifi_scan()
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed wifi networks scan\n")
+                    print ""
+                print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
+                print " "
+                if options.poison == True:
+                    with open('../Results/running_status', 'a') as status:
+                        status.write("Entering poisoning mode\n")
+                        poison(iface)
 
     elif options.attacktype == '-T' or options.attacktype == '--toptcp':
         subprocess.call('clear', shell=True)
@@ -291,7 +299,6 @@ def external_IP_recon():
         except:
                 print bcolors.WARNING + "[!] Could not reach the outside world. Possibly behind a firewall or some kind filtering\n" + bcolors.ENDC
         return
-
 
 def clear_output():
 
