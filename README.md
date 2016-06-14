@@ -39,7 +39,7 @@ Options:
   -P, --poison                          Turn Poisoning on/off. Default: On
   -H, --hostname                        Do not change WarBerry hostname Default: Off
   -e, --enumeration                     Disable enumeration mode on/off. Default: Off
-  -M, --malicious       		Enable Malicious only mode. Default: Off
+  -M, --malicious			Enable Malicious only mode. Default: Off
   -r, --recon                           Enable Recon only mode. Default: Off
   -S, --sniffer                         Enable Sniffer only mode. Default: Off
   -C, --clear                           Clear previous output folders in ../Results
