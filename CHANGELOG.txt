@@ -3,8 +3,23 @@
 |------------------|
 
 * Threads support for all scanning modes
-* Reporting module
 * Wireless Attacks
+
+
+|--------------|
+| VERSION 2.0b |
+|--------------|
+
+* Added SAP scanning support 
+* Added Oracle iSQL scanning support
+* Added Java RMI Endpoint scan support
+
+|--------------|
+| VERSION 2.0a |
+|--------------|
+
+* Added Reporting Module
+* Added rlogin, openvpn, ipsec, ldap, pop3, smtp support
 
 |-------------|
 | VERSION 2.0 |
