@@ -57,6 +57,7 @@ if [[ ! -z $APT_GET_CMD ]]; then
                     make         \
                     g++          \
                     iw           \
+		    xprobe2      \
 		    bridge-utils \
                     ettercap-text-only;
 
