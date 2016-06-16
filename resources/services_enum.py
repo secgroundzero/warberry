@@ -72,6 +72,28 @@ def smb_users():
         print bcolors.TITLE + "[+] Done! Results saved in /Results/smb_users" + bcolors.ENDC
 
 
+def domains_enum():
+
+        if os.path.isfile('../Results/windows'):
+                print " "
+                print bcolors.OKGREEN + "      [ SMB DOMAINS ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/domains_enum'):
+                print bcolors.WARNING + "[!] SMB DOMAINS Results File Exists. Previous Results will be Overwritten\n" +bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
+
+        with open('../Results/win_hosts') as hosts:
+                for host in hosts:
+                        print "[*] Enumerating domains on %s" %host.strip()
+                        nm = nmap.PortScanner()
+                        nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-domains -p U:137,T:139 --open -o ../Results/domains_enum')
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/domains_enum" + bcolors.ENDC
+
+
+
 def webs_prep():
         if (os.path.isfile('../Results/webservers80') or os.path.isfile('../Results/webservers8080')
             or os.path.isfile('../Results/webservers8181') or os.path.isfile('../Results/webservers443')
@@ -240,6 +262,28 @@ def clamav_enum():
                         nm.scan(hosts=clam, arguments='-Pn -T4 -sV -p3310 --open --script clamav-exec.nse  -o ../Results/clamav_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/clamav_enum" + bcolors.ENDC
+
+
+def os_enum(CIDR):
+
+        subprocess.call("nmap -sP %s -oG - | awk '/Up$/{print $2}' >> ../Results/live_ips" %CIDR, shell=True)
+
+        if os.stat('../Results/live_ips').st_size != 0:
+                print " "
+                print bcolors.OKGREEN + "      [ OS ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+
+        if os.path.isfile('../Results/live_ips'):
+                print bcolors.WARNING + "[!] OS Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/live_ips | uniq > ../Results/liveip_hosts", shell=True)
+        with open('../Results/liveip_hosts') as alive:
+                for live in alive:
+                        print "[*] Enumerating OS on %s" %live.strip()
+                        subprocess.call('sudo xprobe2 -D 11 %s | grep -A 1 "Primary guess:" >> ../Results/os_enum' %live.strip(), shell=True)
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/os_enum" + bcolors.ENDC
 
 
 def pcap_parser():
