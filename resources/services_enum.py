@@ -222,6 +222,25 @@ def snmp_enum():
         print bcolors.TITLE + "[+] Done! Results saved in /Results/snmp_enum" + bcolors.ENDC
 
 
+def clamav_enum():
+
+        if os.path.isfile('../Results/clamav'):
+                print " "
+                print bcolors.OKGREEN + "      [ CLAM AV ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/clamav_enum'):
+                print bcolors.WARNING + "[!] Clam AV Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/clamav | uniq > ../Results/clamav_hosts", shell=True)
+        with open('../Results/clamav_hosts') as clams:
+                for clam in clams:
+                        print "[*] Enumerating Clam AV on %s" %clam.strip()
+                        nm = nmap.PortScanner()
+                        nm.scan(hosts=clam, arguments='-Pn -T4 -sV -p3310 --open --script clamav-exec.nse  -o ../Results/clamav_enum')
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/clamav_enum" + bcolors.ENDC
+
 
 def pcap_parser():
 

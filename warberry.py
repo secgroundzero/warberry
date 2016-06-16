@@ -166,6 +166,9 @@ v2.0                              @sec_groundzero
                         snmp_enum()
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed SNMP Enumeration\n")
+                        clamav_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed ClamAV Enumeration\n")
                 bluetooth_scan()
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed bluetooth scan\n")
