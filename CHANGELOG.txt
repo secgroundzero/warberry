@@ -5,6 +5,16 @@
 * Threads support for all scanning modes
 * Wireless Attacks
 
+|---------------|
+| VERSION 2.0b3 |
+|---------------|
+
+* Added support for OS Fingerprint
+* Changed bootstrap to include xprobe2
+* Added SMB Domains enumeration scanning
+* Added support for finger protocol scanning
+* Added support for distcc daemon scanning
+* Added support for webmin scanning
 
 |---------------|
 | VERSION 2.0b2 |
