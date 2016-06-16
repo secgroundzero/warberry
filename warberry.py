@@ -72,7 +72,7 @@ v2.0                              @sec_groundzero
 
 
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
-    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC)
+    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC,choices=['-A','--attack','-T','--toptcp', '-B','--topudp', '-F', '--fultcp'])
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="Number of Network Packets to capture")
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
     parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T4", help="Port scan intensity." + bcolors.WARNING + " Default: T4" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
@@ -95,7 +95,7 @@ v2.0                              @sec_groundzero
     elif options.manpage == True:
         subprocess.call('clear', shell=True)
         banner_full_help()
-    elif options.attacktype == '-A' or options.attacktype == '--attack':
+    elif options.attacktype == "-A" or options.attacktype == '--attack':
         subprocess.call('clear', shell=True)
         banner()
         if not os.geteuid() == 0:
