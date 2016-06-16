@@ -144,6 +144,9 @@ v2.0                              @sec_groundzero
                         smb_users()
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed enumerating users\n")
+                        domains_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed enumerating domains\n")
                         webs_prep()
                         http_title_enum()
                         with open('../Results/running_status', 'a') as status:
@@ -169,6 +172,9 @@ v2.0                              @sec_groundzero
                         clamav_enum()
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed ClamAV Enumeration\n")
+                        os_enum(CIDR)
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed OS Enumeration\n")
                 bluetooth_scan()
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed bluetooth scan\n")
