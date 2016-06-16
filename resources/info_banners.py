@@ -73,8 +73,8 @@ Options:
   -m, --man                             Print WarBerry man pages
 
 
-example usage: sudo python warberry.py -A
-               sudo python warberry.py --attack
+example usage: sudo python warberry.py -a -T
+               sudo python warberry.py --attack --topudp
                sudo python warberry.py -r
 
 
