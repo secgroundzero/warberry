@@ -6,6 +6,18 @@
 * Wireless Attacks
 
 
+|---------------|
+| VERSION 2.0b2 |
+|---------------|
+
+* Support for ClamAV Scanning and Enumeration
+
+|---------------|
+| VERSION 2.0b1 |
+|---------------|
+
+* Fixed Example usages
+
 |--------------|
 | VERSION 2.0b |
 |--------------|
