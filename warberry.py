@@ -252,7 +252,7 @@ def iprecon(ifname):
         int_ip =  socket.inet_ntoa(fcntl.ioctl(s.fileno(),0x8915, struct.pack('256s', ifname[:15]))[20:24])
         netmask = socket.inet_ntoa(fcntl.ioctl(socket.socket(socket.AF_INET, socket.SOCK_DGRAM), 35099, struct.pack('256s', ifname))[20:24])
 
-        if not ip_validate(int_ip):
+        if not ip_validate(int_ip) and int_ip!="169.254.253.251":
             print '[+] Internal IP obtained on '+ bcolors.TITLE + '%s:' % ifname + bcolors.ENDC + bcolors.OKGREEN + " %s" % int_ip + bcolors.ENDC + ' netmask ' + bcolors.OKGREEN + '%s' % netmask + bcolors.ENDC
             return int_ip
 
