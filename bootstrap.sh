@@ -69,7 +69,7 @@ if [[ ! -z $APT_GET_CMD ]]; then
     echo """
         INSTALLING PYTHON PACKAGES...
     """
-    pip2 install scapy python-nmap ip2address netaddr optparse-pretty pybluez;
+    pip2 install scapy python-nmap ipaddress netaddr optparse-pretty pybluez;
 
     echo """
         CLONING GIT PACKAGES TO WarBerry/Tools directory...
