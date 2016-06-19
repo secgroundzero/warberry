@@ -38,7 +38,7 @@ def banner():
 
             TACTICAL EXPLOITATION
 
-v2.0b                             @sec_groundzero
+v2.0b4                            @sec_groundzero
 
 ''') + bcolors.ENDC
 
@@ -62,6 +62,7 @@ Options:
   -a ATTACKTYPE, --attack=ATTACKTYPE    Attack Mode. Default: --attack
   -p PACKETS, --packets=PACKETS         Number of Network Packets to capture
   -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
+  -N NAME, --name=NAME                  Hostname to use. Default: Auto
   -i INTENSITY, --intensity=INTENSITY   Port scan intensity. Default: T4
   -P, --poison                          Turn Poisoning on/off. Default: On
   -H, --hostname                        Do not Change WarBerry hostname Default: Off
@@ -73,9 +74,12 @@ Options:
   -m, --man                             Print WarBerry man pages
 
 
-example usage: sudo python warberry.py -a -T
-               sudo python warberry.py --attack --topudp
-               sudo python warberry.py -r
+example usage: sudo python warberry.py -a -T                Attack all TCP Ports
+               sudo python warberry.py --attack --topudp    Scan only the top udp ports
+               sudo python warberry.py -r                   Use only the recon modules
+               sudo python warberry.py -H -I wlan0          Use the wlan0 interface and dont change hostname
+               sudo python warberry.py -I eth0 -i -T3       Use the eth0 interface and T3 scanning intensity
+               sudo python warberry.py -I eth0 -N HackerPC  Use the eth0 interface and change hostname to HackerPC
 
 
 ''') + bcolors.ENDC
@@ -92,6 +96,13 @@ def banner_full_help():
  \/  \/\_| |_/\_| \_\____/\____/\_| \_\_| \_| \_/
 
 [-] Warberry Man Page [-]
+
+example usage: sudo python warberry.py -a -T                Attack all TCP Ports
+               sudo python warberry.py --attack --topudp    Scan only the top udp ports
+               sudo python warberry.py -r                   Use only the recon modules
+               sudo python warberry.py -H -I wlan0          Use the wlan0 interface and dont change hostname
+               sudo python warberry.py -I eth0 -i -T3       Use the eth0 interface and T3 scanning intensity
+               sudo python warberry.py -I eth0 -N DC5       Use the eth0 interface and change hostname to DC5
 
 
 FLAG SPECIFICATION
