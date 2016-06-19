@@ -65,6 +65,17 @@ def hostnames(CIDR):
 	print " "
 
 
+def manual_namechange(host_name):
+
+	print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %host_name + bcolors.ENDC
+	with open('/etc/hostname', 'w') as hostname:
+		hostname.write(host_name)
+	with open('/etc/hosts', 'w') as hosts:
+		hosts.write('127.0.0.1\tlocalhost\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %host_name)
+	subprocess.call('sudo systemctl daemon-reload 2>/dev/null', shell=True)
+	subprocess.call('sudo /etc/init.d/hostname.sh 2>/dev/null', shell=True)
+	print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
+
 def namechange():
 
 	mvp_hosts = ['DEMO', 'DEV', 'PRINTER', 'BACKUP', 'DC', 'DC1', 'DC2']
@@ -96,8 +107,8 @@ def namechange():
 					with open('/etc/hosts', 'w') as hosts:
 						print "[*] Changing Hostname from " + bcolors.WARNING + socket.gethostname() + bcolors.ENDC + " to " + bcolors.OKGREEN + "%s" %mvp + bcolors.ENDC
 						hosts.write('127.0.0.1\tlocalhost\n::1\tlocalhost ip6-localhost ip6-loopback\nff02::1\tip6-allnodes\nff02::2\tip6-allrouters\n\n127.0.1.1\t%s' %mvp.strip())
-				subprocess.call('sudo /etc/init.d/hostname.sh', shell=True)
-				subprocess.call('sudo systemctl daemon-reload', shell=True)
+				subprocess.call('sudo systemctl daemon-reload 2>/dev/null', shell=True)
+				subprocess.call('sudo /etc/init.d/hostname.sh 2>/dev/null', shell=True)
 				print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
 
 
