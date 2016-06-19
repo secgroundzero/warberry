@@ -4,6 +4,27 @@
 
 * Threads support for all scanning modes
 * Wireless Attacks
+* Support for threads number definition
+* Vlans enumeration
+
+|---------------|
+| VERSION 2.0b4 |
+|---------------|
+
+* Added support for PJL Language Scanning
+* Added support for vSphere Client Scanning
+* Added support for Informix Server Scanning
+* Added support for Informix Client Scanning
+* Added support for H323 Scanning
+* Added support for Lotus Notes Client Scanning
+* Added more examples to the help menu
+* Fixed nameserver enumeration errors output
+* Fixed os enumeration errors output
+* Added SIP Methods Enumeration
+* Added SIP Users Enumeration
+* Added Informix DB Enumeration
+* Added Informix Tables Enumeration
+* Added functionality to manually set hostname via -N
 
 |---------------|
 | VERSION 2.0b3 |
