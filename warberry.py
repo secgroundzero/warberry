@@ -75,6 +75,7 @@ v2.0                              @sec_groundzero
     parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC,choices=['-A','--attack','-T','--toptcp', '-B','--topudp', '-F', '--fultcp'])
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="Number of Network Packets to capture")
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
+    parser.add_option("-N", "--name", action="store", dest="name", default="WarBerry",help="Hostname to use." + bcolors.WARNING + " Default: Auto" + bcolors.ENDC)
     parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T4", help="Port scan intensity." + bcolors.WARNING + " Default: T4" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
     parser.add_option("-P", "--poison", action="store_false",dest="poison",default=True, help="Turn Poisoning off."+ bcolors.WARNING + " Default: On" + bcolors.ENDC)
     parser.add_option("-H", "--hostname", action="store_false", dest="hostname", default= True, help="Do not change WarBerry hostname" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
@@ -103,6 +104,7 @@ v2.0                              @sec_groundzero
             sys.exit(-1)
         dhcp_check()
         iface = options.iface
+        host_name = options.name
         int_ip = iprecon(iface)
         if (int_ip == None):
             exit
@@ -130,7 +132,9 @@ v2.0                              @sec_groundzero
                 nbtscan(CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed NBTScan\n")
-                if options.hostname == True:
+                if host_name != "WarBerry":
+                    manual_namechange(host_name)
+                if options.hostname == True and host_name == "WarBerry":
                     namechange()
                 if options.reconmode == False:
                     intensity = options.intensity
@@ -172,6 +176,18 @@ v2.0                              @sec_groundzero
                         clamav_enum()
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed ClamAV Enumeration\n")
+                        informix_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed Informix DB Enumeration\n")
+                        informix_tables()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed Informix Tables Enumeration\n")
+                        sip_methods_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed SIP Methods Enumeration\n")
+                        sip_users_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed SIP Users Enumeration\n")
                         os_enum(CIDR)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed OS Enumeration\n")
@@ -348,7 +364,7 @@ def sniffer(iface, packets):
         packet_count = 20
         pcap_location = "../Results/capture.pcap"
         print bcolors.OKGREEN + "      [ NETWORK SNIFFING MODULE ]\n" + bcolors.ENDC
-        print "Sniffer will begin capturing %d packets" %packet_count #Change the count number accordingly
+        print "Sniffer will begin capturing %d packets" %packet_count
         packets = sniff(iface=iface, count= packet_count)
         wrpcap(pcap_location, packets)
         print bcolors.OKGREEN + "[+] " + bcolors.ENDC + "Capture Completed." + bcolors.ENDC + " PCAP File Saved at " + bcolors.OKGREEN + "%s!\n" %pcap_location + bcolors.ENDC
@@ -414,7 +430,7 @@ def nbtscan(CIDR):
        print " "
        print bcolors.OKGREEN + "      [ NAMESERVER ENUMERATION MODULE ]\n" + bcolors.ENDC
 
-       subprocess.call('sudo nbtscan -r %s > ../Results/nameservers' %CIDR , shell = True )
+       subprocess.call('sudo nbtscan -r %s 2>/dev/null > ../Results/nameservers' %CIDR , shell = True )
        subprocess.call("sudo cat ../Results/nameservers | awk {'print $2'} > ../Results/mvp_names", shell=True)
 
        print " "
