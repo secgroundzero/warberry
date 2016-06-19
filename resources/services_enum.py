@@ -264,6 +264,87 @@ def clamav_enum():
         print bcolors.TITLE + "[+] Done! Results saved in /Results/clamav_enum" + bcolors.ENDC
 
 
+def informix_enum():
+
+        if os.path.isfile('../Results/informix_db'):
+                print " "
+                print bcolors.OKGREEN + "      [ Informix DB ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/informix_enum'):
+                print bcolors.WARNING + "[!] Informix DB Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
+        with open('../Results/informix_hosts') as infdb:
+                for inf in infdb:
+                        print "[*] Enumerating Informix DB on %s" %inf.strip()
+                        nm = nmap.PortScanner()
+                        nm.scan(hosts=inf, arguments='-Pn -p 9088 --script informix-query --script-args informix-query.username=informix,informix-query.password=informix  -o ../Results/informix_enum')
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_enum" + bcolors.ENDC
+
+
+def informix_tables():
+
+        if os.path.isfile('../Results/informix_db'):
+                print " "
+                print bcolors.OKGREEN + "      [ Informix DB TABLES ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/informix_tables'):
+                print bcolors.WARNING + "[!] Informix DB Tables Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
+        with open('../Results/informix_hosts') as infdb:
+                for inf in infdb:
+                        print "[*] Enumerating Informix DB Tables on %s" %inf.strip()
+                        nm = nmap.PortScanner()
+                        nm.scan(hosts=inf, arguments='-Pn -p 9088 --script informix-tables --script-args informix-tables.username=informix,informix-tables.password=informix  -o ../Results/informix_tables')
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_tables" + bcolors.ENDC
+
+
+def sip_methods_enum():
+
+        if os.path.isfile('../Results/voip'):
+                print " "
+                print bcolors.OKGREEN + "      [ SIP METHODS ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/sip_methods'):
+                print bcolors.WARNING + "[!] SIP Methods Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
+        with open('../Results/voip_hosts') as sips:
+                for sip in sips:
+                        print "[*] Enumerating SIP Methods on %s" %sip.strip()
+                        nm = nmap.PortScanner()
+                        nm.scan(hosts=sip, arguments='-Pn --script sip-methods -sU -p 5060  -o ../Results/sip_methods')
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_methods" + bcolors.ENDC
+
+def sip_users_enum():
+
+        if os.path.isfile('../Results/voip'):
+                print " "
+                print bcolors.OKGREEN + "      [ SIP USERS ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/sip_users'):
+                print bcolors.WARNING + "[!] SIP Users Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
+        with open('../Results/voip_hosts') as sips:
+                for sip in sips:
+                        print "[*] Enumerating SIP Users on %s" %sip.strip()
+                        nm = nmap.PortScanner()
+                        nm.scan(hosts=sip, arguments='-Pn --script sip-enum-users -sU -p 5060  -o ../Results/sip_users')
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_users" + bcolors.ENDC
+
+
+
+
 def os_enum(CIDR):
 
         subprocess.call("nmap -sP %s -oG - | awk '/Up$/{print $2}' >> ../Results/live_ips" %CIDR, shell=True)
@@ -274,14 +355,14 @@ def os_enum(CIDR):
         else:
                 return
 
-        if os.path.isfile('../Results/live_ips'):
+        if os.path.isfile('../Results/os_enum'):
                 print bcolors.WARNING + "[!] OS Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
         subprocess.call("sudo sort ../Results/live_ips | uniq > ../Results/liveip_hosts", shell=True)
         with open('../Results/liveip_hosts') as alive:
                 for live in alive:
                         print "[*] Enumerating OS on %s" %live.strip()
-                        subprocess.call('sudo xprobe2 -D 11 %s | grep -A 1 "Primary guess:" >> ../Results/os_enum' %live.strip(), shell=True)
+                        subprocess.call('sudo xprobe2 -D 11 %s 2>/dev/null | grep -A 1 "Primary guess:" >> ../Results/os_enum' %live.strip(), shell=True)
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/os_enum" + bcolors.ENDC
 
