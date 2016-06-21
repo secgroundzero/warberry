@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Warberry Pi</title>
+    <link rel="icon" href="Warberry_Logo_Transparent.png">
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.6-dist/css/bootstrap.min.css">
+ </head>
+<body style="background-color:#eee;">
+    <div class="jumbotron">
+
+        <!-- Page Header -->
+        <div class="container">
+            <div class="row" style="display:flex">
+                <div class="col-md-4">
+                    <img src="Warberry_Logo_Transparent.png">
+                </div>
+                <div class="col-md-10 col-md-offset-3">
+                    <div class="page-header">
+                        <h2>WarBerry Report</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Body -->
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-body" style="height:80%;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="nav nav-tabs nav-tabs-justified" id="warBerry_tabs" role="tablist">
+                                    <li role="presentation" class="active"><a onclick="changeTab('#network_traffic')" href="#network_traffic" role="tab" data-toggle="tab">Network Capture</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="tab-content" id="content-tabs" style="margin-top:20px;height:85%">
+                            <div role="tabpanel" class="tab-pane active pre-scrollable" id="network_traffic">
+                                <div class="col-md-offset-5" style="margin-top:20px">
+                                    <button type="button" class="btn btn-primary btn-lg active" onclick="downloadFile()">Download capture.pcap <span class="glyphicon glyphicon-download-alt"></span></button>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="network_scanner_content">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hidden-elements" style="display:none">
+        </div>
+        <!-- Page Footer -->
+        <div class="col-md-3 col-md-offset-8">
+            <div class="panel-footer" style="background-color:#ffe6e6">
+                <h6><a onclick="downloadPDF()">Download the PDF Report <span class="glyphicon glyphicon-floppy-save" aria-hidden="true">  </span></a></h6>
+            </div>
+
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel-footer" style="background-color:#eee">
+                <h6>2016 WarBerry</h6>
+                <h6 style="align:right">@Sec_GroundZero</h6>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- JQuery -->
+    <script src="bootstrap-3.3.6-dist/js/jquery/dist/jquery.min.js"></script>
+    <script src="bootstrap-3.3.6-dist/js/jquery/dist/jquery.fileDownload.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <!-- JsPDF JavaScript -->
+    <script src="jsPDF/dist/jspdf.min.js"></script>
+    <script src="bootstrap-3.3.6-dist/js/jspdf.plugin.autotable.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="bootstrap-3.3.6-dist/js/warberry-js.js"></script>
+
+</body>
+</html>

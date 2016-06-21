@@ -1,0 +1,36 @@
+{
+  "name": "jspdf",
+  "version": "1.2.61",
+  "homepage": "https://github.com/mrrio/jspdf",
+  "description": "PDF Document creation from JavaScript",
+  "main": "dist/jspdf.min.js",
+  "files": [
+    "dist/jspdf.min.js",
+    "README.md"
+  ],
+  "keywords": [
+    "pdf"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrRio/jsPDF.git"
+  },
+  "dependencies": {
+    "adler32cs": "github:chick307/adler32cs.js",
+    "cf-blob.js": "0.0.1",
+    "filesaver.js": "github:andyinabox/FileSaver.js"
+  },
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^1.1.1",
+    "local-web-server": "^1.2.6",
+    "rollup": "^0.31.1",
+    "rollup-plugin-babel": "^2.4.0",
+    "uglify-js": "^2.6.2"
+  },
+  "scripts": {
+    "start": "ws",
+    "build": "npm install && bower install && node build.js",
+    "version": "npm run build && git add -A dist"
+  }
+}
