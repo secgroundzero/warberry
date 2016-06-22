@@ -78,6 +78,7 @@ v2.0                              @sec_groundzero
     parser.add_option("-N", "--name", action="store", dest="name", default="WarBerry",help="Hostname to use." + bcolors.WARNING + " Default: Auto" + bcolors.ENDC)
     parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T4", help="Port scan intensity." + bcolors.WARNING + " Default: T4" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
     parser.add_option("-P", "--poison", action="store_false",dest="poison",default=True, help="Turn Poisoning off."+ bcolors.WARNING + " Default: On" + bcolors.ENDC)
+    parser.add_option("-s", "--spoof", action="store_true", dest="spoof", default=False, help="Spoof source IP." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-H", "--hostname", action="store_false", dest="hostname", default= True, help="Do not change WarBerry hostname" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-e", "--enumeration", action="store_true",dest="enum", default=False, help="Disable enumeration mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-M", "--malicious", action="store_true", dest="malicious", default=False, help="Enable Malicious only mode" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
@@ -137,8 +138,16 @@ v2.0                              @sec_groundzero
                 if options.hostname == True and host_name == "WarBerry":
                     namechange()
                 if options.reconmode == False:
+                    if options.spoof == True:
+                        source_ip = ips_in_use(iface, CIDR, int_ip)
+                    else:
+                        source_ip = int_ip
                     intensity = options.intensity
-                    scanner_thread(CIDR, intensity)
+                    spoofed = 1
+                    if source_ip == int_ip:
+                        spoofed = 0
+                    scanner_thread(CIDR, intensity,source_ip,spoofed)
+                    intensity = options.intensity
                     with open('../Results/running_status', 'a') as status:
                         status.write("Completed targeted scanning\n")
                     if options.enum == False:
@@ -163,7 +172,7 @@ v2.0                              @sec_groundzero
                             status.write("Completed WAF Enumeration\n")
                         mysql_enum()
                         with open('../Results/running_status', 'a') as status:
-                            status.write("Completed MYSQL Enumeration\n")
+                                status.write("Completed MYSQL Enumeration\n")
                         mssql_enum()
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed MSSQL Enumeration\n")
@@ -191,12 +200,12 @@ v2.0                              @sec_groundzero
                         os_enum(CIDR)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed OS Enumeration\n")
-                bluetooth_scan()
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed bluetooth scan\n")
-                wifi_scan()
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed wifi networks scan\n")
+                    bluetooth_scan()
+                    with open('../Results/running_status', 'a') as status:
+                        status.write("Completed bluetooth scan\n")
+                    wifi_scan()
+                    with open('../Results/running_status', 'a') as status:
+                        status.write("Completed wifi networks scan\n")
                     print ""
                 print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
                 print " "
@@ -435,6 +444,24 @@ def nbtscan(CIDR):
        with open('../Results/nameservers', 'r') as nameservers:
             names = nameservers.read()
             print names
+
+
+def ips_in_use(iface,CIDR, int_ip):
+
+    print bcolors.OKGREEN + "      [ USED IP ENUMERATION MODULE ]\n" + bcolors.ENDC
+
+    print "ARP Scanning Network for IPs to spoof source IP\n"
+    subprocess.call("sudo netdiscover -i %s -P -l %s | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > ../Results/ips_discovered" %(iface, CIDR),shell=True)
+
+    if os.stat('../Results/ips_discovered').st_size != 0:
+        discover = open("../Results/ips_discovered","r")
+        source_ip = discover.readline()
+        discover.close()
+
+        return (source_ip)
+    else:
+        print bcolors.FAIL + "[-] No IPs captured! Exiting" + bcolors.ENDC
+        return int_ip
 
 
 if __name__ == '__main__':
