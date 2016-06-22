@@ -65,6 +65,7 @@ Options:
   -N NAME, --name=NAME                  Hostname to use. Default: Auto
   -i INTENSITY, --intensity=INTENSITY   Port scan intensity. Default: T4
   -P, --poison                          Turn Poisoning on/off. Default: On
+  -s, --spoof                           Spoof source IP. Default: Off
   -H, --hostname                        Do not Change WarBerry hostname Default: Off
   -e, --enumeration                     Disable Enumeration mode. Default: Off
   -M, --malicious                       Enable Malicious only mode Default: Off
