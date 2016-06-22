@@ -48,12 +48,12 @@ from netaddr import *
 from bluetooth import *
 #External modules
 from info_banners import *
-from network_scanners import *
+#from network_scanners import *
 from services_enum import *
 from rest_bypass import *
 from console_colors import bcolors
 from network_thread_scanner import *
-
+from network_full_thread import *
 
 def main():
 
@@ -72,7 +72,7 @@ v2.0                              @sec_groundzero
 
 
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
-    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC,choices=['-A','--attack','-T','--toptcp', '-B','--topudp', '-F', '--fultcp'])
+    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC,choices=['-A','--attack','-T','--toptcp', '-B','--topudp', '-F', '--fulltcp'])
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="Number of Network Packets to capture")
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
     parser.add_option("-N", "--name", action="store", dest="name", default="WarBerry",help="Hostname to use." + bcolors.WARNING + " Default: Auto" + bcolors.ENDC)
@@ -213,9 +213,9 @@ v2.0                              @sec_groundzero
         if (int_ip == None):
             exit
         netmask = netmask_recon(iface)
-        print external_IP_recon()
+        external_IP_recon()
         CIDR = subnet(int_ip, netmask)
-        scanner_top(CIDR)
+        scanner_top(CIDR, options.intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
 
     elif options.attacktype == '-B' or options.attacktype == '--tcpudp':
@@ -226,9 +226,9 @@ v2.0                              @sec_groundzero
         if (int_ip == None):
             exit
         netmask = netmask_recon(iface)
-        print external_IP_recon()
+        external_IP_recon()
         CIDR = subnet(int_ip, netmask)
-        scanner_full(CIDR)
+        scanner_full(CIDR,options.intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
     elif options.attacktype == '-F' or options.attacktype == '--fulltcp':
         subprocess.call('clear', shell=True)
@@ -236,9 +236,9 @@ v2.0                              @sec_groundzero
         iface = options.iface
         int_ip = iprecon(iface)
         netmask = netmask_recon(iface)
-        print external_IP_recon()
+        external_IP_recon()
         CIDR = subnet(int_ip, netmask)
-        scanner_tcp_full(CIDR)
+        scanner_tcp_full(CIDR,options.intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
     elif options.attacktype == '-S' or options.attacktype == '--sniffer':
         iface = options.iface
@@ -301,10 +301,8 @@ def net_length(netmask):
 
 
 def subnet(int_ip, netmask):
-
         ipaddr = int_ip.split('.')
         netmask = netmask.split('.')
-
 
         net_start = [str(int(ipaddr[x]) & int(netmask[x]))
              for x in range(0,4)]

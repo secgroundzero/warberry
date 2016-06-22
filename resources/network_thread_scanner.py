@@ -14,6 +14,9 @@ name = ['Windows Hosts', 'FTP', 'MSSQL Databases','MySQL Databases', 'Oracle Dat
 
 port=['445', '21', '1433', '3306', '1521', '111', '80', '443', '8080', '4443', '8081', '8181', '9090', '8611,8612,5222,5223', '23', '27017,27018,27019,28017', '5900', '53', '8089', '5800', '9443', '3050', '6000', '3690', '161','5060','513','1194','500','389','110','25','50013','3299','8000','8042','1099','5560','3310','79','3632','10000','9100','1526','1720','902,903','9088','143,999','1352']
 
+scan_type=['n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n,n,n,n', 'n', 'n,n,n,n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n,n','n','n,n','n']
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[34m'
@@ -25,7 +28,7 @@ class bcolors:
     TITLE = '\033[96m' 
 
 class ScanThread(threading.Thread):
-    def __init__(self,name, path_file,port, message, file,CIDR, intensity):
+    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type):
         threading.Thread.__init__(self)
         self.name = name
         self.path_file = path_file
@@ -35,6 +38,7 @@ class ScanThread(threading.Thread):
         self.CIDR=CIDR
         self.intensity=intensity
         self.output=""
+        self.type=type
     def run(self):
         file=self.path_file
         if os.path.isfile(file):
@@ -51,15 +55,38 @@ def scan_targetted(self):
 
 def scanning(self):
     nm=nmap.PortScanner()
-    arg= "-Pn -p"+self.port + " " + self.intensity + " --open"
-    nm.scan(hosts=self.CIDR, arguments=arg)
-    for host in nm.all_hosts():
-        writeFile=self.path_file
-        with open(writeFile, 'a') as hosts:
-            self.output=self.output+ "\n----------------------------------------------------\n"
-            hosts.write('%s\n' % host)
-            self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " %host + self.port + " ***" + bcolors.ENDC
-            self.output = self.output +"\n"+bcolors.TITLE + self.message +  bcolors.ENDC
+    if (self.type=="y"):
+        arg="-Pn -sU -p"+self.port + " " + self.intensity + " --open"
+        nm.scan(hosts=self.CIDR, arguments=arg)
+        for host in nm.all_hosts():
+            writeFile = self.path_file
+            with open(writeFile, 'a') as hosts:
+                self.output = self.output + "\n----------------------------------------------------\n"
+                hosts.write('%s\n' % host)
+                self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
+                self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
+    elif(self.type=="n"):
+        arg= "-Pn -p"+self.port + " " + self.intensity + " --open"
+        nm.scan(hosts=self.CIDR, arguments=arg)
+        for host in nm.all_hosts():
+            writeFile = self.path_file
+            with open(writeFile, 'a') as hosts:
+                self.output = self.output + "\n----------------------------------------------------\n"
+                hosts.write('%s\n' % host)
+                self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
+                self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
+    elif(self.type=="yn"):
+        arg = "-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open"
+        nm.scan(hosts=self.CIDR, arguments=arg)
+        for host in nm.all_hosts():
+            writeFile = self.path_file
+            with open(writeFile, 'a') as hosts:
+                self.output = self.output + "\n----------------------------------------------------\n"
+                hosts.write('%s\n' % host)
+                self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
+                self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
+
+
 
 def scanner_thread(CIDR, intensity):
     
@@ -69,7 +96,7 @@ def scanner_thread(CIDR, intensity):
     print " "
     threads=[]
     for i in range(len(path_file)):
-        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity)
+        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity, scan_type[i])
         t.start()
         threads.append(t)
     for t in threads:
