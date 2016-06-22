@@ -5,6 +5,7 @@
 * Wireless Attacks
 * Support for threads number definition
 * Vlans enumeration
+* Support for IPv6
 
 |---------------|
 | VERSION 2.0b6 |
@@ -12,6 +13,9 @@
 
 * Added thread support for all scans
 * Added support for UDP Scanning
+	- SQL Resolution Service
+	- UPNP
+	- RADIUS Authentication and Accounting messages
 
 |---------------|
 | VERSION 2.0b5 |
