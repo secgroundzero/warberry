@@ -2,10 +2,22 @@
 | UPCOMING CHANGES |
 |------------------|
 
-* Threads support for all scanning modes
 * Wireless Attacks
 * Support for threads number definition
 * Vlans enumeration
+
+|---------------|
+| VERSION 2.0b6 |
+|---------------|
+
+* Added thread support for all scans
+* Added support for UDP Scanning
+
+|---------------|
+| VERSION 2.0b5 |
+|---------------|
+
+* Revised reporting module
 
 |---------------|
 | VERSION 2.0b4 |
