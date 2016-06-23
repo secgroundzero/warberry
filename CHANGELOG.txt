@@ -7,6 +7,14 @@
 * Vlans enumeration
 * Support for IPv6
 
+
+|---------------|
+| VERSION 2.0b7 |
+|---------------|
+
+* Removed support for spoofing source IP
+
+
 |--------------------|
 | VERSION 2.0b6 beta |
 |--------------------|
