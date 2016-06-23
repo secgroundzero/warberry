@@ -28,7 +28,7 @@ class bcolors:
     TITLE = '\033[96m' 
 
 class ScanThread(threading.Thread):
-    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type, source_ip):
+    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type):
         threading.Thread.__init__(self)
         self.name = name
         self.path_file = path_file
@@ -37,7 +37,6 @@ class ScanThread(threading.Thread):
         self.result_file=file
         self.CIDR=CIDR
         self.intensity=intensity
-        self.source_ip = source_ip
         self.output=""
         self.type=type
     def run(self):
@@ -57,7 +56,7 @@ def scan_targetted(self):
 def scanning(self):
     nm=nmap.PortScanner()
     if (self.type=="y"):
-        arg="-Pn -sU -p"+self.port + " " + self.intensity + " --open -S" + self.source.ip
+        arg="-Pn -sU -p"+self.port + " " + self.intensity + " --open"
         nm.scan(hosts=self.CIDR, arguments=arg)
         for host in nm.all_hosts():
             writeFile = self.path_file
@@ -67,7 +66,7 @@ def scanning(self):
                 self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
                 self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
     elif(self.type=="n"):
-        arg= "-Pn -p"+self.port + " " + self.intensity + " --open -S" + self.source.ip
+        arg= "-Pn -p"+self.port + " " + self.intensity + " --open"
         nm.scan(hosts=self.CIDR, arguments=arg)
         for host in nm.all_hosts():
             writeFile = self.path_file
@@ -77,7 +76,7 @@ def scanning(self):
                 self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
                 self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
     elif(self.type=="yn"):
-        arg = "-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open -S" + self.source.ip
+        arg = "-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open"
         nm.scan(hosts=self.CIDR, arguments=arg)
         for host in nm.all_hosts():
             writeFile = self.path_file
@@ -89,18 +88,15 @@ def scanning(self):
 
 
 
-def scanner_thread(CIDR, intensity,source_ip,spoofed):
+def scanner_thread(CIDR, intensity):
     
     print " "
     print bcolors.OKGREEN + " [ TARGETTED SERVICES NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
-    if spoofed == 1:
-        print "\n[*] Beginning Scanning Subnet %s with %s intensity and spoofed IP %s" % (CIDR, intensity, source_ip)
-    else:
-        print "\n[*] Beginning Scanning Subnet %s with %s intensity." %(CIDR, intensity)
+    print "\n[*] Beginning Scanning Subnet %s with %s intensity." %(CIDR, intensity)
     print " "
     threads=[]
     for i in range(len(path_file)):
-        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity,source_ip, scan_type[i])
+        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity, scan_type[i])
         t.start()
         threads.append(t)
     for t in threads:
