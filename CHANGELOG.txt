@@ -13,7 +13,7 @@
 |---------------|
 
 * Removed support for spoofing source IP
-
+* Updated reporting module
 
 |--------------------|
 | VERSION 2.0b6 beta |
