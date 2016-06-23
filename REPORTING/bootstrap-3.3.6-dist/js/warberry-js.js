@@ -1551,6 +1551,12 @@ function findTitle(filename){
             break;
         case 'lotus_notes': return 'network_scanner';
             break;
+        case'sql_resolution': return 'network_scanner';
+            break;
+        case 'upnp': return 'network_scanner';
+            break;
+        case 'radius': return 'network_scanner';
+            break;
         case 'http_titles': return 'HTTP Titles';
             break;
         case 'shares': return 'Shares Enum';
@@ -1832,6 +1838,12 @@ function findItemTitle(filename){
             break;
         case 'lotus_notes': return 'Lotus Notes';
             break;
+        case 'sql_resolution': return 'SQL Resolution Service';
+            break;
+        case 'upnp': return 'UPNP';
+            break;
+        case 'radius': return 'RADIUS';
+            break;
     }
 
 }
@@ -1977,6 +1989,12 @@ function findPDFTitle(filename){
         case 'imap': return 'IMAP';
             break;
         case 'lotus_notes': return 'Lotus Notes';
+            break;
+        case 'sql_resolution': return 'SQL Resolution Service';
+            break;
+        case 'upnp': return 'UPNP';
+            break;
+        case 'radius': return 'RADIUS';
             break;
         default: return filename;
     }
