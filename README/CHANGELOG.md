@@ -92,11 +92,11 @@
 * Added optparse installation in README
 * Changed menu to use optparse 
 * Added support for granular attacking
-	[*] -r --recon        : This attack mode will only run the recon modules without performing any port scans
-	[*] -i --interface    : Manually specify the interface to use. Default is eth0
-	[*] -H --hostname     : Set this flag to disable changing the WarBerry's hostname during bypass modes
-	[*] -p --packets      : Manually set the number of packets to capture. Default is 20 packets
-	[*] -e --enumeration  : Set this flag to disable the enumeration scripts
+	[+] -r --recon        : This attack mode will only run the recon modules without performing any port scans
+	[+] -i --interface    : Manually specify the interface to use. Default is eth0
+	[+] -H --hostname     : Set this flag to disable changing the WarBerry's hostname during bypass modes
+	[+] -p --packets      : Manually set the number of packets to capture. Default is 20 packets
+	[+] -e --enumeration  : Set this flag to disable the enumeration scripts
 
 * Added bootstrap script for automatic installation of dependencies
 * Updated man pages
