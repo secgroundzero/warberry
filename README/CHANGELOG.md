@@ -1,10 +1,25 @@
 ## UPCOMING
 
 * Wireless Attacks
-* Support for threads number definition
 * Vlans enumeration
 * Support for IPv6
 
+
+## Version 4
+
+* Support for turning threads on and off
+* Scan default profile changed for T4 to T1 for stealthiness
+* New and improved folder layout
+* Only active IPs are included in the scans reducing the network footprint
+* Added Blackhat Arsenal 2016 Badge
+* Bug fixes
+* Enchancements of wiki pages 
+
+## Version 3
+
+* Bug fixes and experimentation with scapy
+* Wiki Pages
+* Reduced clutter in the README file
 
 ## VERSION 2.0b8 
 
