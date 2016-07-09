@@ -51,11 +51,11 @@ from src.core.scanners.targetted_thread_scanner import *
 from src.core.scanners.top_port_scanner import *
 from src.core.scanners.full_port_scanner import *
 from src.core.enumeration.services_enum import *
+from src.core.enumeration.nameservers import *
 from src.core.bypass import *
 from src.core.scanners.full_thread_scanner import *
 from src.core.enumeration.bluetooth_enum import *
 from src.core.enumeration.ip_enum import *
-from src.core.enumeration.nameservers import *
 from src.core.enumeration.network_packets import *
 from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
@@ -142,7 +142,7 @@ v4.0                              @sec_groundzero
                 hostnames(CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed hostnames search\n")
-                #nbtscan(CIDR)
+                nbtscan(CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed NBTScan\n")
                 if host_name != "WarBerry":
