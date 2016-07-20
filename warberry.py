@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+
 """
 This file is part of the WarBerry tool.
 Copyright (c) 2016 Yiannis Ioannides (@sec_groundzero).
@@ -14,7 +17,6 @@ GNU General Public License for more details.
 """
 
 
-#!/usr/bin/python
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 logging.info("finished")
