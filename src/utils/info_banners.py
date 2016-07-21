@@ -64,7 +64,7 @@ Options:
   -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
   -N NAME, --name=NAME                  Hostname to use. Default: Auto
   -i INTENSITY, --intensity=INTENSITY   Port scan intensity. Default: T1
-  -F, --fast                            Scan using threads. Default: Off
+  -Q, --quick                           Scan using threads. Default: Off
   -P, --poison                          Turn Poisoning on/off. Default: On
   -H, --hostname                        Do not Change WarBerry hostname Default: Off
   -e, --enumeration                     Disable Enumeration mode. Default: Off
