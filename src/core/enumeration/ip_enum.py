@@ -55,8 +55,6 @@ def iprecon(ifname):
 
 def scope_definition(ifname, CIDR):
 
-    print ifname+"\n"
-    print CIDR
     print bcolors.OKGREEN + "      [  SCOPE DEFINITION MODULE ]\n" + bcolors.ENDC
 
     print "Finding live IPs in order to include only those in the scans to minimize footprint\n"
