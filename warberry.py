@@ -94,6 +94,8 @@ v4.0                              @sec_groundzero
     parser.add_option("-H", "--hostname", action="store_false", dest="hostname", default= True, help="Do not change WarBerry hostname" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-e", "--enumeration", action="store_true",dest="enum", default=False, help="Disable enumeration mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-M", "--malicious", action="store_true", dest="malicious", default=False, help="Enable Malicious only mode" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-B", "--bluetooth", action="store_true", dest="btooth", default=False, help="Enable Bluetooth Scanning" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
+    parser.add_option("-W", "--wifi", action="store_true", dest="wifi", default=False, help="Enable WiFi Scanning" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-r", "--recon", action="store_true", dest="reconmode", default=False,help="Enable Recon only mode. " + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-S", "--sniffer", action="store_true", dest="sniffer", default=False,help="Enable Sniffer only mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-C", "--clear", action="store_true", dest="clear", default=False, help="Clear previous output folders in ../Results")
@@ -207,12 +209,14 @@ v4.0                              @sec_groundzero
                         os_enum(CIDR)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed OS Enumeration\n")
-                    bluetooth_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed bluetooth scan\n")
-                    wifi_enum()
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed wifi networks scan\n")
+                    if options.btooth == True:
+                        bluetooth_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed bluetooth scan\n")
+                    if options.wifi == True:
+                        wifi_enum()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed wifi networks scan\n")
                     print ""
                 print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
                 print " "

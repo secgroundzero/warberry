@@ -69,6 +69,8 @@ Options:
   -H, --hostname                        Do not Change WarBerry hostname Default: Off
   -e, --enumeration                     Disable Enumeration mode. Default: Off
   -M, --malicious                       Enable Malicious only mode Default: Off
+  -B, --bluetooth                       Enable Bluetooth Scanning. Default: Off
+  -W, --wifi                            Enable WiFi Scanning. Default: Off
   -r, --recon                           Enable Recon only mode. Default: Off
   -S, --sniffer                         Enable Sniffer only mode. Default: Off
   -C, --clear                           Clear previous output folders in ../Results
