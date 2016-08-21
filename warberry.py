@@ -103,182 +103,148 @@ v4.0                              @sec_groundzero
 
 
     (options, args) = parser.parse_args()
+    #set globals from options
+    packets = options.packets
+    iface = options.iface
+    host_name = options.name
+    attacktype=options.attacktype
+    intensity=options.intensity
 
-
-
+    def statusWrite(message):
+        """Write a status message"""
+        with open('../Results/running_status', 'a') as status:
+            status.write(message)
+    def setupAttack():
+        """Sets Up Attack"""
+        subprocess.call('clear',shell=True)
+        banner()
+        int_ip=iprecon(iface)
+        if (int_ip == None)
+            exit
+        netmask = netmask_recon(iface)
+        statusWrite("Completed IP Recon\n")
+        CIDR = subnet(int_ip,netmask)
+    #clear previous output folders                
     if options.clear == True:
         clear_output()
-    elif options.manpage == True:
+    #display man page
+    if options.manpage == True:
         subprocess.call('clear', shell=True)
         banner_full_help()
-    elif options.attacktype == "-A" or options.attacktype == '--attack':
-        subprocess.call('clear', shell=True)
-        banner()
+    #hostname operations
+    if host_name != "WarBerry":
+        manual_namechange(host_name)
+    if options.hostname == True and host_name == "WarBerry":
+        namechange()
+    
+    #attack
+    if attacktype == "-A" or attacktype == '--attack':
         if not os.geteuid() == 0:
             print bcolors.FAIL + '*** You are not running as root and some modules will fail ***\nRun again with sudo.' + bcolors.ENDC
             sys.exit(-1)
         dhcp_check()
-        iface = options.iface
-        host_name = options.name
-        int_ip = iprecon(iface)
-        if (int_ip == None):
-            exit
+        setupAttack()
+        if options.malicious == True:
+            statusWrite("Entering poisoning mode\n")
+            poison(iface)
         else:
-            if options.malicious == True:
-                netmask = netmask_recon(iface)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Entering poisoning mode\n")
+            ##external_IP_recon()
+            sniffer(iface, packets)
+            statusWrite("Completed sniffing network packets\n")
+            pcap_parser()
+            ##scope_definition(iface, CIDR)
+            hostnames(CIDR)
+            statusWrite("Completed hostnames search\n")
+            nbtscan(CIDR)
+            statusWrite("Completed NBTScan\n")
+            
+            #end recon mode
+            if options.reconmode == False:
+                if options.fast == False:
+                    single_port_scanner(CIDR, intensity)
+                else:
+                    thread_port_scanner(CIDR, intensity)
+                statusWrite("Completed Port Scanning\n")
+                if options.enum == False:
+                    shares_enum()
+                    statusWrite("Completed Enumerating Shares\n")
+                    smb_users()
+                    statusWrite("Completed Enumerating Users\n")
+                    domains_enum()
+                    statusWrite("Completed Enumerating Domains\n")
+                    webs_prep()
+                    http_title_enum()
+                    statusWrite("Completed Enumerating HTTP Titles\n")
+                    nfs_enum()
+                    statusWrite("Completed NFS Enumeration\n")
+                    waf_enum()
+                    statusWrite("Completed WAF Enumeration\n")
+                    mysql_enum()
+                    statusWrite("Completed MYSQL Enumeration\n")
+                    mssql_enum()
+                    statusWrite("Completed MSSQL Enumeration\n")
+                    ftp_enum()
+                    statusWrite("Completed FTP Enumeration\n")
+                    snmp_enum()
+                    statusWrite("Completed SNMP Enumeration\n")
+                    clamav_enum()
+                    statusWrite("Completed ClamAV Enumeration\n")
+                    informix_enum()
+                    statusWrite("Completed Informix DB Enumeration\n")
+                    informix_tables()
+                    statusWrite("Completed Informix Tables Enumeration\n")
+                    sip_methods_enum()
+                    statusWrite("Completed SIP Methods Enumeration\n")
+                    sip_users_enum()
+                    statusWrite("Completed SIP Users Enumeration\n")
+                    os_enum(CIDR)
+                    statusWrite("Completed OS Enumeration\n")
+                if options.btooth == True:
+                    bluetooth_enum()
+                    statusWrite("Completed bluetooth scan\n")
+                if options.wifi == True:
+                    wifi_enum()
+                    statusWrite("Completed wifi networks scan\n")
+                print ""
+            print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
+            print " "
+            if options.poison == True:
+                statusWrite("Entering poisoning mode\n")
                     poison(iface)
-            else:
-                netmask = netmask_recon(iface)
-               # external_IP_recon()
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed IP Recon\n")
-                packets = options.packets
-                sniffer(iface, packets)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed sniffing network packets\n")
-                pcap_parser()
-                CIDR = subnet(int_ip, netmask)
-                #scope_definition(iface, CIDR)
-                hostnames(CIDR)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed hostnames search\n")
-                nbtscan(CIDR)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed NBTScan\n")
-                if host_name != "WarBerry":
-                    manual_namechange(host_name)
-                if options.hostname == True and host_name == "WarBerry":
-                    namechange()
-                if options.reconmode == False:
-                    intensity = options.intensity
-                    if options.fast == False:
-                        single_port_scanner(CIDR, intensity)
-                    else:
-                        thread_port_scanner(CIDR, intensity)
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed Port Scanning\n")
-                    if options.enum == False:
-                        shares_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating Shares\n")
-                        smb_users()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating Users\n")
-                        domains_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating Domains\n")
-                        webs_prep()
-                        http_title_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating HTTP Titles\n")
-                        nfs_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed NFS Enumeration\n")
-                        waf_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed WAF Enumeration\n")
-                        mysql_enum()
-                        with open('../Results/running_status', 'a') as status:
-                                status.write("Completed MYSQL Enumeration\n")
-                        mssql_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed MSSQL Enumeration\n")
-                        ftp_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed FTP Enumeration\n")
-                        snmp_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed SNMP Enumeration\n")
-                        clamav_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed ClamAV Enumeration\n")
-                        informix_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Informix DB Enumeration\n")
-                        informix_tables()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Informix Tables Enumeration\n")
-                        sip_methods_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed SIP Methods Enumeration\n")
-                        sip_users_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed SIP Users Enumeration\n")
-                        os_enum(CIDR)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed OS Enumeration\n")
-                    if options.btooth == True:
-                        bluetooth_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed bluetooth scan\n")
-                    if options.wifi == True:
-                        wifi_enum()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed wifi networks scan\n")
-                    print ""
-                print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-                print " "
-                if options.poison == True:
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Entering poisoning mode\n")
-                        poison(iface)
 
-    elif options.attacktype == '-T' or options.attacktype == '--toptcp':
-        subprocess.call('clear', shell=True)
-        banner()
-        iface = options.iface
-        int_ip = iprecon(iface)
-        if (int_ip == None):
-            exit
-        netmask = netmask_recon(iface)
+    elif attacktype == '-T' or attacktype == '--toptcp':
+        setupAttack()
         external_IP_recon()
-        CIDR = subnet(int_ip, netmask)
-        #scope_definition(iface, CIDR)
-        top_ports_scanner(CIDR, options.intensity)
+        ##scope_definition(iface, CIDR)
+        top_ports_scanner(CIDR, intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
 
-    elif options.attacktype == '-B' or options.attacktype == '--tcpudp':
-        subprocess.call('clear', shell=True)
-        banner()
-        iface = options.iface
-        int_ip = iprecon(iface)
-        if (int_ip == None):
-            exit
-        netmask = netmask_recon(iface)
+    elif attacktype == '-B' or attacktype == '--tcpudp':
+        setupAttack()
         external_IP_recon()
-        CIDR = subnet(int_ip, netmask)
-        #scope_definition(iface, CIDR)
+        ##scope_definition(iface, CIDR)
         if options.fast == True:
-            tcpudp_thread_scanner(CIDR,options.intensity)
+            tcpudp_thread_scanner(CIDR,intensity)
         else:
-            tcpudp_scanner(CIDR, options.intensity)
+            tcpudp_scanner(CIDR,intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-    elif options.attacktype == '-F' or options.attacktype == '--fulltcp':
-        subprocess.call('clear', shell=True)
-        banner()
-        iface = options.iface
-        int_ip = iprecon(iface)
-        netmask = netmask_recon(iface)
+    
+    elif attacktype == '-F' or attacktype == '--fulltcp':
+        setupAttack()
         external_IP_recon()
-        CIDR = subnet(int_ip, netmask)
-        #scope_definition(iface, CIDR)
+        ##scope_definition(iface, CIDR)
         if options.fast == True:
-            full_thread_scanner(CIDR,options.intensity)
+            full_thread_scanner(CIDR,intensity)
         else:
-            full_scanner(CIDR, options.intensity)
+            full_scanner(CIDR,intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-    elif options.attacktype == '-S' or options.attacktype == '--sniffer':
-        iface = options.iface
-        packets = options.packets
+    
+    elif attacktype == '-S' or attacktype == '--sniffer':
         subprocess.call('clear', shell=True)
         sniffer(iface, packets)
 
 
-
 if __name__ == '__main__':
-
     try:
         main()
     except KeyboardInterrupt:
