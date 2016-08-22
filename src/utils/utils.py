@@ -21,6 +21,7 @@ import socket
 from src.utils.console_colors import *
 import struct
 import linecache
+import urllib2
 from src.core.bypass.mac import *
 from src.core.bypass.nac import *
 from random import randint
