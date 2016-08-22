@@ -280,9 +280,13 @@ v4.0                              @sec_groundzero
 if __name__ == '__main__':
 
     try:
+        if os.path.exists("../Results") == False:
+            os.mkdir("../Results")
+        if os.path.exists("../Tools") == False:
+            os.mkdir("../Tools")
         main()
     except KeyboardInterrupt:
-        subprocess.call("sudo mkdir ../Results/Responder_logs", shell=True)
-        subprocess.call("sudo mv ../Tools/Responder/logs/* ../Results/Responder_logs/",shell=True)
+        subprocess.call("sudo mkdir -v ../Results/Responder_logs", shell=True)
+        subprocess.call("sudo mv -v ../Tools/Responder/logs/* ../Results/Responder_logs/",shell=True)
         subprocess.call('clear', shell=True)
         banner_full()
