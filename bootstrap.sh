@@ -6,7 +6,7 @@
 ##
 
 APT_GET_CMD=$(which apt-get)
-WARBERRYDIR=/home/pi/WarBerry
+WARBERRYDIR=/home/$USER/WarBerry
 GITREPOS=("https://github.com/DanMcInerney/net-creds.git"
           "https://github.com/stasinopoulos/commix.git"
           "https://github.com/sqlmapproject/sqlmap.git"
