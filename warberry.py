@@ -169,7 +169,7 @@ v4.0                              @sec_groundzero
                             status.write("Completed Enumerating Users\n")
 
                         webs_prep()
-                        http_title_enum()
+                        http_title_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Enumerating HTTP Titles\n")
                         nfs_enum(iface)
