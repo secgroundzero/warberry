@@ -54,7 +54,6 @@ from src.core.enumeration.services_enum import *
 from src.core.enumeration.nameservers import *
 from src.core.bypass import *
 from src.core.scanners.full_thread_scanner import *
-#from src.core.enumeration.domains_enumeration import *
 from src.core.enumeration.bluetooth_enum import *
 from src.core.enumeration.ip_enum import *
 from src.core.enumeration.network_packets import *
@@ -156,9 +155,9 @@ v4.0                              @sec_groundzero
                 if options.reconmode == False:
                     intensity = options.intensity
                     if options.fast == False:
-                        single_port_scanner(CIDR, intensity, iface)
+                        single_port_scanner(CIDR, intensity)
                     else:
-                        thread_port_scanner(CIDR, intensity, iface)
+                        thread_port_scanner(CIDR, intensity)
                     with open('../Results/running_status', 'a') as status:
                         status.write("Completed Port Scanning\n")
                     if options.enum == False:
@@ -236,7 +235,7 @@ v4.0                              @sec_groundzero
         external_IP_recon()
         CIDR = subnet(int_ip, netmask)
         #scope_definition(iface, CIDR)
-        top_ports_scanner(CIDR, options.intensity, iface)
+        top_ports_scanner(CIDR, options.intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
 
     elif options.attacktype == '-B' or options.attacktype == '--tcpudp':
@@ -251,7 +250,7 @@ v4.0                              @sec_groundzero
         CIDR = subnet(int_ip, netmask)
         #scope_definition(iface, CIDR)
         if options.fast == True:
-            tcpudp_thread_scanner(CIDR,options.intensity, iface)
+            tcpudp_thread_scanner(CIDR,options.intensity)
         else:
             tcpudp_scanner(CIDR, options.intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
@@ -265,7 +264,7 @@ v4.0                              @sec_groundzero
         CIDR = subnet(int_ip, netmask)
         #scope_definition(iface, CIDR)
         if options.fast == True:
-            full_thread_scanner(CIDR,options.intensity, iface)
+            full_thread_scanner(CIDR,options.intensity)
         else:
             full_scanner(CIDR, options.intensity)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
