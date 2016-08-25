@@ -17,9 +17,9 @@ import os, os.path
 import subprocess
 from src.utils.console_colors import *
 
-def os_enum(CIDR):
+def os_enum(CIDR,iface):
 
-        subprocess.call("nmap -sP %s -oG - | awk '/Up$/{print $2}' >> ../Results/live_ips" %CIDR, shell=True)
+        subprocess.call("nmap -sP %s -e " + iface + " -oG - | awk '/Up$/{print $2}' >> ../Results/live_ips" %CIDR, shell=True)
 
         if os.stat('../Results/live_ips').st_size != 0:
                 print " "

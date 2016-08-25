@@ -22,7 +22,7 @@ from src.core.scanners.port_list import *
 from src.utils.console_colors import *
 
 class ScanThread(threading.Thread):
-    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type,hostlist):
+    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type,hostlist,iface):
         threading.Thread.__init__(self)
         self.name = name
         self.path_file = path_file
@@ -34,6 +34,8 @@ class ScanThread(threading.Thread):
         self.output=""
         self.type=type
         self.hostlist=hostlist
+        self.iface=iface
+
     def run(self):
         file=self.path_file
         if os.path.isfile(file):
@@ -56,6 +58,8 @@ def scanning(self):
         arg= "-Pn -p"+self.port + " " + self.intensity + " --open"
     elif(self.type=="yn"):
         arg = "-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open"
+
+    arg += " -e " + self.iface
     nm.scan(hosts='192.168.1.1,192.168.1.253', arguments=arg)
     for h in self.hostlist:
         nm.scan(hosts=h, arguments=arg)

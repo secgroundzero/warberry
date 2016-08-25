@@ -155,9 +155,9 @@ v4.0                              @sec_groundzero
                 if options.reconmode == False:
                     intensity = options.intensity
                     if options.fast == False:
-                        single_port_scanner(CIDR, intensity)
+                        single_port_scanner(CIDR, intensity, iface)
                     else:
-                        thread_port_scanner(CIDR, intensity)
+                        thread_port_scanner(CIDR, intensity, iface)
                     with open('../Results/running_status', 'a') as status:
                         status.write("Completed Port Scanning\n")
                     if options.enum == False:
@@ -235,7 +235,7 @@ v4.0                              @sec_groundzero
         external_IP_recon()
         CIDR = subnet(int_ip, netmask)
         #scope_definition(iface, CIDR)
-        top_ports_scanner(CIDR, options.intensity)
+        top_ports_scanner(CIDR, options.intensity,iface)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
 
     elif options.attacktype == '-B' or options.attacktype == '--tcpudp':
@@ -250,9 +250,9 @@ v4.0                              @sec_groundzero
         CIDR = subnet(int_ip, netmask)
         #scope_definition(iface, CIDR)
         if options.fast == True:
-            tcpudp_thread_scanner(CIDR,options.intensity)
+            tcpudp_thread_scanner(CIDR,options.intensity,iface)
         else:
-            tcpudp_scanner(CIDR, options.intensity)
+            tcpudp_scanner(CIDR, options.intensity,iface)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
     elif options.attacktype == '-F' or options.attacktype == '--fulltcp':
         subprocess.call('clear', shell=True)
@@ -264,9 +264,9 @@ v4.0                              @sec_groundzero
         CIDR = subnet(int_ip, netmask)
         #scope_definition(iface, CIDR)
         if options.fast == True:
-            full_thread_scanner(CIDR,options.intensity)
+            full_thread_scanner(CIDR,options.intensity,iface)
         else:
-            full_scanner(CIDR, options.intensity)
+            full_scanner(CIDR, options.intensity,iface)
         print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
     elif options.attacktype == '-S' or options.attacktype == '--sniffer':
         iface = options.iface

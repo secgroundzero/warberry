@@ -26,7 +26,7 @@ import socket
 from src.utils.console_colors import bcolors
 
 
-def shares_enum():
+def shares_enum(iface):
 
         if os.path.isfile('../Results/windows'):
                 print " "
@@ -45,12 +45,12 @@ def shares_enum():
 
                         print "[*] Enumerating shares on %s" %host.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 --script smb-enum-shares -p445 --open -o ../Results/shares')
+                        nm.scan(hosts=host, arguments='-Pn -T4 --script smb-enum-shares -p445 -e ' + iface + '--open -o ../Results/shares')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/shares" + bcolors.ENDC
 
 
-def smb_users():
+def smb_users(iface):
 
         if os.path.isfile('../Results/windows'):
                 print " "
@@ -66,12 +66,12 @@ def smb_users():
                 for host in hosts:
                         print "[*] Enumerating users on %s" %host.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-users -p U:137,T:139 --open -o ../Results/smb_users')
+                        nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-users -p U:137,T:139 -e ' + iface + '--open -o ../Results/smb_users')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/smb_users" + bcolors.ENDC
 
 
-def domains_enum():
+def domains_enum(iface):
 
         if os.path.isfile('../Results/windows'):
                 print " "
@@ -87,7 +87,7 @@ def domains_enum():
                 for host in hosts:
                         print "[*] Enumerating domains on %s" %host.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-domains -p U:137,T:139 --open -o ../Results/domains_enum')
+                        nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-domains -p U:137,T:139 -e ' + iface + '--open -o ../Results/domains_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/domains_enum" + bcolors.ENDC
 
@@ -101,7 +101,7 @@ def webs_prep():
         else:
                 return
 
-def http_title_enum():
+def http_title_enum(iface):
 
 
         if os.path.isfile('../Results/webs'):
@@ -117,12 +117,12 @@ def http_title_enum():
                         for host in webs:
                                 print "[*] Enumerating HTTP Title on %s" %host.strip()
                                 nm = nmap.PortScanner()
-                                nm.scan(hosts=host, arguments='-Pn -T4 -sC -p80,8080,443,4443,8081,8181,9090 --open -o ../Results/http_titles')
+                                nm.scan(hosts=host, arguments='-Pn -T4 -sC -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/http_titles')
 
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
 
 
-def waf_enum():
+def waf_enum(iface):
 
         if os.path.isfile('../Results/webs'):
                 print " "
@@ -138,12 +138,12 @@ def waf_enum():
                 for host in hosts:
                         print "[*] Enumerating WAF on %s" %host.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 --open -o ../Results/wafed')
+                        nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/wafed')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
 
 
-def nfs_enum():
+def nfs_enum(iface):
 
         if os.path.isfile('../Results/nfs'):
                 print " "
@@ -158,12 +158,12 @@ def nfs_enum():
                 for share in shares:
                         print "[*] Enumerating NFS Shares on %s" %share.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=share, arguments='-Pn -sV -T4 --script afp-showmount -p111 --open -o ../Results/nfs_enum')
+                        nm.scan(hosts=share, arguments='-Pn -sV -T4 --script afp-showmount -p111 -e ' + iface + ' --open -o ../Results/nfs_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/nfs_enum" + bcolors.ENDC
 
 
-def mysql_enum():
+def mysql_enum(iface):
 
         if os.path.isfile('../Results/mysql'):
                 print " "
@@ -178,12 +178,12 @@ def mysql_enum():
                 for db in dbs:
                         print "[*] Enumerating MYSQL DB on %s" %db.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=db, arguments='-Pn -T4 -sV --script mysql-enum -p3306 --open -o ../Results/mysql_enum')
+                        nm.scan(hosts=db, arguments='-Pn -T4 -sV --script mysql-enum -p3306 -e ' + iface + ' --open -o ../Results/mysql_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/mysql_enum" + bcolors.ENDC
 
 
-def mssql_enum():
+def mssql_enum(iface):
 
         if os.path.isfile('../Results/mssql'):
                 print " "
@@ -198,12 +198,12 @@ def mssql_enum():
                 for db in dbs:
                         print "[*] Enumerating MSSQL DB on %s" %db.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=db, arguments='-Pn -T4 -sV --script ms-sql-info -p1433 --open -o ../Results/mssql_enum')
+                        nm.scan(hosts=db, arguments='-Pn -T4 -sV --script ms-sql-info -p1433 -e ' + iface + ' --open -o ../Results/mssql_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/mssql_enum" + bcolors.ENDC
 
 
-def ftp_enum():
+def ftp_enum(iface):
 
         if os.path.isfile('../Results/ftp'):
                 print " "
@@ -218,12 +218,12 @@ def ftp_enum():
                 for ftp in ftps:
                         print "[*] Enumerating FTP on %s" %ftp.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=ftp, arguments='-Pn -T4 -sV --script ftp-anon -p22 --open -o ../Results/ftp_enum')
+                        nm.scan(hosts=ftp, arguments='-Pn -T4 -sV --script ftp-anon -p22 -e ' + iface + ' --open -o ../Results/ftp_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/ftp_enum" + bcolors.ENDC
 
 
-def snmp_enum():
+def snmp_enum(iface):
 
         if os.path.isfile('../Results/snmp'):
                 print " "
@@ -238,12 +238,12 @@ def snmp_enum():
                 for snmp in snmps:
                         print "[*] Enumerating SNMP on %s" %snmp.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=snmp, arguments='-Pn -T4 -sV -p161 --open -o ../Results/snmp_enum')
+                        nm.scan(hosts=snmp, arguments='-Pn -T4 -sV -p161 -e ' + iface + ' --open -o ../Results/snmp_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/snmp_enum" + bcolors.ENDC
 
 
-def clamav_enum():
+def clamav_enum(iface):
 
         if os.path.isfile('../Results/clamav'):
                 print " "
@@ -258,12 +258,12 @@ def clamav_enum():
                 for clam in clams:
                         print "[*] Enumerating Clam AV on %s" %clam.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=clam, arguments='-Pn -T4 -sV -p3310 --open --script clamav-exec.nse  -o ../Results/clamav_enum')
+                        nm.scan(hosts=clam, arguments='-Pn -T4 -sV -p3310 --open --script clamav-exec.nse -e ' + iface + ' -o ../Results/clamav_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/clamav_enum" + bcolors.ENDC
 
 
-def informix_enum():
+def informix_enum(iface):
 
         if os.path.isfile('../Results/informix_db'):
                 print " "
@@ -278,12 +278,12 @@ def informix_enum():
                 for inf in infdb:
                         print "[*] Enumerating Informix DB on %s" %inf.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=inf, arguments='-Pn -p 9088 --script informix-query --script-args informix-query.username=informix,informix-query.password=informix  -o ../Results/informix_enum')
+                        nm.scan(hosts=inf, arguments='-Pn -p 9088 --script informix-query --script-args informix-query.username=informix,informix-query.password=informix -e ' + iface + ' -o ../Results/informix_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_enum" + bcolors.ENDC
 
 
-def informix_tables():
+def informix_tables(iface):
 
         if os.path.isfile('../Results/informix_db'):
                 print " "
@@ -298,12 +298,12 @@ def informix_tables():
                 for inf in infdb:
                         print "[*] Enumerating Informix DB Tables on %s" %inf.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=inf, arguments='-Pn -p 9088 --script informix-tables --script-args informix-tables.username=informix,informix-tables.password=informix  -o ../Results/informix_tables')
+                        nm.scan(hosts=inf, arguments='-Pn -p 9088 --script informix-tables --script-args informix-tables.username=informix,informix-tables.password=informix -e ' + iface + ' -o ../Results/informix_tables')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_tables" + bcolors.ENDC
 
 
-def sip_methods_enum():
+def sip_methods_enum(iface):
 
         if os.path.isfile('../Results/voip'):
                 print " "
@@ -318,11 +318,11 @@ def sip_methods_enum():
                 for sip in sips:
                         print "[*] Enumerating SIP Methods on %s" %sip.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=sip, arguments='-Pn --script sip-methods -sU -p 5060  -o ../Results/sip_methods')
+                        nm.scan(hosts=sip, arguments='-Pn --script sip-methods -sU -p 5060 -e ' + iface + '  -o ../Results/sip_methods')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_methods" + bcolors.ENDC
 
-def sip_users_enum():
+def sip_users_enum(iface):
 
         if os.path.isfile('../Results/voip'):
                 print " "
@@ -337,7 +337,7 @@ def sip_users_enum():
                 for sip in sips:
                         print "[*] Enumerating SIP Users on %s" %sip.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=sip, arguments='-Pn --script sip-enum-users -sU -p 5060  -o ../Results/sip_users')
+                        nm.scan(hosts=sip, arguments='-Pn --script sip-enum-users -sU -p 5060 -e ' + iface + '  -o ../Results/sip_users')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_users" + bcolors.ENDC
 
