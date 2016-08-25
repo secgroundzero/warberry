@@ -6,7 +6,7 @@
 ##
 
 APT_GET_CMD=$(which apt-get)
-WARBERRYDIR=/home/pi/WarBerry
+WARBERRYDIR=/home/$USER/WarBerry
 GITREPOS=("https://github.com/DanMcInerney/net-creds.git"
           "https://github.com/stasinopoulos/commix.git"
           "https://github.com/sqlmapproject/sqlmap.git"
@@ -30,6 +30,10 @@ fi
 
 echo "CREATING DIRECTORIES..."
 mkdir -p $WARBERRYDIR/{Results,Tools}
+
+
+echo "Moving Repo under /WarBerry
+mv warberry $WARBERRYDIR/
 
 if [[ ! -z $APT_GET_CMD ]]; then
     echo """
