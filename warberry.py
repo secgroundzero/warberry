@@ -161,51 +161,51 @@ v4.0                              @sec_groundzero
                     with open('../Results/running_status', 'a') as status:
                         status.write("Completed Port Scanning\n")
                     if options.enum == False:
-                        shares_enum()
+                        shares_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Enumerating Shares\n")
-                        smb_users()
+                        smb_users(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Enumerating Users\n")
 
-                        webs_prep()
+                        webs_prep(iface)
                         http_title_enum()
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Enumerating HTTP Titles\n")
-                        nfs_enum()
+                        nfs_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed NFS Enumeration\n")
-                        waf_enum()
+                        waf_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed WAF Enumeration\n")
-                        mysql_enum()
+                        mysql_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                                 status.write("Completed MYSQL Enumeration\n")
-                        mssql_enum()
+                        mssql_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed MSSQL Enumeration\n")
-                        ftp_enum()
+                        ftp_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed FTP Enumeration\n")
-                        snmp_enum()
+                        snmp_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed SNMP Enumeration\n")
-                        clamav_enum()
+                        clamav_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed ClamAV Enumeration\n")
-                        informix_enum()
+                        informix_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Informix DB Enumeration\n")
-                        informix_tables()
+                        informix_tables(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Informix Tables Enumeration\n")
-                        sip_methods_enum()
+                        sip_methods_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed SIP Methods Enumeration\n")
-                        sip_users_enum()
+                        sip_users_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed SIP Users Enumeration\n")
-                        os_enum(CIDR)
+                        os_enum(CIDR, iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed OS Enumeration\n")
                     if options.btooth == True:
