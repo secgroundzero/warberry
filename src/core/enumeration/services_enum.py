@@ -218,7 +218,7 @@ def ftp_enum(iface):
                 for ftp in ftps:
                         print "[*] Enumerating FTP on %s" %ftp.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=ftp, arguments='-Pn -T4 -sV --script ftp-anon -p22 --unprivileged -e ' + iface + ' --open -o ../Results/ftp_enum')
+                        nm.scan(hosts=ftp, arguments='-Pn -T4 -sV --script ftp-anon -p22 -e ' + iface + ' --open -o ../Results/ftp_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/ftp_enum" + bcolors.ENDC
 
