@@ -123,10 +123,9 @@ v4.0                              @sec_groundzero
         else:
             for ifaces in os.listdir("/sys/class/net/"):
                 if ifaces[0] == "e":
-                    lines = [line.rstrip("\n") for line in open("/sys/class/net/"+ifaces+"/carrier")]
-                    for status in lines:
-                        if status == "1":
-                            iface = ifaces
+                    file_iface = open("/sys/class/net/"+ifaces+"/carrier")
+                    if file_iface.readline()[0] == "1":
+                        iface = ifaces
         host_name = options.name
         int_ip = iprecon(iface)
         if (int_ip == None):
