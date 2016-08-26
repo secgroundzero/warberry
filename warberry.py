@@ -118,7 +118,15 @@ v4.0                              @sec_groundzero
             print bcolors.FAIL + '*** You are not running as root and some modules will fail ***\nRun again with sudo.' + bcolors.ENDC
             sys.exit(-1)
         dhcp_check()
-        iface = options.iface
+        if (os.path.isfile('/sys/class/net/'+ options.iface +'/carrier') == True):
+            iface = options.iface
+        else:
+            for ifaces in os.listdir("/sys/class/net/"):
+                if ifaces[0] == "e":
+                    lines = [line.rstrip("\n") for line in open("/sys/class/net/"+ifaces+"/carrier")]
+                    for status in lines:
+                        if status == "1":
+                            iface = ifaces
         host_name = options.name
         int_ip = iprecon(iface)
         if (int_ip == None):
