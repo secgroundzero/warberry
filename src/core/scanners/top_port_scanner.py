@@ -17,7 +17,7 @@ import nmap
 import os,os.path
 from src.utils.console_colors import *
 
-def top_ports_scanner(CIDR,intensity):
+def top_ports_scanner(CIDR,intensity,iface):
 
         print bcolors.OKGREEN + "      [ TOP TCP PORTS NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
 
@@ -41,8 +41,8 @@ def top_ports_scanner(CIDR,intensity):
         print " "
         nm = nmap.PortScanner()
 
-        print "[+] Scanning TOP 1000 TCP Ports in all hosts with %s intensity..." %intensity + "\n"
-        arg="-Pn " + intensity+" --top-ports 1000 --open -o ../Results/tcp_top"
+        print "[+] Scanning Top 1000 TCP Ports in all hosts with %s intensity..." %intensity + "\n"
+        arg = "-Pn " + intensity + " --top-ports 1000 --open -o ../Results/tcp_top -e " + iface
         for h in hostlist:
                 nm.scan(hosts=h, arguments=arg)
                 for host in nm.all_hosts():

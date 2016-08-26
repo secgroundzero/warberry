@@ -20,7 +20,7 @@ import subprocess
 from src.utils.console_colors import *
 
 class FullScanThread(threading.Thread):
-    def __init__(self, ports, CIDR, index,pos,intensity,hostlist):
+    def __init__(self, ports, CIDR, index,pos,intensity,hostlist,iface):
         threading.Thread.__init__(self)
         self.ports = ports
         self.CIDR=CIDR
@@ -30,6 +30,7 @@ class FullScanThread(threading.Thread):
         self.pos=pos
         self.intensity=intensity
         self.hostlist=hostlist
+        self.iface=iface
 
     def run(self):
         fullPorts_Scanning(self)
@@ -50,7 +51,7 @@ def fullPorts_Scanning(self):
 
 
     nm = nmap.PortScanner()
-    arg="-Pn "+self.intensity+" -sT - sU -p%s"  %self.ports + " --open -o ../Results/tcp_udp_scan%s" % self.index
+    arg = "-Pn " + self.intensity + " -sT - sU -p%s" % self.ports + " --open -o ../Results/tcp_udp_scan%s" % self.index + " -e " + self.iface
     for h in self.hostlist:
         nm.scan(hosts=h, arguments=arg)
         for host in nm.all_hosts():
@@ -64,7 +65,7 @@ def fullPorts_Scanning(self):
 
 
 class TCPFullThread(threading.Thread):
-    def __init__(self, ports, CIDR, index,pos,intensity,hostlist):
+    def __init__(self, ports, CIDR, index,pos,intensity,hostlist,iface):
         threading.Thread.__init__(self)
         self.ports = ports
         self.CIDR=CIDR
@@ -74,6 +75,7 @@ class TCPFullThread(threading.Thread):
         self.pos=pos
         self.intensity=intensity
         self.hostlist=hostlist
+        self.iface=iface
 
     def run(self):
         TCPFull_scanning(self)
@@ -93,7 +95,7 @@ def TCPFull_scanning(self):
 
 
     nm = nmap.PortScanner()
-    arg="-Pn "+self.intensity+" -p%s"  %self.ports + " --open -o ../Results/tcp_full%s" % self.index
+    arg = "-Pn " + self.intensity + " -p%s" % self.ports + " --open -o ../Results/tcp_full%s" % self.index + " -e " + self.iface
     for h in self.hostlist:
         nm.scan(hosts=h, arguments=arg)
         for host in nm.all_hosts():
@@ -106,7 +108,7 @@ def TCPFull_scanning(self):
                 self.resultPorts[pos].append(hostname)
 
 
-def full_thread_scanner(CIDR,intensity):
+def full_thread_scanner(CIDR,intensity, iface):
 
     print bcolors.OKGREEN + "      [ FULL TCP NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
 
@@ -133,7 +135,7 @@ def full_thread_scanner(CIDR,intensity):
                 hostlist.append(host.strip())
 
     for i in range(len(ports)):
-        t = TCPFullThread(ports[i],CIDR,i,pos[i],intensity,hostlist)
+        t = TCPFullThread(ports[i],CIDR,i,pos[i],intensity,hostlist, iface=iface)
         t.start()
         threads.append(t)
 
@@ -152,7 +154,7 @@ def full_thread_scanner(CIDR,intensity):
 
 
 
-def tcpudp_thread_scanner(CIDR,intensity):
+def tcpudp_thread_scanner(CIDR,intensity, iface):
 
     print bcolors.OKGREEN + "      [ TCP/UDP NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
 
@@ -180,7 +182,7 @@ def tcpudp_thread_scanner(CIDR,intensity):
                 hostlist.append(host.strip())
 
     for i in range(len(ports)):
-        t = FullScanThread(ports[i],CIDR,i,pos[i],intensity,hostlist)
+        t = FullScanThread(ports[i],CIDR,i,pos[i],intensity,hostlist, iface=iface)
         t.start()
         threads.append(t)
 

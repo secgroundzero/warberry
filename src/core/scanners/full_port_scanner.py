@@ -18,7 +18,7 @@ import nmap
 from src.utils.console_colors import *
 
 
-def tcpudp_scanner(CIDR,intensity):
+def tcpudp_scanner(CIDR,intensity, iface):
 
         print bcolors.OKGREEN + "      [ TCP/UDP NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
 
@@ -43,7 +43,7 @@ def tcpudp_scanner(CIDR,intensity):
         nm = nmap.PortScanner()
 
         print "[+] Scanning TCP/UDP Ports in all hosts..."
-        arg="-Pn "+intensity+" -sT -sU --open -o ../Results/tcp_udp_scan"
+        arg = "-Pn " + intensity + " -sT -sU --open -o ../Results/tcp_udp_scan -e " + iface
         for h in hostlist:
                 nm.scan(hosts=h, arguments=arg)
                 for host in nm.all_hosts():
@@ -57,7 +57,7 @@ def tcpudp_scanner(CIDR,intensity):
 
 
 
-def full_scanner(CIDR,intensity):
+def full_scanner(CIDR,intensity, iface):
 
         print bcolors.OKGREEN + "      [ FULL TCP NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
 
@@ -81,7 +81,7 @@ def full_scanner(CIDR,intensity):
                                 hostlist.append(host.strip())
 
         print "[+] Scanning All TCP Ports in all hosts..."
-        arg="-Pn "+intensity+ " -p1-65535 --open -o ../Results/tcp_full"
+        arg = "-Pn " + intensity + " -p1-65535 --open -o ../Results/tcp_full -e " + iface
         for h in hostlist:
                 nm.scan(hosts=h, arguments=arg)
                 for host in nm.all_hosts():

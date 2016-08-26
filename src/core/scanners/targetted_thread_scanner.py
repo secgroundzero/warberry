@@ -22,7 +22,7 @@ from src.core.scanners.port_list import *
 from src.utils.console_colors import *
 
 class ScanThread(threading.Thread):
-    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type,hostlist):
+    def __init__(self,name, path_file,port, message, file,CIDR, intensity, type,hostlist,iface):
         threading.Thread.__init__(self)
         self.name = name
         self.path_file = path_file
@@ -34,6 +34,8 @@ class ScanThread(threading.Thread):
         self.output=""
         self.type=type
         self.hostlist=hostlist
+        self.iface=iface
+
     def run(self):
         file=self.path_file
         if os.path.isfile(file):
@@ -53,10 +55,11 @@ def scanning(self):
     if (self.type=="y"):
         arg="-Pn -sU -p"+self.port + " " + self.intensity + " --open"
     elif(self.type=="n"):
-        arg= "-Pn -p"+self.port + " " + self.intensity + " --open"
+        arg="-Pn -p"+self.port + " " + self.intensity + " --open"
     elif(self.type=="yn"):
-        arg = "-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open"
-    nm.scan(hosts='192.168.1.1,192.168.1.253', arguments=arg)
+        arg ="-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open"
+    #nm.scan(hosts=h, arguments=arg)
+    arg += " -e " + self.iface
     for h in self.hostlist:
         nm.scan(hosts=h, arguments=arg)
         for host in nm.all_hosts():
@@ -68,7 +71,7 @@ def scanning(self):
                 self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
 
 
-def thread_port_scanner(CIDR, intensity):
+def thread_port_scanner(CIDR, intensity, iface):
     
     print " "
     print bcolors.OKGREEN + " [ TARGETTED SERVICES NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
@@ -88,7 +91,7 @@ def thread_port_scanner(CIDR, intensity):
                 hostlist.append(host.strip())
 
     for i in range(len(path_file)):
-        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity, scan_type[i],hostlist)
+        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity, scan_type[i],hostlist, iface=iface)
         t.start()
         threads.append(t)
 

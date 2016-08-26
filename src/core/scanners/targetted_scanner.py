@@ -27,7 +27,7 @@ from src.core.enumeration.services_enum import *
 from src.core.scanners.port_list import *
 
 
-def scanner(name,path_file, port, message,result_file,CIDR, intensity,type,hostlist):
+def scanner(name,path_file, port, message,result_file,CIDR, intensity,type,hostlist, iface):
         if os.path.isfile(path_file):
                 print bcolors.WARNING + "[!] " + bcolors.ENDC + name + " Results File Exists. New results will be appended"
         print "[+] Scanning for " + name + " ..."
@@ -38,6 +38,7 @@ def scanner(name,path_file, port, message,result_file,CIDR, intensity,type,hostl
                 arg = "-Pn -p" + port + " " + intensity + " --open"
         elif (type == "yn"):
                 arg = "-Pn -p -sT -sU" + port + " " + intensity + " --open"
+        arg += " -e " + iface
         for h in hostlist:
                 nm.scan(hosts=h, arguments=arg)
                 for host in nm.all_hosts():
@@ -51,7 +52,7 @@ def scanner(name,path_file, port, message,result_file,CIDR, intensity,type,hostl
                 print bcolors.TITLE + "\n[+] Done! Results saved in /Results/" + result_file + "\n" + bcolors.ENDC
 
 
-def single_port_scanner(CIDR, intensity):
+def single_port_scanner(CIDR, intensity, iface):
         print " "
         print bcolors.OKGREEN + " [ TARGETTED SERVICES NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
         print "\n[*] Beginning Scanning Subnet %s" % CIDR
@@ -69,7 +70,7 @@ def single_port_scanner(CIDR, intensity):
                                 hostlist.append(host.strip())
 
         for i in range(len(path_file)):
-                scanner(name[i], path_file[i], port[i], message[i], result_file[i], CIDR, intensity,scan_type[i],hostlist)
+                scanner(name[i], path_file[i], port[i], message[i], result_file[i], CIDR, intensity, scan_type[i],hostlist, iface=iface)
 
 
 
