@@ -5,6 +5,14 @@
 * Support for IPv6
 
 
+## Version 4a
+
+* nmap scans are now performed based on the interface chose at start
+* various bug fixes
+* bootstrap file update
+* WiFi and Bluetooth scans are now optional
+
+
 ## Version 4
 
 * Support for turning threads on and off
