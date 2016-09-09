@@ -5,6 +5,11 @@
 * Support for IPv6
 
 
+## Version 4b
+
+* Fixed an error in the output when interface is not available"
+* Changed the way that interfaces are handled
+
 ## Version 4a
 
 * nmap scans are now performed based on the interface chose at start
