@@ -3,10 +3,8 @@ if [ "$(id -u)" != "0" ]; then
 	exit 1
 fi
 
-git clone https://github.com/secgroundzero/warberry.git
-
 echo """
-        Git Repository Downloaded...
+        Creating necessary directories...
     """
 
 cd ..
@@ -71,6 +69,7 @@ git clone https://github.com/PowerShellMafia/PowerSploit.git
 git clone https://github.com/offensive-security/exploit-database.git
 wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 unzip SysinternalsSuite.zip
+
 
 
 echo """
