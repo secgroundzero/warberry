@@ -37,3 +37,26 @@ def os_enum(CIDR, iface):
                         subprocess.call('sudo xprobe2 -D 11 %s 2>/dev/null | grep -A 1 "Primary guess:" >> ../Results/os_enum' %live.strip(), shell=True)
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/os_enum" + bcolors.ENDC
+
+
+def enum4linux():
+
+        if os.stat('../Results/win_hosts').st_size != 0:
+                print " "
+                print bcolors.OKGREEN + "      [ ENUM4LINUX ENUMERATION MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+
+        if os.path.isfile('../Results/enum4linux_enum'):
+                print bcolors.WARNING + "[!] Enum4Linux Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/win_hosts | uniq > ../Results/enum4linux_hosts", shell=True)
+        if os.stat('../Results/enum4linux_hosts').st_size == 0:
+                print bcolors.WARNING + "[!] No suitable hosts found" + bcolors.ENDC
+        else:
+                with open('../Results/enum4linux_hosts') as hosts:
+                        for host in hosts:
+                                print "[*] Enumerating OS on %s" % host.strip()
+                                subprocess.call('sudo perl ../Tools/enum4linux/enum4linux.pl %s >> ../Results/enum4linux_results' % host.strip(),shell=True)
+
+                print bcolors.TITLE + "[+] Done! Results saved in /Results/enum4linux_results" + bcolors.ENDC

@@ -5,6 +5,15 @@
 * Support for IPv6
 
 
+## Version 4c
+
+* Removed duplicate code
+* Added VPN Aggressive mode scanning
+* Added SMBclient & enum4linux installation
+* Added Zone Transfer Enumeration
+* Updated wiki & bootstrap 
+
+
 ## Version 4b
 
 * Fixed an error in the output when interface is not available"

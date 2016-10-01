@@ -61,6 +61,7 @@ from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
 from src.core.exploits.responder_poison import *
+from src.core.enumeration.zones import *
 from src.utils.info_banners import *
 from src.utils.console_colors import *
 from src.utils import *
@@ -118,7 +119,6 @@ v4.0                              @sec_groundzero
             print bcolors.FAIL + '*** You are not running as root and some modules will fail ***\nRun again with sudo.' + bcolors.ENDC
             sys.exit(-1)
         dhcp_check()
-        #iface = options.iface
         if (os.path.isfile('/sys/class/net/' + options.iface + '/carrier') == True):
             iface = options.iface
         else:
@@ -139,17 +139,17 @@ v4.0                              @sec_groundzero
                     poison(iface)
             else:
                 netmask = netmask_recon(iface)
+                CIDR = subnet(int_ip, netmask)
                # external_IP_recon()
+                scope_definition(iface, CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed IP Recon\n")
-
                 packets = options.packets
                 sniffer(iface, packets)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing network packets\n")
                 pcap_parser()
-                CIDR = subnet(int_ip, netmask)
-                #scope_definition(iface, CIDR)
+
                 hostnames(CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed hostnames search\n")
@@ -175,7 +175,6 @@ v4.0                              @sec_groundzero
                         smb_users(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed Enumerating Users\n")
-
                         webs_prep()
                         http_title_enum(iface)
                         with open('../Results/running_status', 'a') as status:
@@ -213,9 +212,18 @@ v4.0                              @sec_groundzero
                         sip_users_enum(iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed SIP Users Enumeration\n")
+                        aggressive_vpn()
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed Aggressive VPN Enumeration\n")
                         os_enum(CIDR,iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed OS Enumeration\n")
+                        #enum4linux()
+                        #with open('../Results/running_status', 'a') as status:
+                        #    status.write("Completed enum4linux Enumeration\n")
+                        zone_transfers(CIDR)
+                        with open('../Results/running_status', 'a') as status:
+                            status.write("Completed zones Enumeration\n")
                     if options.btooth == True:
                         bluetooth_enum()
                         with open('../Results/running_status', 'a') as status:
@@ -283,7 +291,6 @@ v4.0                              @sec_groundzero
         sniffer(iface, packets)
 
 
-
 if __name__ == '__main__':
 
     try:
@@ -292,14 +299,10 @@ if __name__ == '__main__':
         try:
             if os.path.exists("../Results") == False:
                 subprocess.call("sudo mkdir ../Results", shell = True)
-            if os.path.exists("../Tools") == False:
-                subprocess.call("sudo mkdir ../Tools", shell = True)
-            main()
-        except KeyboardInterrupt:
-            subprocess.call("sudo mkdir ../Results/Responder_logs", shell=True)
-            subprocess.call("sudo mkdir ../Results/Responder_logs", shell=True)
-            subprocess.call("sudo mv ../Tools/Responder/logs/* ../Results/Responder_logs/", shell=True)
-            subprocess.call("sudo mkdir -v ../Results/Responder_logs", shell=True)
-            subprocess.call("sudo mv -v ../Tools/Responder/logs/* ../Results/Responder_logs/", shell=True)
-            subprocess.call('clear', shell=True)
+                subprocess.call("sudo mkdir  ../Results/Responder_logs", shell=True)
+                subprocess.call("sudo mv  ../Tools/Responder/logs/* ../Results/Responder_logs/", shell=True)
+        finally:
+            subprocess.call("clear", shell=True)
             banner_full()
+
+

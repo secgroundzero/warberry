@@ -46,7 +46,6 @@ def iprecon(ifname):
             netmask = netmask_recon(ifname)
             external_IP_recon()
             CIDR = subnet(int_ip, netmask)
-            scope_definition(ifname, CIDR)
             return int_ip
         else:
 

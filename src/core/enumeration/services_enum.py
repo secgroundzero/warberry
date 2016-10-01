@@ -342,4 +342,24 @@ def sip_users_enum(iface):
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_users" + bcolors.ENDC
 
 
+def aggressive_vpn():
+        if os.path.isfile('../Results/openvpn'):
+                print " "
+                print bcolors.OKGREEN + "      [ VPN AGGRESSIVE MODE MODULE ]\n" + bcolors.ENDC
+        else:
+                return
+        if os.path.isfile('../Results/vpn_aggressive'):
+                print bcolors.WARNING + "[!] Aggressive VPN Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+        subprocess.call("sudo sort ../Results/openvpn | uniq > ../Results/vpn_hosts", shell=True)
+        with open('../Results/vpn_hosts') as vpns:
+                for vpn in vpns:
+                        print "[*] Attacking VPN on %s" % vpn.strip()
+                        subprocess.call("sudo ike-scan -A > ../Results/aggressive_results", shell=True)
+                        if 'Aggressive Mode' in open('../Results/aggressive_results').read():
+                                print "[+] Aggressive Mode enabled on %s"
+                                print "[!] sudo ike-scan -M -A -id=randomgroup -P should extract the hash"
+                                vpn_aggressive.write(vpn)
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/vpn_aggressive" + bcolors.ENDC
+
 
