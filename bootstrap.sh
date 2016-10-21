@@ -31,6 +31,11 @@ apt-get install tcpdump -y
 apt-get install nmap -y 
 apt-get install python-nmap -y 
 apt-get install python-bluez -y
+apt-get install smbclient -y
+apt-get install samba -y
+apt-get install samba_common_bin -y
+apt-get install unzip -y
+
 
 pip install optparse-pretty 
 pip install netaddr 
@@ -41,7 +46,13 @@ apt-get install xprobe2 -y
 apt-get install sg3-utils -y
 apt-get install netdiscover -y
 apt-get install macchanger -y
+
 wget http://seclists.org/nmap-dev/2016/q2/att-201/clamav-exec.nse -O /usr/share/nmap/scripts/clamav-exec.nse
+wget https://labs.portcullis.co.uk/download/enum4linux-0.8.9.tar.gz -O /home/pi/WarBerry/Tools/
+tar -zxvf enum4linux-0.8.9.tar.gz
+mv enum4linux-0.8.9 enum4linux
+
+
 
 cd /home/pi/WarBerry/Tools
 
