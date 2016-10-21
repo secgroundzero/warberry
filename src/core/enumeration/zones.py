@@ -29,11 +29,12 @@ from src.utils.utils import *
 
 def zone_transfers(CIDR):
 
-        if os.stat('../Results/dns').st_size != 0:
-                print " "
-                print bcolors.OKGREEN + "      [ ZONE TRANSFER MODULE ]\n" + bcolors.ENDC
-        else:
-                return
+        if os.path.isfile('../Results/zones'):
+                if os.stat('../Results/dns').st_size != 0:
+                        print " "
+                        print bcolors.OKGREEN + "      [ ZONE TRANSFER MODULE ]\n" + bcolors.ENDC
+                else:
+                        return
 
         if os.path.isfile('../Results/zones'):
                 print bcolors.WARNING + "[!] Zone Transfer Results File Exists. Previous Results will be overwritten\n " + bcolors.ENDC
