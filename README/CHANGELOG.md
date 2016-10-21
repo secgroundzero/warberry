@@ -8,6 +8,8 @@
 
 - Added a timeout for responder using the -t switch
 - Fixed a bug in the zones enumeration
+- Added robots.txt enumeration
+
 
 ## Version 4c
 
