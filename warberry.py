@@ -186,6 +186,9 @@ v4.0                              @sec_groundzero
                             status.write("Completed NFS Enumeration\n")
                         waf_enum(iface)
                         with open('../Results/running_status', 'a') as status:
+                            status.write("Completed Robots.txt Enumeration\n")
+                        robots_txt()
+                        with open('../Results/running_status', 'a') as status:
                             status.write("Completed WAF Enumeration\n")
                         mysql_enum(iface)
                         with open('../Results/running_status', 'a') as status:

@@ -143,6 +143,37 @@ def waf_enum(iface):
         print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
 
 
+def robots_txt():
+        if os.path.isfile('../Results/webs'):
+                print " "
+                print bcolors.OKGREEN + "      [ ROBOTS TXT ENUMERATION MODULE ]\n" + bcolors.ENDC
+
+                if os.path.isfile('../Results/robotstxt'):
+                        print bcolors.WARNING + "[!] Robots TXT Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+
+                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+
+                with open('../Results/web_hosts') as webs:
+                        for host in webs:
+                                print "[*] Enumerating Robots TXT on %s" % host.strip()
+                                print "Attempting Port 80"
+                                subprocess.call("sudo curl -s --user-agent anagent %s/robots.txt >> ../Results/robots.txt" %host.strip(), shell = True)
+                                print "Attempting Port 8080"
+                                subprocess.call("sudo curl -s --user-agent anagent %s:8080/robots.txt >> ../Results/robots.txt" % host.strip(),shell=True)
+                                print "Attempting Port 4443"
+                                subprocess.call("sudo curl -s --user-agent anagent %s:4443/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
+                                print "Attempting Port 8081"
+                                subprocess.call("sudo curl -s --user-agent anagent %s:8081/robots.txt >> ../Results/robots.txt" % host.strip(),shell=True)
+                                print "Attempting Port 443"
+                                subprocess.call("sudo curl -s --user-agent anagent %s:443/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
+                                print "Attempting Port 8181"
+                                subprocess.call("sudo curl -s --user-agent anagent %s:8181/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
+                                print "Attempting Port 9090"
+                                subprocess.call("sudo curl -s --user-agent anagent %s:9090/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
+
+                print bcolors.TITLE + "[+] Done! Results saved in /Results/robotstxt" + bcolors.ENDC
+
+
 def nfs_enum(iface):
 
         if os.path.isfile('../Results/nfs'):
