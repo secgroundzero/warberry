@@ -4,6 +4,10 @@
 * Vlans enumeration
 * Support for IPv6
 
+## Version 4c1
+
+- Added a timeout for responder using the -t switch
+- Fixed a bug in the zones enumeration
 
 ## Version 4c
 
