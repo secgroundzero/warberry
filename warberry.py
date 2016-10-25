@@ -62,6 +62,7 @@ from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
 from src.core.exploits.responder_poison import *
+from src.core.exploits.mail_cred_getter import *
 from src.core.enumeration.zones import *
 from src.utils.info_banners import *
 from src.utils.console_colors import *
