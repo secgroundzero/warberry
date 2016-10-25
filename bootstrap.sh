@@ -28,8 +28,8 @@ echo """
 apt-get install nbtscan -y
 apt-get install python-scapy -y
 apt-get install tcpdump -y
-apt-get install nmap -y 
-apt-get install python-nmap -y 
+apt-get install nmap -y
+apt-get install python-nmap -y
 apt-get install python-bluez -y
 apt-get install smbclient -y
 apt-get install samba -y
@@ -37,9 +37,11 @@ apt-get install samba_common_bin -y
 apt-get install unzip -y
 
 
-pip install optparse-pretty 
-pip install netaddr 
-pip install ipaddress 
+pip install optparse-pretty
+pip install netaddr
+pip install ipaddress
+pip install pypcap
+
 
 apt-get install ppp -y
 apt-get install xprobe2 -y
@@ -78,13 +80,11 @@ git clone https://github.com/samratashok/nishang.git
 git clone https://github.com/SpiderLabs/Responder.git
 git clone https://github.com/PowerShellMafia/PowerSploit.git
 git clone https://github.com/offensive-security/exploit-database.git
+git clone https://github.com/thecarterb/mail0wner.git
 wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 unzip SysinternalsSuite.zip -d sysinternals/
-
 
 
 echo """
         All done ready to rock...
     """
-
-
