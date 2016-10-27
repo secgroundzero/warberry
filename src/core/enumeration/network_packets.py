@@ -24,7 +24,6 @@ def sniffer(iface, packets):
         print bcolors.OKGREEN + "      [ IP NETWORK SNIFFING MODULE ]\n" + bcolors.ENDC
         print "Sniffer will begin capturing %d packets" %packets
         packets = sniff(iface=iface, count= packets, timeout=2)
-        #Time out Parameter to exit if  no packet is received - Ask Yiannis
         wrpcap(pcap_location, packets)
         print bcolors.OKGREEN + "[+] " + bcolors.ENDC + "Capture Completed." + bcolors.ENDC + " PCAP File Saved at " + bcolors.OKGREEN + "%s!\n" %pcap_location + bcolors.ENDC
 

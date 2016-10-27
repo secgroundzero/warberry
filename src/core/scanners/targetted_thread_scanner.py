@@ -75,7 +75,7 @@ def thread_port_scanner(CIDR, intensity, iface):
     
     print " "
     print bcolors.OKGREEN + " [ TARGETTED SERVICES NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
-    print "\n[*] Beginning Scanning Subnet %s with %s intensity." %(CIDR, intensity)
+    print "\n[*] Beginning Scanning Live IPs in Subnet %s with %s intensity." %(CIDR, intensity)
     print " "
     threads=[]
     hostlist = []

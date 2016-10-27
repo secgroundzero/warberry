@@ -227,7 +227,7 @@ v4.0                              @sec_groundzero
                         #enum4linux()
                         #with open('../Results/running_status', 'a') as status:
                         #    status.write("Completed enum4linux Enumeration\n")
-                        zone_transfers(CIDR)
+                        zone_transfers(CIDR,iface)
                         with open('../Results/running_status', 'a') as status:
                             status.write("Completed zones Enumeration\n")
                     if options.btooth == True:

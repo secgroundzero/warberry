@@ -138,7 +138,7 @@ def waf_enum(iface):
                 for host in hosts:
                         print "[*] Enumerating WAF on %s" %host.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 -e ' + iface + '--open -o ../Results/wafed')
+                        nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/wafed')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
 
@@ -269,7 +269,7 @@ def snmp_enum(iface):
                 for snmp in snmps:
                         print "[*] Enumerating SNMP on %s" %snmp.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=snmp, arguments='-Pn -T4 -sV -p161 -e ' + iface + '--open -o ../Results/snmp_enum')
+                        nm.scan(hosts=snmp, arguments='-Pn -T4 -sV -sU -p161 -e ' + iface + ' --open -o ../Results/snmp_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/snmp_enum" + bcolors.ENDC
 
@@ -309,7 +309,7 @@ def informix_enum(iface):
                 for inf in infdb:
                         print "[*] Enumerating Informix DB on %s" %inf.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=inf, arguments='-Pn -p 9088 -e ' + iface + ' --script informix-query --script-args informix-query.username=informix,informix-query.password=informix  -o ../Results/informix_enum')
+                        nm.scan(hosts=inf, arguments='-Pn -T4 -p9088 -e ' + iface + ' --script informix-query --script-args informix-query.username=informix,informix-query.password=informix  -o ../Results/informix_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_enum" + bcolors.ENDC
 
@@ -329,7 +329,7 @@ def informix_tables(iface):
                 for inf in infdb:
                         print "[*] Enumerating Informix DB Tables on %s" %inf.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=inf, arguments='-Pn -p 9088 -e ' + iface + ' --script informix-tables --script-args informix-tables.username=informix,informix-tables.password=informix  -o ../Results/informix_tables')
+                        nm.scan(hosts=inf, arguments='-Pn -T4 -p9088 -e ' + iface + ' --script informix-tables --script-args informix-tables.username=informix,informix-tables.password=informix  -o ../Results/informix_tables')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_tables" + bcolors.ENDC
 
@@ -349,7 +349,7 @@ def sip_methods_enum(iface):
                 for sip in sips:
                         print "[*] Enumerating SIP Methods on %s" %sip.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=sip, arguments='-Pn --script sip-methods -sU -e ' + iface + ' -p 5060  -o ../Results/sip_methods')
+                        nm.scan(hosts=sip, arguments='-Pn -T4 --script sip-methods -sU -e ' + iface + ' -p 5060  -o ../Results/sip_methods')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_methods" + bcolors.ENDC
 
@@ -368,7 +368,7 @@ def sip_users_enum(iface):
                 for sip in sips:
                         print "[*] Enumerating SIP Users on %s" %sip.strip()
                         nm = nmap.PortScanner()
-                        nm.scan(hosts=sip, arguments='-Pn --script sip-enum-users -sU -e ' + iface + ' -p 5060  -o ../Results/sip_users')
+                        nm.scan(hosts=sip, arguments='-Pn -T4 --script sip-enum-users -sU -e ' + iface + ' -p 5060  -o ../Results/sip_users')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_users" + bcolors.ENDC
 
