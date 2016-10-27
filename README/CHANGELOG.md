@@ -4,6 +4,15 @@
 * Vlans enumeration
 * Support for IPv6
 
+
+## Version 4c1a
+
+- Fixed a bug in WAF enumeration
+- Fixed a bug in SNMP enumeration
+- Fied a bug in zone transfers
+- Changed the services enumeration intensity
+
+
 ## Version 4c1
 
 - Added a timeout for responder using the -t switch
