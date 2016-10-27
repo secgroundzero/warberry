@@ -27,7 +27,7 @@ from src.utils.utils import *
 
 
 
-def zone_transfers(CIDR):
+def zone_transfers(CIDR, iface):
 
         if os.path.isfile('../Results/zones'):
                 if os.stat('../Results/dns').st_size != 0:
@@ -41,7 +41,7 @@ def zone_transfers(CIDR):
                 with open('../Results/dns') as dns:
                         for host in dns:
                                 print bcolors.WARNING + "[*] Attempting Zone Transfer on %s" %host.strip() + bcolors.ENDC
-                                subprocess.call('sudo nmap -Pn --script=dns-zone-transfer %s -O ../Results/domains' %host, shell = True)
+                                subprocess.call('sudo nmap -Pn -e' + iface + '--script=dns-zone-transfer %s -O ../Results/domains' %host, shell = True)
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/zones" + bcolors.ENDC
         else:
                 return
