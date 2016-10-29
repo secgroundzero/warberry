@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-import subprocess
+import subprocess32
 import os, os.path
 import sys, getopt
 import socket
@@ -37,7 +37,7 @@ def shares_enum(iface):
         if os.path.isfile('../Results/shares'):
                 print bcolors.WARNING + "[!] Shares Results File Exists. Previous results will be overwritten\n" + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
 
         with open('../Results/win_hosts', 'r') as hosts:
 
@@ -60,7 +60,7 @@ def smb_users(iface):
         if os.path.isfile('../Results/smb_users'):
                 print bcolors.WARNING + "[!] SMB Users Results File Exists. Previous Results will be Overwritten\n" +bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
 
         with open('../Results/win_hosts') as hosts:
                 for host in hosts:
@@ -81,7 +81,7 @@ def domains_enum(iface):
         if os.path.isfile('../Results/domains_enum'):
                 print bcolors.WARNING + "[!] SMB DOMAINS Results File Exists. Previous Results will be Overwritten\n" +bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
 
         with open('../Results/win_hosts') as hosts:
                 for host in hosts:
@@ -97,7 +97,7 @@ def webs_prep():
         if (os.path.isfile('../Results/webservers80') or os.path.isfile('../Results/webservers8080')
             or os.path.isfile('../Results/webservers8181') or os.path.isfile('../Results/webservers443')
             or os.path.isfile('../Results/webservers4443')or os.path.isfile('../Results/webservers9090')):
-                subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
+                subprocess32.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
         else:
                 return
 
@@ -111,7 +111,7 @@ def http_title_enum(iface):
                 if os.path.isfile('../Results/http_titles'):
                         print bcolors.WARNING + "[!] HTTP Titles Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+                subprocess32.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
 
                 with open('../Results/web_hosts') as webs:
                         for host in webs:
@@ -132,8 +132,8 @@ def waf_enum(iface):
         if os.path.isfile('../Results/wafed'):
                 print bcolors.WARNING + "[!] WAF Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
-        subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+        subprocess32.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
+        subprocess32.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
         with open('../Results/web_hosts') as hosts:
                 for host in hosts:
                         print "[*] Enumerating WAF on %s" %host.strip()
@@ -151,25 +151,18 @@ def robots_txt():
                 if os.path.isfile('../Results/robotstxt'):
                         print bcolors.WARNING + "[!] Robots TXT Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+                subprocess32.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
 
                 with open('../Results/web_hosts') as webs:
                         for host in webs:
-                                print "[*] Enumerating Robots TXT on %s" % host.strip()
-                                print "Attempting Port 80"
-                                subprocess.call("sudo curl -s --user-agent anagent %s/robots.txt >> ../Results/robots.txt" %host.strip(), shell = True)
-                                print "Attempting Port 8080"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:8080/robots.txt >> ../Results/robots.txt" % host.strip(),shell=True)
-                                print "Attempting Port 4443"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:4443/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
-                                print "Attempting Port 8081"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:8081/robots.txt >> ../Results/robots.txt" % host.strip(),shell=True)
-                                print "Attempting Port 443"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:443/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
-                                print "Attempting Port 8181"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:8181/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
-                                print "Attempting Port 9090"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:9090/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
+				ports_to_check = [80, 8080, 4443, 8081, 443, 8181, 9090]
+                                for port in ports_to_check:
+                                        print "[*] Enumerating Robots TXT on %s:%s" % (host.strip(), port)
+                                        print "Attempting Port %s" % port
+                                        try:
+                                                subprocess32.call("sudo curl -s --user-agent anagent %s:%s/robots.txt >> ../Results/robots.txt" % (host.strip(), port), shell = True, timeout=5)
+                                        except subprocess32.TimeoutExpired:
+                                                print bcolors.WARNING + "[!] Timed out, moving along.\n" + bcolors.ENDC
 
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/robotstxt" + bcolors.ENDC
 
@@ -184,7 +177,7 @@ def nfs_enum(iface):
         if os.path.isfile('../Results/nfs_enum'):
                 print bcolors.WARNING + "[!] NFS Enum Results File Exists. Previous results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/nfs | uniq > ../Results/nfs_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/nfs | uniq > ../Results/nfs_hosts", shell=True)
         with open('../Results/nfs_hosts') as shares:
                 for share in shares:
                         print "[*] Enumerating NFS Shares on %s" %share.strip()
@@ -204,7 +197,7 @@ def mysql_enum(iface):
         if os.path.isfile('../Results/mysql_enum'):
                 print bcolors.WARNING + "[!] MYSQL Enum Results File Exists. Rrevious Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/mysql | uniq > ../Results/mysql_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/mysql | uniq > ../Results/mysql_hosts", shell=True)
         with open('../Results/mysql_hosts') as dbs:
                 for db in dbs:
                         print "[*] Enumerating MYSQL DB on %s" %db.strip()
@@ -224,7 +217,7 @@ def mssql_enum(iface):
         if os.path.isfile('../Results/mssql_enum'):
                 print bcolors.WARNING + "[!] MSSQL Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/mssql | uniq > ../Results/mssql_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/mssql | uniq > ../Results/mssql_hosts", shell=True)
         with open('../Results/mssql_hosts') as dbs:
                 for db in dbs:
                         print "[*] Enumerating MSSQL DB on %s" %db.strip()
@@ -244,7 +237,7 @@ def ftp_enum(iface):
         if os.path.isfile('../Results/ftp_enum'):
                 print bcolors.WARNING + "[!] FTP Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/ftp | uniq > ../Results/ftp_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/ftp | uniq > ../Results/ftp_hosts", shell=True)
         with open('../Results/ftp_hosts') as ftps:
                 for ftp in ftps:
                         print "[*] Enumerating FTP on %s" %ftp.strip()
@@ -264,7 +257,7 @@ def snmp_enum(iface):
         if os.path.isfile('../Results/snmp_enum'):
                 print bcolors.WARNING + "[!] SNMP Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/snmp | uniq > ../Results/snmp_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/snmp | uniq > ../Results/snmp_hosts", shell=True)
         with open('../Results/snmp_hosts') as snmps:
                 for snmp in snmps:
                         print "[*] Enumerating SNMP on %s" %snmp.strip()
@@ -284,7 +277,7 @@ def clamav_enum(iface):
         if os.path.isfile('../Results/clamav_enum'):
                 print bcolors.WARNING + "[!] Clam AV Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/clamav | uniq > ../Results/clamav_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/clamav | uniq > ../Results/clamav_hosts", shell=True)
         with open('../Results/clamav_hosts') as clams:
                 for clam in clams:
                         print "[*] Enumerating Clam AV on %s" %clam.strip()
@@ -304,7 +297,7 @@ def informix_enum(iface):
         if os.path.isfile('../Results/informix_enum'):
                 print bcolors.WARNING + "[!] Informix DB Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
         with open('../Results/informix_hosts') as infdb:
                 for inf in infdb:
                         print "[*] Enumerating Informix DB on %s" %inf.strip()
@@ -324,7 +317,7 @@ def informix_tables(iface):
         if os.path.isfile('../Results/informix_tables'):
                 print bcolors.WARNING + "[!] Informix DB Tables Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
         with open('../Results/informix_hosts') as infdb:
                 for inf in infdb:
                         print "[*] Enumerating Informix DB Tables on %s" %inf.strip()
@@ -344,7 +337,7 @@ def sip_methods_enum(iface):
         if os.path.isfile('../Results/sip_methods'):
                 print bcolors.WARNING + "[!] SIP Methods Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
         with open('../Results/voip_hosts') as sips:
                 for sip in sips:
                         print "[*] Enumerating SIP Methods on %s" %sip.strip()
@@ -363,7 +356,7 @@ def sip_users_enum(iface):
         if os.path.isfile('../Results/sip_users'):
                 print bcolors.WARNING + "[!] SIP Users Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
         with open('../Results/voip_hosts') as sips:
                 for sip in sips:
                         print "[*] Enumerating SIP Users on %s" %sip.strip()
@@ -382,11 +375,11 @@ def aggressive_vpn():
         if os.path.isfile('../Results/vpn_aggressive'):
                 print bcolors.WARNING + "[!] Aggressive VPN Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
-        subprocess.call("sudo sort ../Results/openvpn | uniq > ../Results/vpn_hosts", shell=True)
+        subprocess32.call("sudo sort ../Results/openvpn | uniq > ../Results/vpn_hosts", shell=True)
         with open('../Results/vpn_hosts') as vpns:
                 for vpn in vpns:
                         print "[*] Attacking VPN on %s" % vpn.strip()
-                        subprocess.call("sudo ike-scan -A > ../Results/aggressive_results", shell=True)
+                        subprocess32.call("sudo ike-scan -A > ../Results/aggressive_results", shell=True)
                         if 'Aggressive Mode' in open('../Results/aggressive_results').read():
                                 print "[+] Aggressive Mode enabled on %s"
                                 print "[!] sudo ike-scan -M -A -id=randomgroup -P should extract the hash"
