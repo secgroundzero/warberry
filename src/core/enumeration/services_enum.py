@@ -14,6 +14,7 @@ GNU General Public License for more details.
 """
 
 import subprocess
+import subprocess32
 import os, os.path
 import sys, getopt
 import socket
@@ -155,21 +156,13 @@ def robots_txt():
 
                 with open('../Results/web_hosts') as webs:
                         for host in webs:
-                                print "[*] Enumerating Robots TXT on %s" % host.strip()
-                                print "Attempting Port 80"
-                                subprocess.call("sudo curl -s --user-agent anagent %s/robots.txt >> ../Results/robots.txt" %host.strip(), shell = True)
-                                print "Attempting Port 8080"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:8080/robots.txt >> ../Results/robots.txt" % host.strip(),shell=True)
-                                print "Attempting Port 4443"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:4443/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
-                                print "Attempting Port 8081"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:8081/robots.txt >> ../Results/robots.txt" % host.strip(),shell=True)
-                                print "Attempting Port 443"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:443/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
-                                print "Attempting Port 8181"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:8181/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
-                                print "Attempting Port 9090"
-                                subprocess.call("sudo curl -s --user-agent anagent %s:9090/robots.txt >> ../Results/robots.txt" % host.strip(), shell=True)
+                                ports_to_check = [80, 8080, 4443, 8081, 443, 8181, 9090]
+                                for port in ports_to_check:
+                                        print bcolors.WARNING + "[*]" + bcolors.ENDC + " Enumerating Robots TXT on %s:%s" % (host.strip(), port)
+                                        try:
+                                                subprocess32.call("sudo curl -s --user-agent anagent %s:%s/robots.txt >> ../Results/robots.txt" % (host.strip(), port), shell=True, timeout=5)
+                                        except subprocess32.TimeoutExpired:
+                                                print bcolors.WARNING + "[!] Timed out, moving along.\n" + bcolors.ENDC
 
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/robotstxt" + bcolors.ENDC
 

@@ -37,7 +37,7 @@ def pcap_parser():
                 return
 
         if os.path.isfile('../Results/pcap_results'):
-                print bcolors.WARNING + "[!] PCAP Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+                print bcolors.WARNING + "[!] PCAP Results File Exists. Previous Results will be overwritten\n " + bcolors.ENDC
 
         print bcolors.TITLE + "[*] Looking for interesting data in /Results/capture.pcap" + bcolors.ENDC
         subprocess.call("sudo python ../Tools/net-creds/net-creds.py -p ../Results/capture.pcap > ../Results/pcap_results", shell = True)

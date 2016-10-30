@@ -5,7 +5,6 @@ from src.utils.console_colors import *
 
 def nbtscan(CIDR):
 
-       print " "
        print bcolors.OKGREEN + "      [ NAMESERVER ENUMERATION MODULE ]\n" + bcolors.ENDC
 
        subprocess.call('sudo nbtscan -r %s 2>/dev/null > ../Results/nameservers' %CIDR , shell = True )
