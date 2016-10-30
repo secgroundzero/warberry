@@ -1,4 +1,25 @@
-## UPCOMING
+## Credits and Contributors
+
+Below is the list of people that helped the project either by commiting code or making suggestions.Make sure to check their repos on Github. 
+Thank you also to all those who take the time to test and post bugs.
+
+- thecarterb
+- ikirt
+- robinlennox
+- jabedude
+- vesche
+- dyzajash
+- Cabalist
+- stephenreda
+- vay3t
+- malbolgias
+- Dbof
+- sigwo
+- FrUh
+
+A big thank you goes to all the people that developed the awesome tools that WarBerryPi uses. 
+
+## UPCOMING ADDITIONS
 
 * Wireless Attacks
 * Vlans enumeration
@@ -8,7 +29,8 @@
 
 - Updated reporting package
 - Timeout for robots.txt enumeration
-- Updated bootstrap to include subprocess32
+- Updated bootstrap to include subprocess32 and pyrcap
+- Added mailowner script
 
 ## Version 4c1a
 
