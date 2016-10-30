@@ -40,6 +40,7 @@ apt-get install unzip -y
 pip install optparse-pretty 
 pip install netaddr 
 pip install ipaddress 
+pip install subprocess32
 
 apt-get install ppp -y
 apt-get install xprobe2 -y
