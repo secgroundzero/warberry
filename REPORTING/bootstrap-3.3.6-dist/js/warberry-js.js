@@ -1367,7 +1367,7 @@ function findResponderElements(){
             var response= data;
             var validFiles=[];
             for (var i=0; i<response.Files.length; i++) {
-                if ((response.Files[i].indexOf(".log")>=0) || (response.Files[i].indexOf("..")>=0) || ((response.Files[i].length==1) && (response.Files[i].indexOf('.')>=0))){}
+                if ((response.Files[i].indexOf(".log")>=0) || (response.Files[i].indexOf("mvp_names")>=0) || (response.Files[i].indexOf("model")>=0) || (response.Files[i].indexOf("nfs_hosts")>=0) || (response.Files[i].indexOf("nameservers")>=0) || (response.Files[i].indexOf("liveip_hosts")>=0) || (response.Files[i].indexOf("live_ips")>=0) || (response.Files[i].indexOf("web_hosts")>=0) || (response.Files[i].indexOf("running_status")>=0) || (response.Files[i].indexOf("mvps")>=0) || (response.Files[i].indexOf("win_hosts")>=0) || (response.Files[i].indexOf("..")>=0) || ((response.Files[i].length==1) && (response.Files[i].indexOf('.')>=0))){}
                 else{
                     validFiles.push(response.Files[i])
                 }
@@ -1394,7 +1394,7 @@ function findResults(){
             var response= data;
             var validFiles=[];
             for (var i=0; i<response.Files.length; i++) {
-                if ((response.Files[i].indexOf("statics")>=0)|| (response.Files[i].indexOf("pcap_results")>=0)|| (response.Files[i].indexOf(".DS_Store")>=0)|| (response.Files[i].indexOf("capture.pcap")>=0)|| (response.Files[i].indexOf("avail_ips")>=0) || (response.Files[i].indexOf("..")>=0) || ((response.Files[i].length==1) && (response.Files[i].indexOf('.')>=0))){}
+                if ((response.Files[i].indexOf("statics")>=0) || (response.Files[i].indexOf("mvp_names")>=0) || (response.Files[i].indexOf("model")>=0) || (response.Files[i].indexOf("nfs_hosts")>=0) || (response.Files[i].indexOf("nameservers")>=0) || (response.Files[i].indexOf("liveip_hosts")>=0) || (response.Files[i].indexOf("live_ips")>=0) || (response.Files[i].indexOf("web_hosts")>=0) || (response.Files[i].indexOf("running_status")>=0) || (response.Files[i].indexOf("mvps")>=0) || (response.Files[i].indexOf("win_hosts")>=0) || (response.Files[i].indexOf("pcap_results")>=0)|| (response.Files[i].indexOf(".DS_Store")>=0)|| (response.Files[i].indexOf("capture.pcap")>=0)|| (response.Files[i].indexOf("avail_ips")>=0) || (response.Files[i].indexOf("..")>=0) || ((response.Files[i].length==1) && (response.Files[i].indexOf('.')>=0))){}
                 else{
                     validFiles.push(response.Files[i])
                 }
@@ -1435,7 +1435,7 @@ function findTitle(filename){
     switch (filename){
         case 'avail_ips': return 'Available IPs';
             break;
-        case 'hostnames': return 'Hostnames Discovered';
+        case 'hostnames': return 'Hostnames';
             break;
         case 'unique_CIDR': return 'CIDR Discovered';
             break;
@@ -1477,7 +1477,7 @@ function findTitle(filename){
             break;
         case 'webservers': return 'network_scanner';
             break;
-        case 'webs': return 'Webservers Discovered';
+        case 'webs': return 'Webservers';
             break;
         case 'printers': return 'network_scanner';
             break;
@@ -1559,25 +1559,27 @@ function findTitle(filename){
             break;
         case 'http_titles': return 'HTTP Titles';
             break;
-        case 'shares': return 'Shares Enum';
+        case 'shares': return 'Enumerated Shares';
             break;
-        case 'smb_users': return 'SMB Users Enum';
+        case 'smb_users': return 'SMB Users Enumeration';
             break;
-        case 'nfs_enum': return 'NFS Enum';
+        case 'nfs_enum': return 'NFS Enumeration';
             break;
         case 'wafed': return 'WAF Enum';
             break;
-        case 'mysql_enum': return 'MYSQL Enum';
+        case 'mysql_enum': return 'MYSQL Enumeration';
             break;
         case 'mssql_enum': return 'MSSQL Enum';
             break;
-        case 'ftp_enum': return 'FTP Enum';
+        case 'ftp_enum': return 'FTP Enumeration';
             break;
         case 'snmp_enum': return 'SNMP Enum';
             break;
         case 'wifis': return 'Wireless Networks';
             break;
         case 'blues': return 'Bluetooth Devices';
+            break;
+        case 'os_enum': return 'OS Enumeration';
             break;
         default: return filename;
     }
@@ -1667,6 +1669,7 @@ function Presentation(lines,filename){
             contents.push("snmp_enum_table");
             localStorage.setItem("pdf",JSON.stringify(contents));
             break;
+      
         case 'blues': table=BluesPresentation(lines,filename);
             table.setAttribute("id", "blues_table");
             $("#"+filename+"_content").append(table);
@@ -1852,19 +1855,19 @@ function findPDFTitle(filename){
     switch (filename){
         case 'avail_ips': return 'Available IPs';
             break;
-        case 'hostnames_table': return 'Hostnames Discovered';
+        case 'hostnames_table': return 'Hostnames';
             break;
-        case 'unique_CIDR_table': return 'CIDR Discovered';
+        case 'unique_CIDR_table': return 'CIDR';
             break;
-        case 'unique_hosts_table': return 'Hosts Discovered';
+        case 'unique_hosts_table': return 'Hosts';
             break;
-        case 'unique_subnets_table': return 'Subnets Discovered';
+        case 'unique_subnets_table': return 'Available Subnets';
             break;
         case 'hostnames' : return 'Hostnames';
             break;
         case 'used_ips_table': return 'Used IPs';
             break;
-        case 'ips_discovered_table': return "IPs Discovered";
+        case 'ips_discovered_table': return "IPs";
             break;
         case 'windows': return 'Windows';
             break;
@@ -1872,7 +1875,7 @@ function findPDFTitle(filename){
             break;
         case 'mysql': return 'MySQL';
             break;
-        case 'webs_table': return 'Webservers Discovered';
+        case 'webs_table': return 'Webservers';
             break;
         case 'webservers80': return 'Web Servers 80';
             break;
@@ -1938,7 +1941,7 @@ function findPDFTitle(filename){
             break;
         case 'shares_enum_table': return 'Shares Enum';
             break;
-        case 'smb_users_table': return 'SMB Users Enum';
+        case 'smb_users_table': return 'SMB Users Enumeration';
             break;
         case 'nfs_enum_table': return 'NFS Enum';
             break;
@@ -1995,6 +1998,8 @@ function findPDFTitle(filename){
         case 'upnp': return 'UPNP';
             break;
         case 'radius': return 'RADIUS';
+            break;
+        case 'os_enum': return 'OS Enumeration';
             break;
         default: return filename;
     }
