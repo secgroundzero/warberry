@@ -87,7 +87,8 @@ v4.0                              @sec_groundzero
 
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
     parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC,choices=['-A','--attack','-T','--toptcp', '-B','--topudp', '-F', '--fulltcp'])
-    parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="Number of Network Packets to capture")
+    parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="# of Network Packets to capture" + bcolors.WARNING + " Default: 20" + bcolors.ENDC)
+    parser.add_option("-x", "--expire", action="store", dest="expire", default=20, type=int,help="Time for packet capture to stop" + bcolors.WARNING + " Default: 20s" + bcolors.ENDC)
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
     parser.add_option("-N", "--name", action="store", dest="name", default="WarBerry",help="Hostname to use." + bcolors.WARNING + " Default: Auto" + bcolors.ENDC)
     parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T1", help="Port scan intensity." + bcolors.WARNING + " Default: T1" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
@@ -143,16 +144,15 @@ v4.0                              @sec_groundzero
             else:
                 netmask = netmask_recon(iface)
                 CIDR = subnet(int_ip, netmask)
-               # external_IP_recon()
                 scope_definition(iface, CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed IP Recon\n")
                 packets = options.packets
-                sniffer(iface, packets)
+                expire = options.expire
+                sniffer(iface, packets, expire)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing network packets\n")
                 pcap_parser()
-
                 hostnames(CIDR)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed hostnames search\n")
