@@ -4,6 +4,11 @@
 * Vlans enumeration
 * Support for IPv6
 
+## Version 4c1b
+
+- Updated reporting package
+- Timeout for robots.txt enumeration
+- Updated bootstrap to include subprocess32
 
 ## Version 4c1a
 
