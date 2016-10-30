@@ -80,7 +80,6 @@ git clone https://github.com/samratashok/nishang.git
 git clone https://github.com/SpiderLabs/Responder.git
 git clone https://github.com/PowerShellMafia/PowerSploit.git
 git clone https://github.com/offensive-security/exploit-database.git
-git clone https://github.com/thecarterb/mail0wner.git
 wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 unzip SysinternalsSuite.zip -d sysinternals/
 
