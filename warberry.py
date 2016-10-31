@@ -58,6 +58,7 @@ from src.core.scanners.full_thread_scanner import *
 from src.core.enumeration.bluetooth_enum import *
 from src.core.enumeration.ip_enum import *
 from src.core.enumeration.network_packets import *
+from src.core.enumeration.mailowner import *
 from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
@@ -152,6 +153,9 @@ v4.0                              @sec_groundzero
                 sniffer(iface, packets, expire)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing network packets\n")
+                mail_creds(iface, expire)
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed sniffing mail info from packets\n")
                 pcap_parser()
                 hostnames(CIDR)
                 with open('../Results/running_status', 'a') as status:

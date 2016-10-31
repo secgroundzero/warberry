@@ -25,6 +25,11 @@ A big thank you goes to all the people that developed the awesome tools that War
 * Vlans enumeration
 * Support for IPv6
 
+## Version 4c1c
+
+- Added the mailowner module developed by thecarterb
+
+
 ## Version 4c1b
 
 - Updated reporting package
