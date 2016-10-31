@@ -35,6 +35,8 @@ apt-get install smbclient -y
 apt-get install samba -y
 apt-get install samba_common_bin -y
 apt-get install unzip -y
+sudo apt-get install python-dev
+sudo apt-get install python3-dev
 
 
 pip install optparse-pretty 
