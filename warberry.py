@@ -63,6 +63,7 @@ from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
 from src.core.exploits.responder_poison import *
+from src.core.exploits.mail_cred_getter import *
 from src.core.enumeration.zones import *
 from src.utils.info_banners import *
 from src.utils.console_colors import *
@@ -142,6 +143,10 @@ v4.0                              @sec_groundzero
                     status.write("Entering poisoning mode\n")
                     poison_time = options.time
                     poison(iface, poison_time)
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Entering mail cred get mode")
+                    get_creds()
+
             else:
                 netmask = netmask_recon(iface)
                 CIDR = subnet(int_ip, netmask)
@@ -315,5 +320,3 @@ if __name__ == '__main__':
         finally:
             subprocess.call("clear", shell=True)
             banner_full()
-
-
