@@ -27,4 +27,4 @@ def mail_creds(iface, expire):
         sniff(filter="tcp port 110 or tcp port 25 or tcp port 143", iface=options.iface, prn=packet_callback, store=0, timeout=expire)    
 
         
-print bcolors.OKGREEN + "[+] " + bcolors.ENDC + "Capture Completed." + bcolors.ENDC + " Results saved at " + bcolors.OKGREEN + "../WarBerry/Results/mailcreds!\n" + bcolors.END
+print bcolors.OKGREEN + "[+] " + bcolors.ENDC + "Capture Completed." + bcolors.ENDC + " Results saved at " + bcolors.OKGREEN + "../WarBerry/Results/mailcreds!\n" + bcolors.ENDC
