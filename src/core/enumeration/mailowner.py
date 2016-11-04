@@ -18,8 +18,8 @@ def mail_creds(iface, expire):
     print " "
     print bcolors.OKGREEN + "      [ MAIL INFO SNIFFER MODULE ]\n" + bcolors.ENDC
     print '[*] Sniffing for %d seconds...' %expire
+    
     #check which interface is being used    
-def options(iface):    
     if options.iface == "wlan0":
         sniff(filter="tcp port 110 or tcp port 25 or tcp port 143", iface="wlan0", prn=packet_callback, store=0, timeout=expire)
     elif options.iface == "eth0":
