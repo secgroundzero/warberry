@@ -18,5 +18,6 @@ def mail_creds(iface, expire):
     print " "
     print bcolors.OKGREEN + "      [ MAIL INFO SNIFFER MODULE ]\n" + bcolors.ENDC
     print '[*] Sniffing for %d seconds...' %expire
+    print "Interface: %s" %iface
     sniff(filter="tcp port 110 or tcp port 25 or tcp port 143", iface=iface, prn=packet_callback, store=0, timeout=expire)
     print bcolors.OKGREEN + "[+] " + bcolors.ENDC + "Capture Completed." + bcolors.ENDC + " Results saved at " + bcolors.OKGREEN + "../WarBerry/Results/mailcreds!\n" + bcolors.ENDC
