@@ -44,7 +44,7 @@ pip install netaddr
 pip install ipaddress 
 pip install subprocess32
 pip install pypcap
-
+apt-get install libpcap-dev -y
 
 apt-get install ppp -y
 apt-get install xprobe2 -y
