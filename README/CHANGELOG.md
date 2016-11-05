@@ -25,6 +25,12 @@ A big thank you goes to all the people that developed the awesome tools that War
 * Vlans enumeration
 * Support for IPv6
 
+
+## Version 4c1e
+
+- Mailowner works with all interfaces now
+- Fixed a typo in the examples section
+
 ## Version 4c1d
 
 - Updated bootstrap for the subprocess32 installation
