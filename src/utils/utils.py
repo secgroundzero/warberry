@@ -246,7 +246,7 @@ def external_IP_recon():
                 url = site.read()
                 grab = re.findall('([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)', url)
                 address = grab[0]
-                print 'External IP obtained: ' + bcolors.OKGREEN + '%s\n' %address + bcolors.ENDC
+                print '[+] External IP obtained: ' + bcolors.OKGREEN + '%s\n' %address + bcolors.ENDC
         except:
                 print bcolors.WARNING + "[!] Could not reach the outside world. Possibly behind a firewall or some kind filtering\n" + bcolors.ENDC
         return
