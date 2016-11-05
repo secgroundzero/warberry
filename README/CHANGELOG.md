@@ -1,24 +1,3 @@
-## Credits and Contributors
-
-Below is the list of people that helped the project either by commiting code or making suggestions.Make sure to check their repos on Github. 
-Thank you also to all those who take the time to test and post bugs.
-
-- thecarterb
-- ikirt
-- robinlennox
-- jabedude
-- vesche
-- dyzajash
-- Cabalist
-- stephenreda
-- vay3t
-- malbolgias
-- Dbof
-- sigwo
-- FrUh
-
-A big thank you goes to all the people that developed the awesome tools that WarBerryPi uses. 
-
 ## UPCOMING ADDITIONS
 
 * Wireless Attacks
@@ -30,6 +9,8 @@ A big thank you goes to all the people that developed the awesome tools that War
 
 - Mailowner works with all interfaces now
 - Fixed a typo in the examples section
+- Created a hall of fame page in the wiki for the contributors
+- Create a page in the wiki for the conferences that the WarBerryPi was presented
 
 ## Version 4c1d
 
