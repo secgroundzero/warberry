@@ -5,6 +5,10 @@
 * Support for IPv6
 
 
+## Version 4c1f
+
+- Fixed a bug with nameservers enumeration
+
 ## Version 4c1e
 
 - Mailowner works with all interfaces now
