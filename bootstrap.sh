@@ -59,7 +59,7 @@ mv enum4linux-0.8.9 enum4linux
 
 
 
-cd /home/pi/WarBerry/Tools
+cd Tools/
 
 
 echo """
