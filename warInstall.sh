@@ -74,6 +74,7 @@ else
     apt-get -y install xprobe2
     apt-get -y install sg3-utils
     apt-get -y install netdiscover
+    apt-get -y instal  python-beautifulsoup
     yes | pip install optparse-pretty 
     yes | pip install netaddr 
     yes | pip install ipaddress 
