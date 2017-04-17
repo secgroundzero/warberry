@@ -210,7 +210,7 @@ def robots_txt():
 
         with open('../Results/urls') as urls:
                 for url in urls:
-                        print bcolors.TITLE + "[*] Searching for robots.txt on %s" % (url) + bcolors.ENDC
+                        print bcolors.TITLE + "[*] Searching for robots.txt on %s" % (url.strip()) + bcolors.ENDC
                         try:
                                 request = urllib2.Request(url, headers=headers)
                                 response = urllib2.urlopen(request, timeout=2)
