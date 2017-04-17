@@ -81,7 +81,7 @@ def main():
 
             TACTICAL EXPLOITATION
 
-v4.0                              @sec_groundzero
+v4.c1g                            @sec_groundzero
                           secgroundzero@gmail.com
 ''') + bcolors.ENDC
 
