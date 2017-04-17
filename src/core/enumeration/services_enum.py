@@ -25,6 +25,9 @@ import nmap
 from socket import inet_aton
 import socket
 from src.utils.console_colors import bcolors
+import urllib2
+from BeautifulSoup import BeautifulSoup
+
 
 
 def shares_enum(iface):
@@ -103,24 +106,53 @@ def webs_prep():
                 return
 
 def http_title_enum(iface):
-
+        targets = open('../Results/targets', 'w')
+        urls = open('../Results/urls', 'w')
+        titles = open('../Results/http_titles', 'w')
+        headers = {}
+        headers['User-Agent'] = "Googlebot"
+        ports_to_check = [':80', ':8080', ':4443', ':8081', ':443', ':8181', ':9090']
+        protocols = ['http://', 'https://']
 
         if os.path.isfile('../Results/webs'):
                 print " "
                 print bcolors.OKGREEN + "      [ HTTP TITLE ENUMERATION MODULE ]\n" + bcolors.ENDC
+                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/titles_web_hosts", shell=True)
+                subprocess.call("grep -v '^$' ../Results/titles_web_hosts > ../Results/titles_webhosts", shell=True)
+                subprocess.call("sudo rm ../Results/titles_web_hosts", shell=True)
 
-                if os.path.isfile('../Results/http_titles'):
-                        print bcolors.WARNING + "[!] HTTP Titles Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
+        with open('../Results/titles_webhosts') as hosts:
+                for host in hosts:
+                        for port in ports_to_check:
+                                url = host.strip() + port.strip()
+                                targets.write(url + '\n')
+                targets.close()
 
-                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+        with open('../Results/targets') as tar:
+                for host in tar:
+                        for protocol in protocols:
+                                url = protocol.strip() + host.strip()
+                                urls.write(url + '\n')
+                urls.close()
 
-                with open('../Results/web_hosts') as webs:
-                        for host in webs:
-                                print "[*] Enumerating HTTP Title on %s" %host.strip()
-                                nm = nmap.PortScanner()
-                                nm.scan(hosts=host, arguments='-Pn -T4 -sC -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/http_titles')
+        with open('../Results/urls') as urls:
+                for url in urls:
+                        print bcolors.TITLE + "[*] Searching HTTP TITLE on %s" % (url.strip()) + bcolors.ENDC
+                        try:
+                                response = urllib2.urlopen(url, timeout=3)
+                                html = response.read()
+                                soup = BeautifulSoup(html)
+                                print bcolors.OKGREEN + "[+] Obtained Title: %s" % soup.title.string + bcolors.ENDC
+                                titles.write(url + " " + soup.title.string )
+                        except urllib2.HTTPError as e:
+                                print bcolors.WARNING + "[!] HTTP code not 200!" + bcolors.ENDC
+                        except urllib2.URLError as e:
+                                print bcolors.FAIL + "[!] URL is Unreachable" + bcolors.ENDC
 
-                print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
+                        except:
+                                print bcolors.FAIL + "[!] General Error" + bcolors.ENDC
+
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
 
 
 def waf_enum(iface):
@@ -145,26 +177,52 @@ def waf_enum(iface):
 
 
 def robots_txt():
+
+        targets = open('../Results/targets', 'w')
+        robots_file = open('../Results/robots', 'w')
+        urls = open('../Results/urls', 'w')
+        headers = {}
+        headers['User-Agent'] = "Googlebot"
+        ports_to_check = [':80', ':8080', ':4443', ':8081', ':443', ':8181', ':9090']
+        protocols = ['http://', 'https://']
+
+
         if os.path.isfile('../Results/webs'):
                 print " "
-                print bcolors.OKGREEN + "      [ ROBOTS TXT ENUMERATION MODULE ]\n" + bcolors.ENDC
-
-                if os.path.isfile('../Results/robotstxt'):
-                        print bcolors.WARNING + "[!] Robots TXT Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
-
+                print bcolors.OKGREEN + "      [ ROBOTS.TXT ENUMERATION MODULE ]\n" + bcolors.ENDC
                 subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
+                subprocess.call("grep -v '^$' ../Results/web_hosts > ../Results/webhosts", shell=True)
+                subprocess.call("sudo rm ../Results/web_hosts", shell=True)
 
-                with open('../Results/web_hosts') as webs:
-                        for host in webs:
-                                ports_to_check = [80, 8080, 4443, 8081, 443, 8181, 9090]
-                                for port in ports_to_check:
-                                        print bcolors.WARNING + "[*]" + bcolors.ENDC + " Enumerating Robots TXT on %s:%s" % (host.strip(), port)
-                                        try:
-                                                subprocess32.call("sudo curl -s --user-agent anagent %s:%s/robots.txt >> ../Results/robots.txt" % (host.strip(), port), shell=True, timeout=5)
-                                        except subprocess32.TimeoutExpired:
-                                                print bcolors.WARNING + "[!] Timed out, moving along.\n" + bcolors.ENDC
+        with open('../Results/webhosts') as hosts:
+                for host in hosts:
+                        for port in ports_to_check:
+                                url = host.strip() + port.strip()
+                                targets.write(url + '\n')
+                targets.close()
 
-                print bcolors.TITLE + "[+] Done! Results saved in /Results/robotstxt" + bcolors.ENDC
+        with open('../Results/targets') as tar:
+                for host in tar:
+                        for protocol in protocols:
+                                url = protocol.strip() + host.strip()
+                                urls.write(url + '/robots.txt' + '\n')
+                urls.close()
+
+        with open('../Results/urls') as urls:
+                for url in urls:
+                        print bcolors.TITLE + "[*] Searching for robots.txt on %s" % (url) + bcolors.ENDC
+                        try:
+                                request = urllib2.Request(url, headers=headers)
+                                response = urllib2.urlopen(request, timeout=2)
+                                print bcolors.OKGREEN + '[+] Found Robots.txt file on %s..' % url + bcolors.ENDC
+                                ans = response.read()
+                                print ans
+                                robots_file.write('\n' + url + '\n' + '----------------' + ans)
+                                response.close()
+                        except:
+                                print  bcolors.FAIL + '[!] Timed out, moving along.\n' + bcolors.ENDC
+
+                print bcolors.TITLE + "[+] Done! Results saved in /Results/robots" + bcolors.ENDC
 
 
 def nfs_enum(iface):

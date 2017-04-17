@@ -153,7 +153,7 @@ v4.0                              @sec_groundzero
                 sniffer(iface, packets, expire)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing network packets\n")
-                mail_creds(iface, expire)
+                #mail_creds(iface, expire)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing mail info from packets\n")
                 pcap_parser()
