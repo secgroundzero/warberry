@@ -62,6 +62,7 @@ from src.core.enumeration.mailowner import *
 from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
+from src.core.enumeration.ftpwn import *
 from src.core.exploits.responder_poison import *
 from src.core.enumeration.zones import *
 from src.utils.info_banners import *
@@ -156,6 +157,9 @@ v4.c1g                            @sec_groundzero
                 #mail_creds(iface, expire)
                 with open('../Results/running_status', 'a') as status:
                     status.write("Completed sniffing mail info from packets\n")
+                ftp_creds(iface, expire)
+                with open('../Results/running_status', 'a') as status:
+                    status.write("Completed sniffing ftp info from packets\n")
                 pcap_parser()
                 hostnames(CIDR)
                 with open('../Results/running_status', 'a') as status:
