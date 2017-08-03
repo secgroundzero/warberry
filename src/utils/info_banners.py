@@ -38,7 +38,7 @@ def banner():
 
             TACTICAL EXPLOITATION
 
-v4.c1g                             @sec_groundzero
+v5                                 @sec_groundzero
                            secgroundzero@gmail.com
 ''') + bcolors.ENDC
 
@@ -204,5 +204,3 @@ MAC Address Filtering Bypass
 NAC Filtering Bypass
 
 ''') + bcolors.ENDC
-
-

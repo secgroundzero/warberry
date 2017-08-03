@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 from src.core.enumeration.bluetooth_enum import *
 import subprocess
-import os, os.path
+import os
 from src.utils.console_colors import *
 from bluetooth import *
 
@@ -28,17 +28,6 @@ def bluetooth_enum():
             if model.strip() == "a02082":
                 print " "
                 print bcolors.OKGREEN + "      [ BLUETOOTH ENUMERATION MODULE ]\n" + bcolors.ENDC
-
-                def discover():
-                    blues = discover_devices()
-                    for device in blues:
-                        name = str(lookup_name(device))
-                        with open('../Results/blues','a') as bluesfile:
-                            bluesfile.write(str(name) + " " + str(device)+ "\n")
-
-                        print bcolors.OKGREEN + "[+]" + bcolors.ENDC + " Found Bluetooth Device: " + str(name)
-                        print bcolors.OKGREEN + "[+]" + bcolors.ENDC + " MAC address: " + str(device)
-
                 for i in range(10):
                     discover()
             else:
@@ -48,3 +37,14 @@ def bluetooth_enum():
             print bcolors.TITLE + "[+] Done! Results saved in /Results/blues" + bcolors.ENDC
     else:
         print bcolors.WARNING + "[-] No Bluetooth Devices Captured" + bcolors.ENDC
+
+
+def discover():
+    blues = discover_devices()
+    for device in blues:
+        name = str(lookup_name(device))
+        with open('../Results/blues', 'a') as bluesfile:
+            bluesfile.write(str(name) + " " + str(device) + "\n")
+
+        print bcolors.OKGREEN + "[+]" + bcolors.ENDC + " Found Bluetooth Device: " + str(name)
+        print bcolors.OKGREEN + "[+]" + bcolors.ENDC + " MAC address: " + str(device)

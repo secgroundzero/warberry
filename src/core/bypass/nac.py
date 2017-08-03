@@ -13,9 +13,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-import os, os.path
+import os
 import subprocess
-from src.utils import *
 from src.utils.console_colors import *
 
 

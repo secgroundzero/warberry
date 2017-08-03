@@ -14,44 +14,30 @@ GNU General Public License for more details.
 """
 
 import subprocess
-import subprocess32
-import os, os.path
-import sys, getopt
-import socket
-import fcntl
-import struct
-import re
+import os
 import nmap
-from socket import inet_aton
-import socket
 from src.utils.console_colors import bcolors
 import urllib2
-from BeautifulSoup import BeautifulSoup
 
 
 
 def shares_enum(iface):
-
         if os.path.isfile('../Results/windows'):
                 print " "
                 print bcolors.OKGREEN + "      [ SMB SHARES ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
-
+                return "SMB SHARES DOES NOT ESIST!\n"
         if os.path.isfile('../Results/shares'):
                 print bcolors.WARNING + "[!] Shares Results File Exists. Previous results will be overwritten\n" + bcolors.ENDC
-
         subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
-
         with open('../Results/win_hosts', 'r') as hosts:
-
                 for host in hosts:
-
                         print "[*] Enumerating shares on %s" %host.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=host, arguments='-Pn -T4 --script smb-enum-shares -p445 -e ' + iface + ' --open -o ../Results/shares')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/shares" + bcolors.ENDC
+        return "Completed Enumerating Shares\n"
 
 
 def smb_users(iface):
@@ -60,12 +46,10 @@ def smb_users(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ SMB USERS ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "SMB USERS ENUMERATION DOES NOT EXIST!\n"
         if os.path.isfile('../Results/smb_users'):
                 print bcolors.WARNING + "[!] SMB Users Results File Exists. Previous Results will be Overwritten\n" +bcolors.ENDC
-
         subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
-
         with open('../Results/win_hosts') as hosts:
                 for host in hosts:
                         print "[*] Enumerating users on %s" %host.strip()
@@ -73,6 +57,7 @@ def smb_users(iface):
                         nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-users -p U:137,T:139 -e ' + iface + ' --open -o ../Results/smb_users')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/smb_users" + bcolors.ENDC
+        return "Completed Enumerating Users\n"
 
 
 def domains_enum(iface):
@@ -81,7 +66,7 @@ def domains_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ SMB DOMAINS ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "SMB DOMAINS ENUMERATION MODULE NOT FOUND!\n"
         if os.path.isfile('../Results/domains_enum'):
                 print bcolors.WARNING + "[!] SMB DOMAINS Results File Exists. Previous Results will be Overwritten\n" +bcolors.ENDC
 
@@ -100,10 +85,15 @@ def domains_enum(iface):
 def webs_prep():
         if (os.path.isfile('../Results/webservers80') or os.path.isfile('../Results/webservers8080')
             or os.path.isfile('../Results/webservers8181') or os.path.isfile('../Results/webservers443')
-            or os.path.isfile('../Results/webservers4443')or os.path.isfile('../Results/webservers9090')):
+            or os.path.isfile('../Results/webservers4443')or os.path.isfile('../Results/webservers9090')
+            or os.path.isfile('../Results/webhosts')):
                 subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
+
         else:
-                return
+                return "'../Results/webserver*" \
+                       "' does not exists!\n"
+        print bcolors.TITLE + "[+] Done! Results saved in /Results/webs" + bcolors.ENDC
+        return "WEBS FILE CREATED"
 
 def http_title_enum(iface):
         targets = open('../Results/targets', 'w')
@@ -119,7 +109,9 @@ def http_title_enum(iface):
                 print bcolors.OKGREEN + "      [ HTTP TITLE ENUMERATION MODULE ]\n" + bcolors.ENDC
                 subprocess.call("sudo sort ../Results/webs | uniq > ../Results/titles_web_hosts", shell=True)
                 subprocess.call("grep -v '^$' ../Results/titles_web_hosts > ../Results/titles_webhosts", shell=True)
-                subprocess.call("sudo rm ../Results/titles_web_hosts", shell=True)
+                subprocess.call("sudo rm ../Results/titles_web_hosts", shell=True) #delete temp files.
+        else:
+                print bcolors.WARNING + "[!] ../Results/webs file DOES NOT EXIST!" + bcolors.ENDC
 
         with open('../Results/titles_webhosts') as hosts:
                 for host in hosts:
@@ -129,10 +121,12 @@ def http_title_enum(iface):
                 targets.close()
 
         with open('../Results/targets') as tar:
+
                 for host in tar:
                         for protocol in protocols:
                                 url = protocol.strip() + host.strip()
                                 urls.write(url + '\n')
+
                 urls.close()
 
         with open('../Results/urls') as urls:
@@ -153,6 +147,7 @@ def http_title_enum(iface):
                                 print bcolors.FAIL + "[!] General Error" + bcolors.ENDC
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
+        return "Completed Enumerating HTTP Titles\n"
 
 
 def waf_enum(iface):
@@ -161,7 +156,7 @@ def waf_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ WAF DETECTION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/webs file does not exist!\n"
         if os.path.isfile('../Results/wafed'):
                 print bcolors.WARNING + "[!] WAF Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
@@ -174,7 +169,7 @@ def waf_enum(iface):
                         nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/wafed')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
-
+        return "Completed Robots.txt Enumeration\n"
 
 def robots_txt():
 
@@ -185,14 +180,12 @@ def robots_txt():
         headers['User-Agent'] = "Googlebot"
         ports_to_check = [':80', ':8080', ':4443', ':8081', ':443', ':8181', ':9090']
         protocols = ['http://', 'https://']
-
-
         if os.path.isfile('../Results/webs'):
                 print " "
                 print bcolors.OKGREEN + "      [ ROBOTS.TXT ENUMERATION MODULE ]\n" + bcolors.ENDC
                 subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
                 subprocess.call("grep -v '^$' ../Results/web_hosts > ../Results/webhosts", shell=True)
-                subprocess.call("sudo rm ../Results/web_hosts", shell=True)
+                subprocess.call("sudo rm ../Results/web_hosts", shell=True) #delete temp file.
 
         with open('../Results/webhosts') as hosts:
                 for host in hosts:
@@ -216,14 +209,13 @@ def robots_txt():
                                 response = urllib2.urlopen(request, timeout=2)
                                 print bcolors.OKGREEN + '[+] Found Robots.txt file on %s..' % url + bcolors.ENDC
                                 ans = response.read()
-                                print ans
                                 robots_file.write('\n' + url + '\n' + '----------------' + ans)
                                 response.close()
                         except:
                                 print  bcolors.FAIL + '[!] Timed out, moving along.\n' + bcolors.ENDC
 
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/robots" + bcolors.ENDC
-
+        return "Completed WAF Enumeration\n"
 
 def nfs_enum(iface):
 
@@ -231,7 +223,7 @@ def nfs_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ NFS ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/nfs file does not exist!\n"
         if os.path.isfile('../Results/nfs_enum'):
                 print bcolors.WARNING + "[!] NFS Enum Results File Exists. Previous results will be Overwritten\n " + bcolors.ENDC
 
@@ -243,7 +235,7 @@ def nfs_enum(iface):
                         nm.scan(hosts=share, arguments='-Pn -sV -T4 --script afp-showmount -p111 -e ' + iface + ' --open -o ../Results/nfs_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/nfs_enum" + bcolors.ENDC
-
+        return "Completed NFS Enumeration\n"
 
 def mysql_enum(iface):
 
@@ -251,7 +243,7 @@ def mysql_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ MYSQL ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/mysql file does not exist!\n"
         if os.path.isfile('../Results/mysql_enum'):
                 print bcolors.WARNING + "[!] MYSQL Enum Results File Exists. Rrevious Results will be Overwritten\n " + bcolors.ENDC
 
@@ -263,7 +255,7 @@ def mysql_enum(iface):
                         nm.scan(hosts=db, arguments='-Pn -T4 -sV --script mysql-enum -p3306 -e ' + iface + ' --open -o ../Results/mysql_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/mysql_enum" + bcolors.ENDC
-
+        return "Completed MYSQL Enumeration\n"
 
 def mssql_enum(iface):
 
@@ -271,7 +263,7 @@ def mssql_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ MSSQL ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/mssql file does not exist!\n"
         if os.path.isfile('../Results/mssql_enum'):
                 print bcolors.WARNING + "[!] MSSQL Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
@@ -283,7 +275,7 @@ def mssql_enum(iface):
                         nm.scan(hosts=db, arguments='-Pn -T4 -sV --script ms-sql-info -p1433 -e ' + iface + ' --open -o ../Results/mssql_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/mssql_enum" + bcolors.ENDC
-
+        return "Completed MSSQL Enumeration\n"
 
 def ftp_enum(iface):
 
@@ -291,7 +283,7 @@ def ftp_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ ANON FTP ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/ftp file does not exist!\n"
         if os.path.isfile('../Results/ftp_enum'):
                 print bcolors.WARNING + "[!] FTP Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
@@ -303,7 +295,7 @@ def ftp_enum(iface):
                         nm.scan(hosts=ftp, arguments='-Pn -T4 -sV --script ftp-anon -p22 -e ' + iface + ' --open -o ../Results/ftp_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/ftp_enum" + bcolors.ENDC
-
+        return "Completed FTP Enumeration\n"
 
 def snmp_enum(iface):
 
@@ -311,7 +303,7 @@ def snmp_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ SNMP ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/snmp file does not exist!\n"
         if os.path.isfile('../Results/snmp_enum'):
                 print bcolors.WARNING + "[!] SNMP Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
@@ -323,66 +315,8 @@ def snmp_enum(iface):
                         nm.scan(hosts=snmp, arguments='-Pn -T4 -sV -sU -p161 -e ' + iface + ' --open -o ../Results/snmp_enum')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/snmp_enum" + bcolors.ENDC
+        return "Completed SNMP Enumeration\n"
 
-
-def clamav_enum(iface):
-
-        if os.path.isfile('../Results/clamav'):
-                print " "
-                print bcolors.OKGREEN + "      [ CLAM AV ENUMERATION MODULE ]\n" + bcolors.ENDC
-        else:
-                return
-        if os.path.isfile('../Results/clamav_enum'):
-                print bcolors.WARNING + "[!] Clam AV Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
-
-        subprocess.call("sudo sort ../Results/clamav | uniq > ../Results/clamav_hosts", shell=True)
-        with open('../Results/clamav_hosts') as clams:
-                for clam in clams:
-                        print "[*] Enumerating Clam AV on %s" %clam.strip()
-                        nm = nmap.PortScanner()
-                        nm.scan(hosts=clam, arguments='-Pn -T4 -sV -p3310 -e ' + iface + ' --open --script clamav-exec.nse  -o ../Results/clamav_enum')
-
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/clamav_enum" + bcolors.ENDC
-
-
-def informix_enum(iface):
-
-        if os.path.isfile('../Results/informix_db'):
-                print " "
-                print bcolors.OKGREEN + "      [ Informix DB ENUMERATION MODULE ]\n" + bcolors.ENDC
-        else:
-                return
-        if os.path.isfile('../Results/informix_enum'):
-                print bcolors.WARNING + "[!] Informix DB Enum Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
-
-        subprocess.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
-        with open('../Results/informix_hosts') as infdb:
-                for inf in infdb:
-                        print "[*] Enumerating Informix DB on %s" %inf.strip()
-                        nm = nmap.PortScanner()
-                        nm.scan(hosts=inf, arguments='-Pn -T4 -p9088 -e ' + iface + ' --script informix-query --script-args informix-query.username=informix,informix-query.password=informix  -o ../Results/informix_enum')
-
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_enum" + bcolors.ENDC
-
-
-def informix_tables(iface):
-
-        if os.path.isfile('../Results/informix_db'):
-                print " "
-                print bcolors.OKGREEN + "      [ Informix DB TABLES ENUMERATION MODULE ]\n" + bcolors.ENDC
-        else:
-                return
-        if os.path.isfile('../Results/informix_tables'):
-                print bcolors.WARNING + "[!] Informix DB Tables Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
-
-        subprocess.call("sudo sort ../Results/informix_db | uniq > ../Results/informix_hosts", shell=True)
-        with open('../Results/informix_hosts') as infdb:
-                for inf in infdb:
-                        print "[*] Enumerating Informix DB Tables on %s" %inf.strip()
-                        nm = nmap.PortScanner()
-                        nm.scan(hosts=inf, arguments='-Pn -T4 -p9088 -e ' + iface + ' --script informix-tables --script-args informix-tables.username=informix,informix-tables.password=informix  -o ../Results/informix_tables')
-
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/informix_tables" + bcolors.ENDC
 
 
 def sip_methods_enum(iface):
@@ -391,7 +325,7 @@ def sip_methods_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ SIP METHODS ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/voip file does not exist!\n"
         if os.path.isfile('../Results/sip_methods'):
                 print bcolors.WARNING + "[!] SIP Methods Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
@@ -403,6 +337,7 @@ def sip_methods_enum(iface):
                         nm.scan(hosts=sip, arguments='-Pn -T4 --script sip-methods -sU -e ' + iface + ' -p 5060  -o ../Results/sip_methods')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_methods" + bcolors.ENDC
+        return "Completed SIP Methods Enumeration\n"
 
 def sip_users_enum(iface):
 
@@ -410,7 +345,7 @@ def sip_users_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ SIP USERS ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                return "../Results/voip file does not exist!\n"
         if os.path.isfile('../Results/sip_users'):
                 print bcolors.WARNING + "[!] SIP Users Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
 
@@ -422,26 +357,6 @@ def sip_users_enum(iface):
                         nm.scan(hosts=sip, arguments='-Pn -T4 --script sip-enum-users -sU -e ' + iface + ' -p 5060  -o ../Results/sip_users')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/sip_users" + bcolors.ENDC
-
-
-def aggressive_vpn():
-        if os.path.isfile('../Results/openvpn'):
-                print " "
-                print bcolors.OKGREEN + "      [ VPN AGGRESSIVE MODE MODULE ]\n" + bcolors.ENDC
-        else:
-                return
-        if os.path.isfile('../Results/vpn_aggressive'):
-                print bcolors.WARNING + "[!] Aggressive VPN Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
-
-        subprocess.call("sudo sort ../Results/openvpn | uniq > ../Results/vpn_hosts", shell=True)
-        with open('../Results/vpn_hosts') as vpns:
-                for vpn in vpns:
-                        print "[*] Attacking VPN on %s" % vpn.strip()
-                        subprocess.call("sudo ike-scan -A > ../Results/aggressive_results", shell=True)
-                        if 'Aggressive Mode' in open('../Results/aggressive_results').read():
-                                print "[+] Aggressive Mode enabled on %s"
-                                print "[!] sudo ike-scan -M -A -id=randomgroup -P should extract the hash"
-                                vpn_aggressive.write(vpn)
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/vpn_aggressive" + bcolors.ENDC
+        return "Completed SIP Users Enumeration\n"
 
 

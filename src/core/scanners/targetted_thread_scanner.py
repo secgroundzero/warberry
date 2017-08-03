@@ -11,17 +11,20 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
+
+
 """
 
 import os, os.path
-import subprocess 
-import nmap 
-import threading 
-import time
-from src.core.scanners.port_list import *
+import nmap
+import threading
 from src.utils.console_colors import *
+from src.utils.port_obj_Read import port_obj_reader
+
 
 class ScanThread(threading.Thread):
+
+    #CONSTRUCTOR
     def __init__(self,name, path_file,port, message, file,CIDR, intensity, type,hostlist,iface):
         threading.Thread.__init__(self)
         self.name = name
@@ -51,14 +54,13 @@ def scan_targetted(self):
 
 
 def scanning(self):
-    nm=nmap.PortScanner()
-    if (self.type=="y"):
-        arg="-Pn -sU -p"+self.port + " " + self.intensity + " --open"
-    elif(self.type=="n"):
-        arg="-Pn -p"+self.port + " " + self.intensity + " --open"
-    elif(self.type=="yn"):
-        arg ="-Pn -p -sT -sU" + self.port + " " + self.intensity + " --open"
-    #nm.scan(hosts=h, arguments=arg)
+    nm = nmap.PortScanner()
+    if (self.type == "y"):
+        arg = "-Pn -sU -p" + str(self.port) + " " + self.intensity + " --open"
+    elif (self.type == "n"):
+        arg = "-Pn -p" + str(self.port) + " " + self.intensity + " --open"
+    elif (self.type == "yn"):
+        arg = "-Pn -p -sT -sU" + str(self.port) + " " + self.intensity + " --open"
     arg += " -e " + self.iface
     for h in self.hostlist:
         nm.scan(hosts=h, arguments=arg)
@@ -69,15 +71,15 @@ def scanning(self):
                 hosts.write('%s\n' % host)
                 self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
                 self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
-
+    if (os.path.isfile(self.path_file)):
+        print bcolors.TITLE + "\n[+] Done! Results saved in /Results/" + self.result_file + "\n" + bcolors.ENDC
 
 def thread_port_scanner(CIDR, intensity, iface):
-    
     print " "
     print bcolors.OKGREEN + " [ TARGETTED SERVICES NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
-    print "\n[*] Beginning Scanning Live IPs in Subnet %s with %s intensity." %(CIDR, intensity)
+    print "\n[*] Beginning Scanning Live IPs in Subnet %s with %s intensity." % (CIDR, intensity)
     print " "
-    threads=[]
+    threads = []
     hostlist = []
     if os.path.isfile('../Results/live_ips'):
         with open('../Results/live_ips', 'r') as h:
@@ -90,11 +92,19 @@ def thread_port_scanner(CIDR, intensity, iface):
             for host in hosts:
                 hostlist.append(host.strip())
 
-    for i in range(len(path_file)):
-        t = ScanThread(name[i],path_file[i],port[i],message[i], result_file[i],CIDR,intensity, scan_type[i],hostlist, iface=iface)
+    ports_list = port_obj_reader("portlist_config")
+    for i in ports_list:
+        temp = []
+        count = 0
+        for key, value in vars(i).iteritems():
+            temp.append(value)
+            count = count + 1
+        for i in range(0, len(temp[5])):
+            t = ScanThread(str(temp[0]), str(temp[2]), str(temp[5][i]), str(temp[4]), str(temp[3]), CIDR, intensity,
+                str(temp[1]),
+                hostlist, iface=iface)
         t.start()
         threads.append(t)
-
     for t in threads:
         t.join()
         print t.output

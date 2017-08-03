@@ -11,21 +11,19 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 """
 
-import subprocess
-import sys
+import port_object
 
-#DOCUMENTATION NEEDED
-def poison(iface, poison_time):
-        #stdout = open("../Results/responder_output", "wb")
-        #stderr = open("../Results/responder_output", "wb")
-        #f=open("TEST", "w")
-        #f.write(" ")
-        print " "
-        #print bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC
-        print  "      [ POISON MODE ]\n"
-        #f.write(bcolors.OKGREEN + "      [ POISON MODE ]\n" + bcolors.ENDC)
-        subprocess.call('sudo timeout %s python Responder.py -I %s' %(poison_time, iface), cwd=r'../Tools/Responder/', shell=True)
-        #f.close()
+"""this function is used to read portlist_config file and create
+the port object list with port characteristic properties."""
+def port_obj_reader(filename):
+    ports_obj_list = []
+    with open('src/core/scanners/portlist_config','r') as ports_input_file:
+        for line in ports_input_file:
+            f=line.split(',')
+            s=f[5]     #this is to get only y/n not \n
+            f[5]=s[0]   #this is to get only y/n not \n
+            portOB = port_object.port_ob(f[0],f[1],f[2],f[3],f[4],f[5])
+            ports_obj_list.append(portOB)
+    return ports_obj_list

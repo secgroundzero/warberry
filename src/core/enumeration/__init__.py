@@ -2,7 +2,7 @@
 # encoding: UTF-8
 
 """
-his file is part of the WarBerry tool.
+This file is part of the WarBerry tool.
 Copyright (c) 2016 Yiannis Ioannides (@sec_groundzero).
 https://github.com/secgroundzero/warberry
 This program is free software: you can redistribute it and/or modify

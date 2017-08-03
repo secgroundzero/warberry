@@ -1,9 +1,23 @@
-## UPCOMING ADDITIONS
+## Upcoming additions
 
-* Wireless Attacks
-* Vlans enumeration
-* Support for IPv6
+- CME
+- Massscan
 
+## Version 5
+
+- Encryption / decryption of results - default pass 123
+- Updated Reporting package
+- Output files are now in XML format
+- Ports list objects created
+- Fixed installation script
+- Scalability issues fixed
+- Config file for inserting/deleting ports
+- Removed unecessary code
+- Results I/O improvement
+- Speed improvements
+- Bugfixes
+- Removed tools not used
+- Function documentation improvement
 
 ## Version 4c1f
 

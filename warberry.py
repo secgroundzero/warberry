@@ -22,55 +22,32 @@ logging.info("finished")
 logging.captureWarnings(True)
 #Suppress Scapy IPv6 Warnings
 import requests.packages.urllib3
-import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
-
-
-from optparse import OptionParser
-import subprocess
 import os, os.path
-import sys, getopt
-import socket
-import fcntl
-import struct
-import urllib,urllib2
-import re
-import httplib
-from scapy.all import *
-import nmap
-from socket import inet_aton
-import socket
-import json
-from urllib import urlopen
-import ftplib
-import time
-from netaddr import *
 #External modules
-from src.utils.info_banners import *
 from src.core.scanners.targetted_scanner import *
 from src.core.scanners.targetted_thread_scanner import *
-from src.core.scanners.top_port_scanner import *
-from src.core.scanners.full_port_scanner import *
-from src.core.enumeration.services_enum import *
 from src.core.enumeration.nameservers import *
-from src.core.bypass import *
-from src.core.scanners.full_thread_scanner import *
 from src.core.enumeration.bluetooth_enum import *
 from src.core.enumeration.ip_enum import *
 from src.core.enumeration.network_packets import *
-from src.core.enumeration.mailowner import *
 from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
-from src.core.exploits.responder_poison import *
 from src.core.enumeration.zones import *
-from src.utils.info_banners import *
 from src.utils.console_colors import *
-from src.utils import *
+from optparse import OptionParser
+from src.utils.encryption import *
+from src.utils.move_files import *
+from xml_producer import *
+from multiprocessing import Process
+from scapy.all import *
+from src.core.exploits.responder_poison import poison
 
-
-def main():
-
+def warberry():
+    start_time = time.time()
+    #move previous files in /Results
+    move_files(int(start_time))
     version = bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
@@ -81,13 +58,13 @@ def main():
 
             TACTICAL EXPLOITATION
 
-v4.c1g                            @sec_groundzero
+v5                                @sec_groundzero
                           secgroundzero@gmail.com
 ''') + bcolors.ENDC
 
 
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
-    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC,choices=['-A','--attack','-T','--toptcp', '-B','--topudp', '-F', '--fulltcp'])
+    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC)
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="# of Network Packets to capture" + bcolors.WARNING + " Default: 20" + bcolors.ENDC)
     parser.add_option("-x", "--expire", action="store", dest="expire", default=20, type=int,help="Time for packet capture to stop" + bcolors.WARNING + " Default: 20s" + bcolors.ENDC)
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
@@ -138,102 +115,59 @@ v4.c1g                            @sec_groundzero
         else:
             if options.malicious == True:
                 netmask = netmask_recon(iface)
-                with open('../Results/running_status', 'a') as status:
+                with open('../Results/running_status', 'w') as status:
+                    status.write("<root>")
                     status.write("Entering poisoning mode\n")
                     poison_time = options.time
                     poison(iface, poison_time)
+                    status.write("</root>")
             else:
                 netmask = netmask_recon(iface)
                 CIDR = subnet(int_ip, netmask)
-                scope_definition(iface, CIDR)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed IP Recon\n")
+                status_str = str(scope_definition(iface, CIDR))
                 packets = options.packets
                 expire = options.expire
-                sniffer(iface, packets, expire)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed sniffing network packets\n")
-                #mail_creds(iface, expire)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed sniffing mail info from packets\n")
+                status_str+=str(sniffer(iface, packets, expire))
+                #status_str+=mail_creds(iface, expire)
                 pcap_parser()
-                hostnames(CIDR)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed hostnames search\n")
-                nbtscan(CIDR)
-                with open('../Results/running_status', 'a') as status:
-                    status.write("Completed NBTScan\n")
+                status_str +=str(hostnames(CIDR))
+                status_str +=str(nbtscan(CIDR))
+                with open('../Results/running_status', 'w') as status:
+                    status.write(status_str)
                 if host_name != "WarBerry":
                     manual_namechange(host_name)
                 if options.hostname == True and host_name == "WarBerry":
                     namechange()
                 if options.reconmode == False:
                     intensity = options.intensity
+                    status_str=""
                     if options.fast == False:
-                        single_port_scanner(CIDR, intensity, iface)
+                        status_str +=str(single_port_scanner(CIDR, intensity, iface))
                     else:
-                        thread_port_scanner(CIDR, intensity, iface)
-                    with open('../Results/running_status', 'a') as status:
-                        status.write("Completed Port Scanning\n")
+                        status_str +=str(thread_port_scanner(CIDR, intensity, iface))
                     if options.enum == False:
-                        shares_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating Shares\n")
-                        smb_users(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating Users\n")
-                        webs_prep()
-                        http_title_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Enumerating HTTP Titles\n")
-                        nfs_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed NFS Enumeration\n")
-                        waf_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Robots.txt Enumeration\n")
-                        robots_txt()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed WAF Enumeration\n")
-                        mysql_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                                status.write("Completed MYSQL Enumeration\n")
-                        mssql_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed MSSQL Enumeration\n")
-                        ftp_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed FTP Enumeration\n")
-                        snmp_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed SNMP Enumeration\n")
-                        clamav_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed ClamAV Enumeration\n")
-                        informix_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Informix DB Enumeration\n")
-                        informix_tables(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Informix Tables Enumeration\n")
-                        sip_methods_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed SIP Methods Enumeration\n")
-                        sip_users_enum(iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed SIP Users Enumeration\n")
-                        aggressive_vpn()
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed Aggressive VPN Enumeration\n")
-                        os_enum(CIDR,iface)
-                        with open('../Results/running_status', 'a') as status:
-                            status.write("Completed OS Enumeration\n")
+                        status_str +=str(shares_enum(iface))
+                        status_str +=str(smb_users(iface))
+                        status_str += str(webs_prep())
+                        status_str +=str(http_title_enum(iface))
+                        status_str +=str(nfs_enum(iface))
+                        status_str +=str(waf_enum(iface))
+                        status_str +=str(robots_txt())
+                        status_str +=str(mysql_enum(iface))
+                        status_str +=str(mssql_enum(iface))
+                        status_str +=str(ftp_enum(iface))
+                        status_str +=str(snmp_enum(iface))
+                        status_str +=str(sip_methods_enum(iface))
+                        status_str +=str(sip_users_enum(iface))
+                        status_str +=str(os_enum(CIDR,iface))
+
                         #enum4linux()
                         #with open('../Results/running_status', 'a') as status:
-                        #    status.write("Completed enum4linux Enumeration\n")
-                        zone_transfers(CIDR,iface)
+                        #status.write("Completed enum4linux Enumeration\n")
+                        status_str +=str(zone_transfers(CIDR,iface))
+
                         with open('../Results/running_status', 'a') as status:
-                            status.write("Completed zones Enumeration\n")
+                            status.write(status_str)
                     if options.btooth == True:
                         bluetooth_enum()
                         with open('../Results/running_status', 'a') as status:
@@ -250,62 +184,34 @@ v4.c1g                            @sec_groundzero
                         status.write("Entering poisoning mode\n")
                         poison_time = options.time
                         poison(iface, poison_time)
-
-    elif options.attacktype == '-T' or options.attacktype == '--toptcp':
-        subprocess.call('clear', shell=True)
-        banner()
-        iface = options.iface
-        int_ip = iprecon(iface)
-        if (int_ip == None):
-            exit
-        netmask = netmask_recon(iface)
-        external_IP_recon()
-        CIDR = subnet(int_ip, netmask)
-        #scope_definition(iface, CIDR)
-        top_ports_scanner(CIDR, options.intensity, iface)
-        print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-
-    elif options.attacktype == '-B' or options.attacktype == '--tcpudp':
-        subprocess.call('clear', shell=True)
-        banner()
-        iface = options.iface
-        int_ip = iprecon(iface)
-        if (int_ip == None):
-            exit
-        netmask = netmask_recon(iface)
-        external_IP_recon()
-        CIDR = subnet(int_ip, netmask)
-        #scope_definition(iface, CIDR)
-        if options.fast == True:
-            tcpudp_thread_scanner(CIDR,options.intensity, iface)
-        else:
-            tcpudp_scanner(CIDR, options.intensity,iface)
-        print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
-    elif options.attacktype == '-F' or options.attacktype == '--fulltcp':
-        subprocess.call('clear', shell=True)
-        banner()
-        iface = options.iface
-        int_ip = iprecon(iface)
-        netmask = netmask_recon(iface)
-        external_IP_recon()
-        CIDR = subnet(int_ip, netmask)
-        #scope_definition(iface, CIDR)
-        if options.fast == True:
-            full_thread_scanner(CIDR,options.intensity, iface)
-        else:
-            full_scanner(CIDR, options.intensity, iface)
-        print bcolors.TITLE + "All scripts completed. Check the /Results directory" + bcolors.ENDC
     elif options.attacktype == '-S' or options.attacktype == '--sniffer':
+        status_str=""
         iface = options.iface
         packets = options.packets
         subprocess.call('clear', shell=True)
-        sniffer(iface, packets)
+        status_str+=str(sniffer(iface, packets))
+
+    create_xmls()
+    encrypt_files()
+
+    #Sytem exit due to finish.
+    print bcolors.TITLE + "Warberry is now finished. The system will now exit.\n" + bcolors.ENDC
+    print bcolors.TITLE + "Time of execution: " + "--- %s seconds ---\n" % (time.time() - start_time) + bcolors.ENDC
+    sys.exit(0)
+    
+
+def main():
+    #Spawn thread for responder
+    q = Process(target=warberry())
+    q.start()
+    q.join()
+
 
 
 if __name__ == '__main__':
 
     try:
-        main()
+        warberry()
     except KeyboardInterrupt:
         try:
             if os.path.exists("../Results") == False:
@@ -315,5 +221,3 @@ if __name__ == '__main__':
         finally:
             subprocess.call("clear", shell=True)
             banner_full()
-
-

@@ -14,7 +14,7 @@ GNU General Public License for more details.
 """
 
 import subprocess
-import os, os.path
+import os
 from src.utils.console_colors import *
 
 def wifi_enum():

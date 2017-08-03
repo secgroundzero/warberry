@@ -13,43 +13,38 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-import subprocess
 import os, os.path
-import sys, getopt
-import socket
-import fcntl
-import struct
-import re
 import nmap
-from socket import inet_aton
-from src.utils.console_colors import *
 from src.core.enumeration.services_enum import *
-from src.core.scanners.port_list import *
+from src.utils.port_obj_Read import port_obj_reader
 
 
-def scanner(name,path_file, port, message,result_file,CIDR, intensity,type,hostlist, iface):
-        if os.path.isfile(path_file):
-                print bcolors.WARNING + "[!] " + bcolors.ENDC + name + " Results File Exists. New results will be appended"
-        print "[+] Scanning for " + name + " ..."
-        nm = nmap.PortScanner()
+def scanner(name, path_file, port, message, result_file, CIDR, intensity, type, hostlist, iface):
+    port = str(port).translate(None,'\'\"][ ')
+    port =port.split(',')
+    if os.path.isfile(path_file):
+        print bcolors.WARNING + "[!] " + bcolors.ENDC + name + " Results File Exists. New results will be appended"
+    print "[+] Scanning for " + name + " ..."
+    nm = nmap.PortScanner()
+    for i in range(0,len(port)):
         if (type == "y"):
-                arg = "-Pn -sU -p" + port + " " + intensity + " --open"
-        elif(type=="n"):
-                arg = "-Pn -p" + port + " " + intensity + " --open"
+            arg = "-Pn -sU -p:" + str(port[i]).translate(None, '\'][ ') + " " + intensity + " --open"
+        elif (type == "n"):
+            arg="-Pn -p"+str(port[i]).translate(None, '\'][ ') + " " + intensity + " --open"
         elif (type == "yn"):
-                arg = "-Pn -p -sT -sU" + port + " " + intensity + " --open"
+            arg ="-Pn -p -st -sU"+str(port[i]).translate(None, '\'][ ') + " " + intensity + "--open"
         arg += " -e " + iface
         for h in hostlist:
-                nm.scan(hosts=h, arguments=arg)
-                for host in nm.all_hosts():
-                        writeFile = path_file
-                        with open(writeFile, 'a') as hosts:
-                                print ("----------------------------------------------------")
-                                hosts.write('%s\n' % host)
-                                print bcolors.OKGREEN + "*** " + name + " Found : %s via port " % host + port + " ***" + bcolors.ENDC
-                                print bcolors.TITLE + message + bcolors.ENDC
+            nm.scan(hosts=h, arguments=arg)
+            for host in nm.all_hosts():
+                    writeFile = path_file
+                    with open(writeFile, 'a') as hosts:
+                        print ("----------------------------------------------------")
+                        hosts.write('%s\n' % host)
+                        print bcolors.OKGREEN + "*** " + name + " Found : %s via port " % host + str(port) + " ***" + bcolors.ENDC
+                        print bcolors.TITLE + message + bcolors.ENDC
         if (os.path.isfile(path_file)):
-                print bcolors.TITLE + "\n[+] Done! Results saved in /Results/" + result_file + "\n" + bcolors.ENDC
+            print bcolors.TITLE + "\n[+] Done! Results saved in /Results/" + result_file + "\n" + bcolors.ENDC
 
 
 def single_port_scanner(CIDR, intensity, iface):
@@ -69,9 +64,14 @@ def single_port_scanner(CIDR, intensity, iface):
                         for host in hosts:
                                 hostlist.append(host.strip())
 
-        for i in range(len(path_file)):
-                scanner(name[i], path_file[i], port[i], message[i], result_file[i], CIDR, intensity, scan_type[i],hostlist, iface=iface)
-
-
-
-
+        #port_obj_reader reads portlist_config file and creates a list with port_objects for scalability.
+        #port list input filename is as below.
+        ports_list=port_obj_reader("portlist_config")
+        for i in ports_list:
+            temp=[]
+            count=0
+            for key, value in vars(i).iteritems():
+                temp.append(value)
+                count=count+1
+            scanner(str(temp[0]),str(temp[2]),str(temp[5]).split('.'),str(temp[4]),str(temp[3]),CIDR,intensity,str(temp[1]),hostlist,iface=iface)
+        return "Completed Port Scanning\n"

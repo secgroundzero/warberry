@@ -1,0 +1,45 @@
+../Results/windows,windows, "[*] You may want to check for open shares here\n",Windows Hosts,445,n
+../Results/ftp, ftp, "[*] You may want to try log in as user ANONYMOUS\n", FTP,21,n
+../Results/mssql, mssql, "[*] Default user for MSSQL installations is SA\n", MSSQL Databases,1433,n
+../Results/mysql, mysql,"[*] Default creds for MYSQL are U:root P:blank\n", MySQL Databases,3306,n
+../Results/oracle, oracle, "[*] Default user on Oracle DBs are SYS SYSTEM SCOTT\n",Oracle Databases,1521,n
+../Results/nfs, nfs, "[*] You can view NFS contents by showmount -e <IP>\n", NFS,111,n
+../Results/webservers80,webservers80,,Web Servers at Port 80,80,n
+../Results/webservers443, webservers443,,Web Servers at Port 443,443,n
+../Results/webservers8080, webservers8080,,Web Servers at Port 8080,8080,n
+../Results/webservers4443, webservers4443,,Web Servers at Port 4443,4443,n
+../Results/webservers8081, webservers8081,,Web Servers at Port 8081,8081,n
+../Results/webservers8181, webservers8181,,Web Servers at Port 8181,8181,n
+../Results/webservers9090, webservers9090,,Web Servers at Port 9090,9090,n
+../Results/printers, printers,,Printers,8611.8612.5222.5223,n
+../Results/telnet, telnet,,Telnet,23,n
+../Results/mongo, mongo,,Mongo Databases,27017.27018.27019.28017,n
+../Results/vnc, vnc,,VNC,5900,n
+../Results/dns, dns,,DNS,53,n
+../Results/tightvnc, tightvnc,,Tight VNC,5800,n
+../Results/websphere, websphere,"[*] Default logins for Websphere are U:system P:manager\n",IBM WebSphere,9443,n
+../Results/firebird, firebird,"[*] Default logins on Firebird DB are U:SYSDBA P:masterkey\n",Firebird Databases,3050,n
+../Results/xserver, xserver,,XServer,6000,n
+../Results/svn, svn ,,SVN Repositories,3690,n
+../Results/snmp, snmp,,SNMP,161,y
+../Results/voip, voip,,VOIP,5060,n
+../Results/rlogin, rlogin,,rLogin,513,n
+../Results/ldap, ldap,,LDAP,389,n
+../Results/pop3, pop3,,POP3,110,n
+../Results/smtp, smtp,,SMTP,25,n
+../Results/sap_mgmt, sap_mgmt,,SAP MGMT Console,50013,n
+../Results/sap_router, sap_router,,SAP Router,3299,n
+../Results/sap_gui, sap_gui,,SAP Web GUI,8000,n
+../Results/sap_icf, sap_icf,,SAP ICF,8042,n
+../Results/java_rmi, java_rmi,,Java RMI Endpoint,1099,n
+../Results/isql, isql,,Oracle iSQL Login Page,5560,n
+../Results/finger, finger,"Get information using finger -l @<ip> or finger 0@<ip>",Finger Protocol,79,n
+../Results/webmin,webmin ,,Webmin,10000,n
+../Results/pjl', pjl,,PJL Language Support,9100,n
+../Results/informix_serv, informix_serv,,Informix Server,1526,n
+../Results/h323, h323,,H323,1720,n
+../Results/vsphere, vsphere,,Vsphere Client,902.903,n
+../Results/informix_db, informix_db,,Informix DB,9088,n
+../Results/sql_resolution, sql_resolution,Multiple SQL Instances on this server,SQL Resolution Service,1434,y
+../Results/upnp, upnp,,UPNP,1900,y
+../Results/radius, radius,,RADIUS,1812.1813.1645.1646,y

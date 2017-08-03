@@ -13,9 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-from src.utils.console_colors import *
-import subprocess
-import os, os.path
+import os
 from src.utils.utils import *
 
 def static_bypass(ifname):

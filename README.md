@@ -53,7 +53,6 @@ Options:
 
 
 example usage: sudo python warberry.py -a -T                Attack all TCP Ports
-               sudo python warberry.py --attack --toptcp    Scan only the top tcp ports
                sudo python warberry.py -r                   Use only the recon modules
                sudo python warberry.py -H -I wlan0          Use the wlan0 interface and dont change hostname
                sudo python warberry.py -I eth0 -i -T3       Use the eth0 interface and T3 scanning intensity

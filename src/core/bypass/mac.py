@@ -14,15 +14,9 @@ GNU General Public License for more details.
 """
 
 
-import os, os.path
-import subprocess
-from src.utils import *
-import linecache
-from random import randint
-from src.core.bypass.nac import *
+import os
 from src.core.bypass.static import *
 from src.utils.console_colors import *
-from src.utils.utils import *
 
 
 def macbypass(unique_CIDR, ifname):

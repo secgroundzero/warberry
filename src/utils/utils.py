@@ -14,14 +14,7 @@ GNU General Public License for more details.
 """
 
 
-import os, os.path
-import os, os.path
-import subprocess
-import socket
-from src.utils.console_colors import *
-import struct
-import linecache
-import urllib2
+import os
 from src.core.bypass.mac import *
 from src.core.bypass.nac import *
 from random import randint
@@ -32,7 +25,6 @@ from scapy.all import *
 def dhcp_check():
 
     print bcolors.OKGREEN + "      [ DHCP SERVICE CHECK MODULE ]\n" + bcolors.ENDC
-
     dhcp_out = subprocess.check_output(['ps', '-A'])
     if "dhcp" in dhcp_out:
         status = bcolors.FAIL + "Running - Not Stealth" + bcolors.ENDC
@@ -46,9 +38,7 @@ def create_subnet(ifname):
 
 	with open('../Results/ips_discovered', 'r') as disc:
 		int_ip = disc.readlines()
-
 	print "\nCreating CIDRs based on IPs captured\n"
-
 	for ip in int_ip:
 		a = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		ipaddr = ip.split('.')
@@ -74,7 +64,6 @@ def create_subnet(ifname):
 		subs = subnets.readlines()
 		for sub in subs:
 			print bcolors.OKGREEN + "[+] Found subnet: %s" %sub.strip() + bcolors.ENDC
-
 	return(set_static(CIDR, ifname))
 
 
@@ -149,11 +138,13 @@ def hostnames(CIDR):
 	try:
 		subprocess.call('sudo nbtscan -q %s | egrep "^[^A-Z]*[A-Z]{5,15}[^A-Z]*$" | awk {\'print $2\'} > ../Results/hostnames' %CIDR, shell = True)
 		subprocess.call("sudo sort ../Results/hostnames | uniq > ../Results/unique_hosts", shell = True)
+		if os.stat('../Results/unique_hosts').st_size == 0:
+			return "No Hostnames Found\n"
 		with open('../Results/unique_hosts', 'r') as hostnames:
 			hosts = hostnames.readlines()
 			for host in hosts:
 				print bcolors.OKGREEN + "[+] Found Hostname: %s" %host.strip() + bcolors.ENDC
-
+		return "Completed hostnames search\n"
 	except:
 		print bcolors.FAIL + "No Hostnames Found" + bcolors.ENDC
 	print " "
@@ -169,6 +160,7 @@ def manual_namechange(host_name):
 	subprocess.call('sudo systemctl daemon-reload 2>/dev/null', shell=True)
 	subprocess.call('sudo /etc/init.d/hostname.sh 2>/dev/null', shell=True)
 	print "[+] New hostname: " + bcolors.TITLE + socket.gethostname() + bcolors.ENDC
+
 
 def namechange():
 
@@ -227,7 +219,6 @@ def netmask_recon(ifname):
 		return netmask
 
 
-
 def subnet(int_ip, netmask):
         ipaddr = int_ip.split('.')
         netmask = netmask.split('.')
@@ -249,7 +240,8 @@ def external_IP_recon():
                 print '[+] External IP obtained: ' + bcolors.OKGREEN + '%s\n' %address + bcolors.ENDC
         except:
                 print bcolors.WARNING + "[!] Could not reach the outside world. Possibly behind a firewall or some kind filtering\n" + bcolors.ENDC
-        return
+        return "External Ip Recon Completed!"
+
 
 def clear_output():
 
@@ -260,7 +252,6 @@ def clear_output():
 
         work_path = '../Results/'
         responder_path = '../Tools/Responder/logs/'
-
 
         if choice in yes:
 
@@ -282,5 +273,5 @@ def clear_output():
             print bcolors.OKGREEN + "[-] Results files left intact" + bcolors.ENDC
 
         else:
-
             sys.stdout.write("Please respond with 'y/yes' or 'n/no'\n")
+

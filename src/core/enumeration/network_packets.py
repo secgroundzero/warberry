@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-import os, os.path
+import os, os.path,sys
 import subprocess
 from src.utils.console_colors import *
 from scapy.all import *
@@ -23,18 +23,31 @@ def sniffer(iface, packets, expire):
         pcap_location = "../Results/capture.pcap"
         print bcolors.OKGREEN + "      [ NETWORK PACKET SNIFFING MODULE ]\n" + bcolors.ENDC
         print "Sniffer will begin capturing %d packets for %d seconds" %(packets,expire)
-        packets = sniff(iface=iface, count= packets, timeout=expire)
-        wrpcap(pcap_location, packets)
+        try:
+                packets = sniff(iface=iface, count= packets, timeout=expire)
+                wrpcap(pcap_location, packets)
+        except IOError as (errno, strerror):
+                print "I/O error({0}): {1}".format(errno, strerror)
+                print "THE SYSTEM WILL NOW EXIT!!!"
+                sys.exit(1)
+        except ValueError:
+                print "Could not convert data to an integer."
+                print "THE SYSTEM WILL NOW EXIT!!!"
+                sys.exit(1)
+        except:
+                print "Unexpected error:", sys.exc_info()[0]
         print bcolors.OKGREEN + "[+] " + bcolors.ENDC + "Capture Completed." + bcolors.ENDC + " PCAP File Saved at " + bcolors.OKGREEN + "%s!\n" %pcap_location + bcolors.ENDC
-
+        if os.path.exists("../Results/arp_flush_temp"):
+                subprocess.call("sudo rm ../Results/arp_flush_temp", shell=True)  # delete temporary file.
+        return "Completed sniffing network packets\n"
 
 def pcap_parser():
-
         if os.path.isfile('../Results/capture.pcap'):
                 print " "
                 print bcolors.OKGREEN + "      [ PCAP CAPTURE PARSER MODULE ]\n" + bcolors.ENDC
         else:
-                return
+                print bcolors.WARNING +" capture.pcap File DOES NOT EXIST!"+bcolors.ENDC
+                sys.exit(1)
 
         if os.path.isfile('../Results/pcap_results'):
                 print bcolors.WARNING + "[!] PCAP Results File Exists. Previous Results will be overwritten\n " + bcolors.ENDC
@@ -47,7 +60,3 @@ def pcap_parser():
                 print bcolors.WARNING + "[-] No interesting data found in the PCAP file\n" + bcolors.ENDC
         else:
                 print bcolors.OKGREEN + "[+] Done! Results saved in /Results/pcap_results\n" + bcolors.ENDC
-
-
-
-

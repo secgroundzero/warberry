@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-import os, os.path
+import os
 import subprocess
 from src.utils.console_colors import *
 
@@ -37,7 +37,7 @@ def os_enum(CIDR, iface):
                         subprocess.call('sudo xprobe2 -D 11 %s 2>/dev/null | grep -A 1 "Primary guess:" >> ../Results/os_enum' %live.strip(), shell=True)
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/os_enum" + bcolors.ENDC
-
+        return "Completed OS Enumeration\n"
 
 def enum4linux():
 
