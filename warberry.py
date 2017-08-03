@@ -39,15 +39,18 @@ from src.utils.console_colors import *
 from optparse import OptionParser
 from src.utils.encryption import *
 from src.utils.move_files import *
+from src.utils.delete_files import *
 from xml_producer import *
 from multiprocessing import Process
 from scapy.all import *
 from src.core.exploits.responder_poison import poison
 
 def warberry():
+
     start_time = time.time()
     #move previous files in /Results
     move_files(int(start_time))
+    delete_files()
     version = bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
@@ -128,8 +131,6 @@ v5                                @sec_groundzero
                 packets = options.packets
                 expire = options.expire
                 status_str+=str(sniffer(iface, packets, expire))
-                #status_str+=mail_creds(iface, expire)
-                pcap_parser()
                 status_str +=str(hostnames(CIDR))
                 status_str +=str(nbtscan(CIDR))
                 with open('../Results/running_status', 'w') as status:
@@ -156,7 +157,7 @@ v5                                @sec_groundzero
                         status_str +=str(mysql_enum(iface))
                         status_str +=str(mssql_enum(iface))
                         status_str +=str(ftp_enum(iface))
-                        status_str +=str(snmp_enum(iface))
+                        #status_str +=str(snmp_enum(iface))
                         status_str +=str(sip_methods_enum(iface))
                         status_str +=str(sip_users_enum(iface))
                         status_str +=str(os_enum(CIDR,iface))

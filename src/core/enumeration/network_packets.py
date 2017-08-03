@@ -41,22 +41,3 @@ def sniffer(iface, packets, expire):
                 subprocess.call("sudo rm ../Results/arp_flush_temp", shell=True)  # delete temporary file.
         return "Completed sniffing network packets\n"
 
-def pcap_parser():
-        if os.path.isfile('../Results/capture.pcap'):
-                print " "
-                print bcolors.OKGREEN + "      [ PCAP CAPTURE PARSER MODULE ]\n" + bcolors.ENDC
-        else:
-                print bcolors.WARNING +" capture.pcap File DOES NOT EXIST!"+bcolors.ENDC
-                sys.exit(1)
-
-        if os.path.isfile('../Results/pcap_results'):
-                print bcolors.WARNING + "[!] PCAP Results File Exists. Previous Results will be overwritten\n " + bcolors.ENDC
-
-        print bcolors.TITLE + "[*] Looking for interesting data in /Results/capture.pcap" + bcolors.ENDC
-        subprocess.call("sudo python ../Tools/net-creds/net-creds.py -p ../Results/capture.pcap > ../Results/pcap_results", shell = True)
-
-
-        if os.stat('../Results/pcap_results').st_size == 0:
-                print bcolors.WARNING + "[-] No interesting data found in the PCAP file\n" + bcolors.ENDC
-        else:
-                print bcolors.OKGREEN + "[+] Done! Results saved in /Results/pcap_results\n" + bcolors.ENDC
