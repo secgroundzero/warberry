@@ -18,8 +18,9 @@ import os,sys
 from src.utils.delete_files import *
 
 """This method decrypts a specific file named filename and 
-the encrypted1 new text is on the same file. The file is now
+the encrypted new text is on the same file. The file is now
 overwritten."""
+
 def decrypt_file(filename):
     with open(filename, 'r') as file:
         lines = file.readlines() #read file and create lines
@@ -45,12 +46,12 @@ def decrypt_file(filename):
             temp_translated+=str(i)
         #decrypt text string.
         translated = decryptMessage(key, temp_translated)
-        #finally overwrite file with encrypted1 text.
+        #finally overwrite file with encrypted text.
         with open(filename, 'w') as new_file:
             new_file.write(translated)
 
 """This function is used to decrypt the decryption part password.
-Retrurns the access password."""
+Returns the access password."""
 def decrypt_password_file(filename):
     temp_translated = ""
     with open(filename, 'r') as file:

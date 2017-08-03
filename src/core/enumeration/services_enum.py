@@ -112,7 +112,7 @@ def http_title_enum(iface):
                 subprocess.call("sudo rm ../Results/titles_web_hosts", shell=True) #delete temp files.
         else:
                 print bcolors.WARNING + "[!] ../Results/webs file DOES NOT EXIST!" + bcolors.ENDC
-                return 
+                return
         with open('../Results/titles_webhosts') as hosts:
                 for host in hosts:
                         for port in ports_to_check:

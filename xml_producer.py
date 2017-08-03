@@ -19,7 +19,7 @@ import os
 
 """This function is used to create .xml files for database creation purposes.
 Files not processed by this function:
-'robots': allready in xml format.
+'robots': already in xml format.
 capture.pcap: not needed for database representation."""
 def create_xmls():
     xmls_created=0
@@ -129,7 +129,7 @@ def create_xmls():
         create_xml("../Results/mvps", "mvps")
         xmls_created += 1
     if os.path.exists("../Results/smb_users") and os.stat("../Results/smb_users").st_size != 0:
-        #create_xml("../Results/smb_users", "smb_users") FIX IT
+        #create_xml("../Results/smb_users", "smb_users")
         xmls_created += 1
     if xmls_created==37:
         print bcolors.TITLE + "All .xml files created successfully. Check the /Results directory" + bcolors.ENDC
