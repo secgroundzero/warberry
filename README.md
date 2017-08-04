@@ -34,7 +34,6 @@ Options:
 
   --version                             show program's version number and exit
   -h, --help                            show this help message and exit
-  -a ATTACKTYPE, --attack=ATTACKTYPE    Attack Mode. Default: --attack
   -p PACKETS, --packets=PACKETS         Number of Network Packets to capture
   -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
   -N NAME, --name=NAME                  Hostname to use. Default: Auto

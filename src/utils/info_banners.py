@@ -38,7 +38,7 @@ def banner():
 
             TACTICAL EXPLOITATION
 
-v5                                 @sec_groundzero
+v5.1                               @sec_groundzero
                            secgroundzero@gmail.com
 ''') + bcolors.ENDC
 

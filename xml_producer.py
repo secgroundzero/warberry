@@ -16,10 +16,12 @@ GNU General Public License for more details.
 from src.utils.info_banners import *
 import sys
 import os
+from xml.etree import ElementTree, cElementTree
+from xml.dom import minidom
 
 """This function is used to create .xml files for database creation purposes.
 Files not processed by this function:
-'robots': already in xml format.
+'robots': allready in xml format.
 capture.pcap: not needed for database representation."""
 def create_xmls():
     xmls_created=0
@@ -75,7 +77,7 @@ def create_xmls():
         create_xml("../Results/windows", "windows")
         xmls_created += 1
     if os.path.exists("../Results/http_titles") and os.stat("../Results/http_titles").st_size !=0 :
-        create_xml_2("../Results/http_titles","ip_add","name")
+        create_xml_2("../Results/http_titles","http_title","ip_add","name")
         xmls_created += 1
     if os.path.exists("../Results/titles_webhosts") and os.stat("../Results/titles_webhosts").st_size !=0 :
         create_xml("../Results/titles_webhosts","titles_webhosts")
@@ -90,7 +92,7 @@ def create_xmls():
         #create_xml_3("../Results/wafed")
         xmls_created += 1
     if os.path.exists("../Results/nameservers") and os.stat("../Results/nameservers").st_size !=0 :
-        create_xml_4("../Results/nameservers")
+        create_xml_nameservers("../Results/nameservers")
         xmls_created += 1
     if os.path.exists("../Results/wifis") and os.stat("../Results/wifis").st_size != 0:
         create_xml("../Results/wifis", "wifis")
@@ -117,7 +119,7 @@ def create_xmls():
         create_xml("../Results/webservers8080","webservers8080")
         xmls_created += 1
     if os.path.exists("../Results/mvp_names") and os.stat("../Results/mvp_names").st_size !=0 :
-        create_xml_5("../Results/mvp_names")
+        create_xml_mvps("../Results/mvp_names")
         xmls_created += 1
     if os.path.exists("../Results/hostnames")and os.stat("../Results/hostnames").st_size != 0:
         create_xml("../Results/hostnames", "hostnames")
@@ -129,7 +131,7 @@ def create_xmls():
         create_xml("../Results/mvps", "mvps")
         xmls_created += 1
     if os.path.exists("../Results/smb_users") and os.stat("../Results/smb_users").st_size != 0:
-        #create_xml("../Results/smb_users", "smb_users")
+        #create_xml("../Results/smb_users", "smb_users") FIX IT
         xmls_created += 1
     if xmls_created==37:
         print bcolors.TITLE + "All .xml files created successfully. Check the /Results directory" + bcolors.ENDC
@@ -137,64 +139,76 @@ def create_xmls():
         print bcolors.TITLE + str(xmls_created)+" .xml files created successfully. Check the /Results directory" + bcolors.ENDC
 
 
-def create_xml_5(filename):
+def create_xml_mvps(filename):
     with open(filename, 'r') as prexml:
         lines = prexml.read().splitlines()
     prexml.close()
-    with open(filename, 'w') as xml:
-        xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        xml.write("\n")
-        xml.write("<root>\n")
-        xml.write("\t<NBT_addresses>\n")
-        count=4
-        for i in range(4,len(lines)):
-            xml.write("\t\t<name>")
-            xml.write(str(lines[count].split()))
-            xml.write("</name>\n")
-        xml.write("\t</NBT_addresses>\n")
-        xml.write("</root>")
-    xml.close()
+
+    XMLFile = filename + str(".xml")
+    root = ElementTree.Element('root')
+    NBTAddress=ElementTree.SubElement(root, 'NBTAddresses')
+    count=4
+    for i in range(4,len(lines)):
+        name=ElementTree.SubElement(NBTAddress,'Name')
+        name.text=str(lines[count].split())
+
+    tree = cElementTree.ElementTree(root)  # wrap it in an ElementTree instance, and save as XML
+
+    t = minidom.parseString(ElementTree.tostring(
+        root)).toprettyxml()  # Since ElementTree write() has no pretty printing support, used minidom to beautify the xml.
+    tree1 = ElementTree.ElementTree(ElementTree.fromstring(t))
+
+    tree1.write(XMLFile, encoding='utf-8', xml_declaration=True)
 
 
-def create_xml(filename,data_name):
+
+def create_xml(filename,targetName):
     with open(filename, 'r') as prexml:
         lines = prexml.read().splitlines()
     prexml.close()
-    with open(filename, 'w') as xml:
-        xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        xml.write("\n")
-        xml.write("<root>\n")
-        for i in lines:
-            xml.write("\t<"+data_name+">")
-            xml.write(str(i))
-            xml.write("</"+data_name+">"+"\n")
-        xml.write("</root>")
-    xml.close()
+
+    XMLFile=filename+str(".xml")
+    root = ElementTree.Element('root')
+    for i in lines:
+        child1 = ElementTree.SubElement(root, targetName)
+        child1.text = str(i)
+
+    tree = cElementTree.ElementTree(root)  # wrap it in an ElementTree instance, and save as XML
+
+    t = minidom.parseString(ElementTree.tostring(
+        root)).toprettyxml()  # Since ElementTree write() has no pretty printing support, used minidom to beautify the xml.
+    tree1 = ElementTree.ElementTree(ElementTree.fromstring(t))
+
+    tree1.write(XMLFile, encoding='utf-8', xml_declaration=True)
 
 
-
-def create_xml_2(filename,data_n1,data_n2):
+def create_xml_2(filename,element, data_n1,data_n2):
     with open(filename, 'r') as prexml:
         lines = prexml.read().splitlines()
     prexml.close()
+
     flag=0
-    with open(filename, 'w') as xml:
-        xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        xml.write("\n")
-        xml.write("<root>\n")
-        for i in lines:
-            if flag==0:
-                xml.write("\t<"+data_n1+">")
-                xml.write(str(i))
-                xml.write("</"+data_n1+">"+"\n")
-                flag=1
-            elif flag==1:
-                xml.write("\t<" + data_n2 + ">")
-                xml.write(str(i))
-                xml.write("</" + data_n2 + ">" + "\n")
-                flag=1
-        xml.write("</root>")
-    xml.close()
+    XMLFile = filename + str(".xml")
+    root = ElementTree.Element('root')
+    elementRoot=ElementTree.SubElement(root, element)
+    for i in lines:
+        if flag==0:
+            child1=ElementTree.SubElement(elementRoot, data_n1)
+            child1_text=str(i)
+            flag=1
+        elif flag==1:
+            child2=ElementTree.SubElement(elementRoot, data_n2)
+            child2.text=str(i)
+            flag=0
+            elementRoot=ElementTree.SubElement(root, element)
+
+    tree = cElementTree.ElementTree(root)  # wrap it in an ElementTree instance, and save as XML
+
+    t = minidom.parseString(ElementTree.tostring(
+                root)).toprettyxml()  # Since ElementTree write() has no pretty printing support, used minidom to beautify the xml.
+    tree1 = ElementTree.ElementTree(ElementTree.fromstring(t))
+    tree1.write(XMLFile, encoding='utf-8', xml_declaration=True)
+
 
 def create_xml_3(filename):
     with open(filename, 'r') as prexml:
@@ -241,56 +255,49 @@ def create_xml_3(filename):
     xml.close()
 
 
-def create_xml_4(filename):
+def create_xml_nameservers(filename):
     with open(filename, 'r') as prexml:
         lines = prexml.read().splitlines()
     prexml.close()
-    with open(filename, 'w') as xml:
-        xml.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        xml.write("\n")
-        xml.write("<root>\n")
-        count=4
-        xml.write("\t<subnet>")
-        temp = lines[0].split()
-        xml.write(str(temp[7]))
-        xml.write("</subnet>\n")
-        xml.write("\t\t<IP_Addresses>\n")
-        sum= len(lines)-4
-        for i in range(0,sum):
-            line =lines[count].split()
-            line_len=len(line)
-            xml.write("\t\t\t<IP>\n")
-            xml.write("\t\t\t\t<Address>")
-            xml.write(str(line[0]).translate(None, '\'<>'))
-            xml.write("</Address>\n")
-            xml.write("\t\t\t\t<NetBIOS_name>")
-            xml.write(str(line[1]).translate(None, '\'<>'))
-            xml.write("</NetBIOS_name>\n")
-            if line_len ==5:
-                xml.write("\t\t\t\t<Server>")
-                xml.write(str(line[2]).translate(None, '\'<>'))
-                xml.write("</Server>\n")
-                xml.write("\t\t\t\t<User>")
-                xml.write(str(line[3]).translate(None, '\'<>'))
-                xml.write("</User>\n")
-                xml.write("\t\t\t\t<MAC_address>")
-                xml.write(str(line[4]).translate(None, '\'<>'))
-                xml.write("</MAC_address>\n")
-            elif line_len==4:
-                xml.write("\t\t\t\t<Server>")
-                xml.write("'None'")
-                xml.write("</Server>\n")
-                xml.write("\t\t\t\t<User>")
-                xml.write(str(line[2]).translate(None, '\'<>'))
-                xml.write("</User>\n")
-                xml.write("\t\t\t\t<MAC_address>")
-                xml.write(str(line[3]).translate(None, '\'<>'))
-                xml.write("</MAC_address>\n")
-            else:
-                print bcolors.TITLE+"NAMESERVERS FILE HAS INAPPROPRIATE FORMAT!!!\n"+bcolors.ENDC
-                sys.exit(1)
-            xml.write("\t\t\t</IP>\n")
-            count+=1
-        xml.write("\t\t</IP_Addresses>\n")
-        xml.write("</root>")
-    xml.close()
+
+    XMLFile = filename + str(".xml")
+    root = ElementTree.Element('root')
+    subnet=ElementTree.SubElement(root, 'subnet')
+    temp = lines[0].split()
+    subnet.text=str(temp[7])
+    ipAddresses=ElementTree.SubElement(root, 'IP_Addresses')
+    sum=len(lines)-4
+    count=4
+    for i in range(0,sum):
+        line = lines[count].split()
+        line_len = len(line)
+        ip=ElementTree.SubElement(ipAddresses, 'IP')
+        address=ElementTree.SubElement(ip,'Address')
+        address.text=str(line[0]).translate(None, '\'<>')
+        netBIOS=ElementTree.SubElement(ip, 'NetBIOS_name')
+        netBIOS.text=str(line[1]).translate(None, '\'<>')
+        if line_len==5:
+            server=ElementTree.SubElement(ip, 'Server')
+            server.text=str(line[2]).translate(None, '\'<>')
+            user=ElementTree.SubElement(ip, 'User')
+            user.text=str(line[3]).translate(None, '\'<>')
+            macAddress=ElementTree.SubElement(ip, 'MAC_Address')
+            macAddress.text=str(line[4]).translate(None, '\'<>')
+        elif line_len==4:
+            server = ElementTree.SubElement(ip, 'Server')
+            server.text = "None"
+            user = ElementTree.SubElement(ip, 'User')
+            user.text = str(line[2]).translate(None, '\'<>')
+            macAddress = ElementTree.SubElement(ip, 'MAC_Address')
+            macAddress.text = str(line[3]).translate(None, '\'<>')
+        else:
+            print bcolors.TITLE + "NAMESERVERS FILE HAS INAPPROPRIATE FORMAT!!!\n" + bcolors.ENDC
+            sys.exit(1)
+        count += 1
+
+    tree = cElementTree.ElementTree(root)  # wrap it in an ElementTree instance, and save as XML
+
+    t = minidom.parseString(ElementTree.tostring(
+        root)).toprettyxml()  # Since ElementTree write() has no pretty printing support, used minidom to beautify the xml.
+    tree1 = ElementTree.ElementTree(ElementTree.fromstring(t))
+    tree1.write(XMLFile, encoding='utf-8', xml_declaration=True)
