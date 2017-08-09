@@ -95,7 +95,7 @@ v5                                @sec_groundzero
         clear_output()
     elif options.manpage == True:
         subprocess.call('clear', shell=True)
-        banner_full_help()
+        banner_full()
     elif options.attacktype == "-A" or options.attacktype == '--attack':
         subprocess.call('clear', shell=True)
         banner()
