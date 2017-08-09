@@ -59,7 +59,6 @@ Options:
 
   --version                             show program's version number and exit
   -h, --help                            show this help message and exit
-  -a ATTACKTYPE, --attack=ATTACKTYPE    Attack Mode. Default: --attack
   -p PACKETS, --packets=PACKETS         Number of Network Packets to capture
   -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
   -N NAME, --name=NAME                  Hostname to use. Default: Auto
@@ -78,8 +77,7 @@ Options:
   -m, --man                             Print WarBerry man pages
 
 
-example usage: sudo python warberry.py -a -T                Attack all TCP Ports
-               sudo python warberry.py -r                   Use only the recon modules
+example usage: sudo python warberry.py -r                   Use only the recon modules
                sudo python warberry.py -H -I wlan0          Use the wlan0 interface and dont change hostname
                sudo python warberry.py -I eth0 -i -T3       Use the eth0 interface and T3 scanning intensity
                sudo python warberry.py -I eth0 -N HackerPC  Use the eth0 interface and change hostname to HackerPC
