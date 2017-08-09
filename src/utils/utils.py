@@ -136,18 +136,14 @@ def hostnames(CIDR):
 
 	print "Searching for hostnames in %s\n" %CIDR
 	try:
-		subprocess.call('sudo cme %s > ../Results/hostnames' %CIDR, shell = True)
-		subprocess.call('cat ../Results/hostnames | grep "CME" | cut -d " " -f 11 | cut -d ":" -f 1 > ips_gathered', shell = True)
-		subprocess.call('cat ../Results/hostnames | grep "name:" | cut -d ":" -f 2 | cut -d " " -f 2 > hostnames_gathered', shell=True)
-		subprocess.call('cat ../Results/hostnames | grep "domain:" | cut -d ":" -f 4 | cut -d ")" -f 1 > domains_gathered', shell=True)
-		subprocess.call('paste ../Results/ips_gathered ../Results/hostnames_gathered > ../Results/hostnames')
-		if os.stat('../Results/hostnames').st_size == 0:
+		subprocess.call('sudo nbtscan -q %s | egrep "^[^A-Z]*[A-Z]{5,15}[^A-Z]*$" | awk {\'print $2\'} > ../Results/hostnames' %CIDR, shell = True)
+		subprocess.call("sudo sort ../Results/hostnames | uniq > ../Results/unique_hosts", shell = True)
+		if os.stat('../Results/unique_hosts').st_size == 0:
 			return "No Hostnames Found\n"
-		with open('../Results/hostnames', 'r') as hostnames:
+		with open('../Results/unique_hosts', 'r') as hostnames:
 			hosts = hostnames.readlines()
-			print "IP	Hostname"
 			for host in hosts:
-				print bcolors.OKGREEN + "[+] Found Hostname: %s" %host.strip(),+ bcolors.ENDC
+				print bcolors.OKGREEN + "[+] Found Hostname: %s" %host.strip() + bcolors.ENDC
 		return "Completed hostnames search\n"
 	except:
 		print bcolors.FAIL + "No Hostnames Found" + bcolors.ENDC
@@ -171,18 +167,15 @@ def namechange():
 	mvp_hosts = ['DEMO', 'DEV', 'PRINTER', 'BACKUP', 'DC', 'DC1', 'DC2']
 	hostname = socket.gethostname()
 	mvp_found=False
-	if os.path.exists('../Results/mvps'):
-		with open('../Results/mvps', 'a') as mvps:
-			with open('../Results/mvp_names', 'r') as hostnames:
-				hosts = hostnames.readlines()
-				for host in hosts:
-					for mvp in mvp_hosts:
-						if host.strip()==mvp.strip():
-							print bcolors.OKGREEN + "[+] Found interesting hostname %s\n" %mvp.strip() + bcolors.ENDC
-							mvps.write(host.strip()+'\n')
-							mvp_found = True
-	#else:
-	#	print bcolors.WARNING + "[-] No hostnames found. Continuing with the same hostname" + bcolors.ENDC
+	with open('../Results/mvps', 'a') as mvps:
+		with open('../Results/mvp_names', 'r') as hostnames:
+			hosts = hostnames.readlines()
+			for host in hosts:
+				for mvp in mvp_hosts:
+					if host.strip()==mvp.strip():
+						print bcolors.OKGREEN + "[+] Found interesting hostname %s\n" %mvp.strip() + bcolors.ENDC
+						mvps.write(host.strip()+'\n')
+						mvp_found = True
 
 	if mvp_found != True:
 		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same hostname" + bcolors.ENDC
@@ -281,4 +274,3 @@ def clear_output():
 
         else:
             sys.stdout.write("Please respond with 'y/yes' or 'n/no'\n")
-
