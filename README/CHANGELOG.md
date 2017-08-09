@@ -6,6 +6,7 @@
 ## Version 5
 
 - Encryption / decryption of results - default pass 123
+- Removed attack types
 - Updated Reporting package
 - Output files are now in XML format
 - Ports list objects created
