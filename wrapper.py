@@ -132,7 +132,7 @@ v5                                @sec_groundzero
                 expire = options.expire
                 status_str+=str(sniffer(iface, packets, expire))
                 status_str +=str(hostnames(CIDR))
-                status_str +=str(nbtscan(CIDR))
+                #status_str +=str(nbtscan(CIDR))
                 with open('../Results/running_status', 'w') as status:
                     status.write(status_str)
                 if host_name != "WarBerry":
