@@ -31,7 +31,6 @@ from src.core.enumeration.nameservers import *
 from src.core.enumeration.bluetooth_enum import *
 from src.core.enumeration.ip_enum import *
 from src.core.enumeration.network_packets import *
-from src.core.enumeration.os_enum import *
 from src.core.enumeration.services_enum import *
 from src.core.enumeration.wifi_enum import *
 from src.core.enumeration.zones import *
@@ -157,8 +156,7 @@ v5                                @sec_groundzero
                         status_str +=str(ftp_enum(iface))
                         status_str +=str(sip_methods_enum(iface))
                         status_str +=str(sip_users_enum(iface))
-                        status_str +=str(os_enum(CIDR,iface))
-                        status_str +=str(zone_transfers(CIDR,iface))
+                        #status_str +=str(zone_transfers(CIDR,iface))
 
                         with open('../Results/running_status', 'a') as status:
                             status.write(status_str)
