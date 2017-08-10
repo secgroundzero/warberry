@@ -67,7 +67,6 @@ v5                                @sec_groundzero
 
 
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
-    parser.add_option("-a", "--attack", action="store", dest="attacktype", default="-A", help="Attack Mode."+ bcolors.WARNING + " Default: --attack" + bcolors.ENDC)
     parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="# of Network Packets to capture" + bcolors.WARNING + " Default: 20" + bcolors.ENDC)
     parser.add_option("-x", "--expire", action="store", dest="expire", default=20, type=int,help="Time for packet capture to stop" + bcolors.WARNING + " Default: 20s" + bcolors.ENDC)
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
@@ -82,7 +81,6 @@ v5                                @sec_groundzero
     parser.add_option("-B", "--bluetooth", action="store_true", dest="btooth", default=False, help="Enable Bluetooth Scanning" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-W", "--wifi", action="store_true", dest="wifi", default=False, help="Enable WiFi Scanning" + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-r", "--recon", action="store_true", dest="reconmode", default=False,help="Enable Recon only mode. " + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
-    parser.add_option("-S", "--sniffer", action="store_true", dest="sniffer", default=False,help="Enable Sniffer only mode." + bcolors.WARNING + " Default: Off" + bcolors.ENDC)
     parser.add_option("-C", "--clear", action="store_true", dest="clear", default=False, help="Clear previous output folders in ../Results")
     parser.add_option("-m", "--man", action="store_true", dest="manpage", default=False, help="Print WarBerry man pages")
 
@@ -96,9 +94,7 @@ v5                                @sec_groundzero
     elif options.manpage == True:
         subprocess.call('clear', shell=True)
         banner_full()
-    elif options.attacktype == "-A" or options.attacktype == '--attack':
-        subprocess.call('clear', shell=True)
-        banner()
+    else:
         if not os.geteuid() == 0:
             print bcolors.FAIL + '*** You are not running as root and some modules will fail ***\nRun again with sudo.' + bcolors.ENDC
             sys.exit(-1)
@@ -111,6 +107,8 @@ v5                                @sec_groundzero
                     file_iface = open("/sys/class/net/" + ifaces + "/carrier")
                     if file_iface.readline()[0] == "1":
                         iface = ifaces
+        subprocess.call("clear", shell = True)
+        banner()
         host_name = options.name
         int_ip = iprecon(iface)
         if (int_ip == None):
@@ -127,12 +125,12 @@ v5                                @sec_groundzero
             else:
                 netmask = netmask_recon(iface)
                 CIDR = subnet(int_ip, netmask)
-                status_str = str(scope_definition(iface, CIDR))
+                status_str=""
                 packets = options.packets
                 expire = options.expire
                 status_str+=str(sniffer(iface, packets, expire))
                 status_str +=str(hostnames(CIDR))
-                #status_str +=str(nbtscan(CIDR))
+
                 with open('../Results/running_status', 'w') as status:
                     status.write(status_str)
                 if host_name != "WarBerry":
@@ -157,14 +155,9 @@ v5                                @sec_groundzero
                         status_str +=str(mysql_enum(iface))
                         status_str +=str(mssql_enum(iface))
                         status_str +=str(ftp_enum(iface))
-                        #status_str +=str(snmp_enum(iface))
                         status_str +=str(sip_methods_enum(iface))
                         status_str +=str(sip_users_enum(iface))
                         status_str +=str(os_enum(CIDR,iface))
-
-                        #enum4linux()
-                        #with open('../Results/running_status', 'a') as status:
-                        #status.write("Completed enum4linux Enumeration\n")
                         status_str +=str(zone_transfers(CIDR,iface))
 
                         with open('../Results/running_status', 'a') as status:
@@ -185,12 +178,7 @@ v5                                @sec_groundzero
                         status.write("Entering poisoning mode\n")
                         poison_time = options.time
                         poison(iface, poison_time)
-    elif options.attacktype == '-S' or options.attacktype == '--sniffer':
-        status_str=""
-        iface = options.iface
-        packets = options.packets
-        subprocess.call('clear', shell=True)
-        status_str+=str(sniffer(iface, packets))
+
 
     create_xmls()
     encrypt_files()

@@ -20,8 +20,7 @@ from src.utils.info_banners import *
 
 
 def war(string):
-    string = "sudo python wrapper.py " + string+" -P"
-    print string
+    string = "sudo python wrapper.py " + string
     subprocess.call(string, shell=True)
 
 def main():
@@ -30,12 +29,15 @@ def main():
     responder_time = 1000
     iface="eth0"
     for i in range(1,len(sys.argv)):
-        if sys.argv[i]=="-t" or sys.argv[i]=="-time":
+        if sys.argv[i]=="-t" or sys.argv[i]=="--time":
             responder_time= sys.argv[i+1]
+            break
+        elif sys.argv[i]=="-h" or sys.argv[i]=="--help":
+            banner_full()
             break
         else:
             war_arg_list.append(sys.argv[i])
-        if sys.argv[i]=="-I":
+        if sys.argv[i]=="-I" or sys.argv[i]=="--interface":
             iface = sys.argv[i+1]
 
     war_string = ' '.join(war_arg_list)
