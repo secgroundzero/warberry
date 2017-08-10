@@ -89,12 +89,6 @@ def webs_prep():
             or os.path.isfile('../Results/webhosts')):
                 subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
 
-        else:
-                return "'../Results/webserver*" \
-                       "' does not exists!\n"
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/webs" + bcolors.ENDC
-        return "WEBS FILE CREATED"
-
 def http_title_enum(iface):
         targets = open('../Results/targets', 'w')
         urls = open('../Results/urls', 'w')
@@ -104,50 +98,48 @@ def http_title_enum(iface):
         ports_to_check = [':80', ':8080', ':4443', ':8081', ':443', ':8181', ':9090']
         protocols = ['http://', 'https://']
 
-        if os.path.isfile('../Results/webs'):
+        if os.path.isfile('../Results/webs') and os.stat("../Results/webs").st_size != 0:
                 print " "
                 print bcolors.OKGREEN + "      [ HTTP TITLE ENUMERATION MODULE ]\n" + bcolors.ENDC
                 subprocess.call("sudo sort ../Results/webs | uniq > ../Results/titles_web_hosts", shell=True)
                 subprocess.call("grep -v '^$' ../Results/titles_web_hosts > ../Results/titles_webhosts", shell=True)
                 subprocess.call("sudo rm ../Results/titles_web_hosts", shell=True) #delete temp files.
-        else:
-                print bcolors.WARNING + "[!] ../Results/webs file DOES NOT EXIST!" + bcolors.ENDC
-                return
-        with open('../Results/titles_webhosts') as hosts:
-                for host in hosts:
-                        for port in ports_to_check:
-                                url = host.strip() + port.strip()
-                                targets.write(url + '\n')
-                targets.close()
 
-        with open('../Results/targets') as tar:
+        if os.path.isfile('../Results/webhosts') and os.stat("../Results/webhosts").st_size != 0:
+                with open('../Results/titles_webhosts') as hosts:
+                        for host in hosts:
+                                for port in ports_to_check:
+                                        url = host.strip() + port.strip()
+                                        targets.write(url + '\n')
+                        targets.close()
 
-                for host in tar:
-                        for protocol in protocols:
-                                url = protocol.strip() + host.strip()
-                                urls.write(url + '\n')
-
+        if os.path.isfile('../Results/targets') and os.stat("../Results/targets").st_size != 0:
+                with open('../Results/targets') as tar:
+                        for host in tar:
+                                for protocol in protocols:
+                                        url = protocol.strip() + host.strip()
+                                        urls.write(url + '\n')
                 urls.close()
 
-        with open('../Results/urls') as urls:
-                for url in urls:
-                        print bcolors.TITLE + "[*] Searching HTTP TITLE on %s" % (url.strip()) + bcolors.ENDC
-                        try:
-                                response = urllib2.urlopen(url, timeout=3)
-                                html = response.read()
-                                soup = BeautifulSoup(html)
-                                print bcolors.OKGREEN + "[+] Obtained Title: %s" % soup.title.string + bcolors.ENDC
-                                titles.write(url + " " + soup.title.string )
-                        except urllib2.HTTPError as e:
-                                print bcolors.WARNING + "[!] HTTP code not 200!" + bcolors.ENDC
-                        except urllib2.URLError as e:
-                                print bcolors.FAIL + "[!] URL is Unreachable" + bcolors.ENDC
+        if os.path.isfile('../Results/urls') and os.stat("../Results/urls").st_size != 0:
+                with open('../Results/urls') as urls:
+                        for url in urls:
+                                print bcolors.TITLE + "[*] Searching HTTP TITLE on %s" % (url.strip()) + bcolors.ENDC
+                                try:
+                                        response = urllib2.urlopen(url, timeout=3)
+                                        html = response.read()
+                                        soup = BeautifulSoup(html)
+                                        print bcolors.OKGREEN + "[+] Obtained Title: %s" % soup.title.string + bcolors.ENDC
+                                        titles.write(url + " " + soup.title.string )
+                                except urllib2.HTTPError as e:
+                                        print bcolors.WARNING + "[!] HTTP code not 200!" + bcolors.ENDC
+                                except urllib2.URLError as e:
+                                        print bcolors.FAIL + "[!] URL is Unreachable" + bcolors.ENDC
+                                except:
+                                        print bcolors.FAIL + "[!] General Error" + bcolors.ENDC
 
-                        except:
-                                print bcolors.FAIL + "[!] General Error" + bcolors.ENDC
-
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
-        return "Completed Enumerating HTTP Titles\n"
+                print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
+                return "Completed Enumerating HTTP Titles\n"
 
 
 def waf_enum(iface):
@@ -186,33 +178,35 @@ def robots_txt():
                 subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
                 subprocess.call("grep -v '^$' ../Results/web_hosts > ../Results/webhosts", shell=True)
                 subprocess.call("sudo rm ../Results/web_hosts", shell=True) #delete temp file.
+        if os.path.isfile('../Results/webhosts') and os.stat("../Results/webhosts").st_size != 0:
+                with open('../Results/webhosts') as hosts:
+                        for host in hosts:
+                                for port in ports_to_check:
+                                        url = host.strip() + port.strip()
+                                        targets.write(url + '\n')
+                        targets.close()
 
-        with open('../Results/webhosts') as hosts:
-                for host in hosts:
-                        for port in ports_to_check:
-                                url = host.strip() + port.strip()
-                                targets.write(url + '\n')
-                targets.close()
+        if os.path.isfile('../Results/targets') and os.stat("../Results/targets").st_size != 0:
+                with open('../Results/targets') as tar:
+                        for host in tar:
+                                for protocol in protocols:
+                                        url = protocol.strip() + host.strip()
+                                        urls.write(url + '/robots.txt' + '\n')
+                        urls.close()
 
-        with open('../Results/targets') as tar:
-                for host in tar:
-                        for protocol in protocols:
-                                url = protocol.strip() + host.strip()
-                                urls.write(url + '/robots.txt' + '\n')
-                urls.close()
-
-        with open('../Results/urls') as urls:
-                for url in urls:
-                        print bcolors.TITLE + "[*] Searching for robots.txt on %s" % (url.strip()) + bcolors.ENDC
-                        try:
-                                request = urllib2.Request(url, headers=headers)
-                                response = urllib2.urlopen(request, timeout=2)
-                                print bcolors.OKGREEN + '[+] Found Robots.txt file on %s..' % url + bcolors.ENDC
-                                ans = response.read()
-                                robots_file.write('\n' + url + '\n' + '----------------' + ans)
-                                response.close()
-                        except:
-                                print  bcolors.FAIL + '[!] Timed out, moving along.\n' + bcolors.ENDC
+        if os.path.isfile('../Results/urls') and os.stat("../Results/urls").st_size != 0:
+                with open('../Results/urls') as urls:
+                        for url in urls:
+                                print bcolors.TITLE + "[*] Searching for robots.txt on %s" % (url.strip()) + bcolors.ENDC
+                                try:
+                                        request = urllib2.Request(url, headers=headers)
+                                        response = urllib2.urlopen(request, timeout=2)
+                                        print bcolors.OKGREEN + '[+] Found Robots.txt file on %s..' % url + bcolors.ENDC
+                                        ans = response.read()
+                                        robots_file.write('\n' + url + '\n' + '----------------' + ans)
+                                        response.close()
+                                except:
+                                        print  bcolors.FAIL + '[!] Timed out, moving along.\n' + bcolors.ENDC
 
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/robots" + bcolors.ENDC
         return "Completed Robots TXT Enumeration\n"
