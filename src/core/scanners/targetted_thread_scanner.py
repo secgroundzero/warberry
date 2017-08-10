@@ -47,10 +47,10 @@ class ScanThread(threading.Thread):
         return self.output
 
 def scan_targetted(self):
-    self.output=self.output+ "[+] Scanning for "+ self.name + " ..."
+    self.output=self.output+ bcolors.TITLE + "[+] " + bcolors.ENDC + "Scanning for " + self.name  + " ..."
     scanning(self)
-    if (os.path.isfile(self.path_file)):
-        self.output = self.output + bcolors.TITLE + "\n[+] Done! Results saved in /Results/"+self.result_file+"\n" + bcolors.ENDC
+    #if (os.path.isfile(self.path_file)):
+    #    self.output = self.output + bcolors.TITLE + "\n[+] Done! Results saved in /Results/"+self.result_file+"\n" + bcolors.ENDC
 
 
 def scanning(self):
@@ -77,20 +77,16 @@ def scanning(self):
 def thread_port_scanner(CIDR, intensity, iface):
     print " "
     print bcolors.OKGREEN + " [ TARGETTED SERVICES NETWORK SCANNER MODULE ]\n" + bcolors.ENDC
-    print "\n[*] Beginning Scanning Live IPs in Subnet %s with %s intensity." % (CIDR, intensity)
+    print bcolors.TITLE + "[*] Beginning Scan of live IPs in scope in subnet %s with %s intensity." % (CIDR, intensity) + bcolors.ENDC
     print " "
     threads = []
     hostlist = []
-    if os.path.isfile('../Results/live_ips'):
-        with open('../Results/live_ips', 'r') as h:
+    if os.path.isfile('../Results/ips_gathered') and os.stat("../Results/ips_gathered").st_size != 0:
+        with open('../Results/ips_gathered', 'r') as h:
             hosts = h.readlines()
             for host in hosts:
                 hostlist.append(host.strip())
-    else:
-        with open('../Results/ips_discovered', 'r') as h:
-            hosts = h.readlines()
-            for host in hosts:
-                hostlist.append(host.strip())
+
 
     ports_list = port_obj_reader("portlist_config")
     for i in ports_list:
