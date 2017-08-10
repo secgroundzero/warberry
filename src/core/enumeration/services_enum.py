@@ -215,7 +215,7 @@ def robots_txt():
                                 print  bcolors.FAIL + '[!] Timed out, moving along.\n' + bcolors.ENDC
 
                 print bcolors.TITLE + "[+] Done! Results saved in /Results/robots" + bcolors.ENDC
-        return "Completed WAF Enumeration\n"
+        return "Completed Robots TXT Enumeration\n"
 
 def nfs_enum(iface):
 
