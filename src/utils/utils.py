@@ -137,6 +137,7 @@ def hostnames(CIDR):
 	ips_gathered = []
 	hostnames_gathered = []
 	domains_gathered = []
+	os_gathered = []
 
 	print "Searching for hostnames in %s...\n" %CIDR
 	print "Current Hostname:" + bcolors.TITLE + " %s" % hostname + bcolors.ENDC
@@ -146,6 +147,7 @@ def hostnames(CIDR):
 		subprocess.call('cat ../Results/hostnames | grep "CME" | cut -d " " -f 11 | cut -d ":" -f 1 > ../Results/ips_gathered', shell=True)
 		subprocess.call('cat ../Results/hostnames | grep "name:" | cut -d ":" -f 2 | cut -d " " -f 2 > ../Results/hostnames_gathered',shell=True)
 		subprocess.call('cat ../Results/hostnames | grep "domain:" | cut -d ":" -f 4 | cut -d ")" -f 1 > ../Results/domains_gathered',shell=True)
+		subprocess.call('cat ../Results/hostnames | grep "[*]" | cut -d "]" -f 2 | cut -d "(" -f 1 | cut -d " " -f 2,3 > ../Results/operating_systems', shell=True)
 
 		# Read files into the lists
 		with open("../Results/ips_gathered", "r") as ips:
@@ -154,6 +156,8 @@ def hostnames(CIDR):
 			hostnames_gathered = hostnames.readlines()
 		with open("../Results/domains_gathered", "r") as domains:
 			domains_gathered = domains.readlines()
+		with open("../Results/operating_systems", "r") as oper:
+			os_gathered = oper.readlines()
 
 		# Get the array length for the loop
 		array = length = len(ips_gathered)
@@ -161,7 +165,7 @@ def hostnames(CIDR):
 		# Write the results on stdout and file
 		with open("../Results/hosts", "w") as hostnames:
 			for i in range(0, length):
-				print bcolors.TITLE + "[+] IP: " +bcolors.ENDC + ips_gathered[i].strip() + "\t" + bcolors.TITLE +"Hostname: " + bcolors.ENDC + hostnames_gathered[i].strip() + "\t" + bcolors.TITLE + "Domain: " + bcolors.ENDC + domains_gathered[i].strip()
+				print bcolors.TITLE + "[+] IP: " +bcolors.ENDC + ips_gathered[i].strip() + "\t" + bcolors.TITLE +"Hostname: " + bcolors.ENDC + hostnames_gathered[i].strip() + "\t" + bcolors.TITLE + "Domain: " + bcolors.ENDC + domains_gathered[i].strip() + "\t" + bcolors.TITLE + "Operating System: " + bcolors.ENDC + os_gathered[i].strip()
 				hostnames.write(ips_gathered[i].strip() + "\t" + hostnames_gathered[i].strip() + "\t" + domains_gathered[i].strip() + "\n")
 	except:
 		print bcolors.FAIL + "No Hostnames Found" + bcolors.ENDC
