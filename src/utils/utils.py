@@ -129,26 +129,53 @@ def set_static(CIDR, ifname):
 
 
 def hostnames(CIDR):
+
 	print bcolors.OKGREEN + "      [ HOSTNAMES ENUMERATION MODULE ]\n" + bcolors.ENDC
 	hostname = socket.gethostname()
-	print "Current Hostname:" + bcolors.TITLE + " %s" %hostname + bcolors.ENDC
-	print " "
 
-	print "Searching for hostnames in %s\n" %CIDR
+	# Initialize lists
+	ips_gathered = []
+	hostnames_gathered = []
+	domains_gathered = []
+
+	print "Searching for hostnames in %s...\n" %CIDR
+	print "Current Hostname:" + bcolors.TITLE + " %s" % hostname + bcolors.ENDC
+	print " "
 	try:
-		subprocess.call('sudo nbtscan -q %s | egrep "^[^A-Z]*[A-Z]{5,15}[^A-Z]*$" | awk {\'print $2\'} > ../Results/hostnames' %CIDR, shell = True)
-		subprocess.call("sudo sort ../Results/hostnames | uniq > ../Results/unique_hosts", shell = True)
-		if os.stat('../Results/unique_hosts').st_size == 0:
-			return "No Hostnames Found\n"
-		with open('../Results/unique_hosts', 'r') as hostnames:
-			hosts = hostnames.readlines()
-			for host in hosts:
-				print bcolors.OKGREEN + "[+] Found Hostname: %s" %host.strip() + bcolors.ENDC
-		return "Completed hostnames search\n"
+		subprocess.call('sudo cme %s --timeout=5 > ../Results/hostnames' % CIDR, shell=True)
+		subprocess.call('cat ../Results/hostnames | grep "CME" | cut -d " " -f 11 | cut -d ":" -f 1 > ../Results/ips_gathered', shell=True)
+		subprocess.call('cat ../Results/hostnames | grep "name:" | cut -d ":" -f 2 | cut -d " " -f 2 > ../Results/hostnames_gathered',shell=True)
+		subprocess.call('cat ../Results/hostnames | grep "domain:" | cut -d ":" -f 4 | cut -d ")" -f 1 > ../Results/domains_gathered',shell=True)
+
+		# Read files into the lists
+		with open("../Results/ips_gathered", "r") as ips:
+			ips_gathered = ips.readlines()
+		with open("../Results/hostnames_gathered", "r") as hostnames:
+			hostnames_gathered = hostnames.readlines()
+		with open("../Results/domains_gathered", "r") as domains:
+			domains_gathered = domains.readlines()
+
+		# Get the array length for the loop
+		array = length = len(ips_gathered)
+
+		# Write the results on stdout and file
+		with open("../Results/hosts", "w") as hostnames:
+			for i in range(0, length):
+				print bcolors.TITLE + "[+] IP: " +bcolors.ENDC + ips_gathered[i].strip() + "\t" + bcolors.TITLE +"Hostname: " + bcolors.ENDC + hostnames_gathered[i].strip() + "\t" + bcolors.TITLE + "Domain: " + bcolors.ENDC + domains_gathered[i].strip()
+				hostnames.write(ips_gathered[i].strip() + "\t" + hostnames_gathered[i].strip() + "\t" + domains_gathered[i].strip() + "\n")
 	except:
 		print bcolors.FAIL + "No Hostnames Found" + bcolors.ENDC
 	print " "
+	if os.path.isfile("../Results/ips_gathered") and os.stat("../Results/ips_gathered").st_size != 0:
+			print bcolors.OKGREEN + "      [  SCOPE DEFINITION MODULE ]\n" + bcolors.ENDC
+			with open("../Results/ips_gathered", "r") as ips_in_scope:
 
+				scope = ips_in_scope.readlines()
+				for ip in scope:
+					print bcolors.TITLE + "[+] " + bcolors.ENDC + "%s " %ip.strip()  + "added to scope!"
+	else:
+		print bcolors.WARNING + "NO LIVE IPS FOUND! THERE IS NO NEED TO CONTINUE! WARBERRY WILL NOW EXIT!" + bcolors.ENDC
+		sys.exit(1)
 
 def manual_namechange(host_name):
 
@@ -168,23 +195,23 @@ def namechange():
 	hostname = socket.gethostname()
 	mvp_found=False
 	with open('../Results/mvps', 'a') as mvps:
-		with open('../Results/mvp_names', 'r') as hostnames:
+		with open('../Results/hostnames_gathered', 'r') as hostnames:
 			hosts = hostnames.readlines()
 			for host in hosts:
 				for mvp in mvp_hosts:
 					if host.strip()==mvp.strip():
-						print bcolors.OKGREEN + "[+] Found interesting hostname %s\n" %mvp.strip() + bcolors.ENDC
+						print bcolors.OKGREEN + "\n[+] Found interesting hostname %s\n" %mvp.strip() + bcolors.ENDC
 						mvps.write(host.strip()+'\n')
 						mvp_found = True
 
 	if mvp_found != True:
-		print bcolors.WARNING + "[-] No interesting names found. Continuing with the same hostname" + bcolors.ENDC
+		print bcolors.WARNING + "\n[-] No interesting names found. Continuing with the same hostname" + bcolors.ENDC
 
 	elif mvp_found == True:
 		with open('../Results/mvps', 'r') as mvps:
 			mvp = mvps.readline()
 			if mvp.strip() == hostname:
-				print bcolors.TITLE + "[*] Hostname is stealthy as is. Keeping the same" + bcolors.ENDC
+				print bcolors.TITLE + "[*] Hostname is stealthy as is. Keeping the same!" + bcolors.ENDC
 			else:
 				with open('../Results/mvps', 'r') as hostnames:
 					mvp = hostnames.readline()
