@@ -1,7 +1,16 @@
 ## Upcoming additions
 
-- CME
-- Massscan
+- CME usage
+- Fix OS enumeration
+
+## 
+
+- Fixed bug with responder
+- Fixed bug when displaying the help page
+- Minor look and feel changes
+- Fixed scope definition
+- Major fix of the hostnames and IPs enumeration
+- CrackMapExec is now performing the scope definition
 
 ## Version 5
 
