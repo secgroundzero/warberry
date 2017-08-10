@@ -45,38 +45,3 @@ def iprecon(ifname):
             return (static_bypass(ifname))
 
 
-def scope_definition(ifname, CIDR):
-    print bcolors.OKGREEN + "      [  SCOPE DEFINITION MODULE ]\n" + bcolors.ENDC
-    print "Finding live IPs in order to include only those in the scans to minimize footprint\n"
-    conf.verb = 0
-    subprocess.call("sudo arp -vn | awk {'if (NR!=1) if ($2==\"ether\") print $1'} >../Results/arp_temp ", shell=True)
-    with open('../Results/arp_temp', 'r') as arpips:
-        lines=arpips.readlines()
-    arpips.close
-    lines = lines[:-1] #exclude last line because its label
-    ips1=[]
-    lines_seen = set()  # holds lines already seen
-    for line in lines:
-        if line not in lines_seen:  # not a duplicate
-            ips1.append(line)
-            lines_seen.add(line)
-
-    if not ips1:
-        print bcolors.WARNING+"NO LIVE IPS FOUND! THERE IS NO NEED TO CONTINUE! WARBERRY WILL NOW EXIT!"+bcolors.ENDC
-        sys.exit(1)
-    with open('../Results/live_ips', 'w') as ip_addresses:
-        for ip in ips1:
-            ip_n=ip
-            ip_addresses.write(ip_n)
-    print bcolors.TITLE + "IP Addresses Found " + bcolors.ENDC
-    print bcolors.TITLE + "--------------------" + bcolors.ENDC
-    with open('../Results/live_ips', 'r') as liveips:
-        lines=liveips.read()
-    liveips.close
-    print lines
-    with open('../Results/live_ips', 'w') as ip_addresses:
-        for ip in ips1:
-            ip_n=ip
-            ip_addresses.write(ip_n)
-    subprocess.call("sudo rm ../Results/arp_temp", shell=True) #delete temporary file.
-    return "Completed IP Recon\n"
