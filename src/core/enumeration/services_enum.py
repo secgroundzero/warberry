@@ -169,7 +169,7 @@ def waf_enum(iface):
                         nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/wafed')
 
         print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
-        return "Completed Robots.txt Enumeration\n"
+        return "Completed WAF Enumeration\n"
 
 def robots_txt():
 
