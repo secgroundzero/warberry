@@ -7,6 +7,7 @@
 
 - Removed HTTP Title enumeration
 - Removed Robots txt enumeration
+- prettytable is a requirement. pip install prettytable
 
 ## Version 5.1a
 
