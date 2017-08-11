@@ -24,6 +24,7 @@ logging.captureWarnings(True)
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 import os, os.path
+import signal
 #External modules
 from src.core.scanners.targetted_scanner import *
 from src.core.scanners.targetted_thread_scanner import *
@@ -60,7 +61,7 @@ def warberry():
 
             TACTICAL EXPLOITATION
 
-v5                                @sec_groundzero
+v5.1                              @sec_groundzero
                           secgroundzero@gmail.com
 ''') + bcolors.ENDC
 
@@ -128,7 +129,7 @@ v5                                @sec_groundzero
                 packets = options.packets
                 expire = options.expire
                 status_str+=str(sniffer(iface, packets, expire))
-                status_str +=str(hostnames(CIDR))
+                status_str +=str(hostnames(int_ip,CIDR))
 
                 with open('../Results/running_status', 'w') as status:
                     status.write(status_str)
@@ -147,10 +148,7 @@ v5                                @sec_groundzero
                         status_str +=str(shares_enum(iface))
                         status_str +=str(smb_users(iface))
                         status_str += str(webs_prep())
-                        status_str +=str(http_title_enum(iface))
                         status_str +=str(nfs_enum(iface))
-                        status_str +=str(waf_enum(iface))
-                        status_str +=str(robots_txt())
                         status_str +=str(mysql_enum(iface))
                         status_str +=str(mssql_enum(iface))
                         status_str +=str(ftp_enum(iface))
@@ -205,6 +203,14 @@ if __name__ == '__main__':
                 subprocess.call("sudo mkdir ../Results", shell = True)
                 subprocess.call("sudo mkdir  ../Results/Responder_logs", shell=True)
                 subprocess.call("sudo mv  ../Tools/Responder/logs/* ../Results/Responder_logs/", shell=True)
+                p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
+                out, err = p.communicate()
+                for line in out.splitlines():
+                    if 'python' in line:
+                        pid = int(line.split(None, 1)[0])
+                        os.kill(pid, signal.SIGKILL)
+                print "Killing threads done"
+
         finally:
             subprocess.call("clear", shell=True)
             banner_full()

@@ -26,13 +26,13 @@ def shares_enum(iface):
                 print " "
                 print bcolors.OKGREEN + "      [ SMB SHARES ENUMERATION MODULE ]\n" + bcolors.ENDC
         else:
-                return "SMB SHARES DOES NOT ESIST!\n"
+                return "SMB SHARES DOES NOT EXIST!\n"
         if os.path.isfile('../Results/shares'):
                 print bcolors.WARNING + "[!] Shares Results File Exists. Previous results will be overwritten\n" + bcolors.ENDC
         subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
         with open('../Results/win_hosts', 'r') as hosts:
                 for host in hosts:
-                        print "[*] Enumerating shares on %s" %host.strip()
+                        print bcolors.TITLE +"[*] " + bcolors.ENDC + "Enumerating shares on %s" %host.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=host, arguments='-Pn -T4 --script smb-enum-shares -p445 -e ' + iface + ' --open -o ../Results/shares')
 
@@ -52,7 +52,7 @@ def smb_users(iface):
         subprocess.call("sudo sort ../Results/windows | uniq > ../Results/win_hosts", shell=True)
         with open('../Results/win_hosts') as hosts:
                 for host in hosts:
-                        print "[*] Enumerating users on %s" %host.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating users on %s" %host.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-users -p U:137,T:139 -e ' + iface + ' --open -o ../Results/smb_users')
 
@@ -74,7 +74,7 @@ def domains_enum(iface):
 
         with open('../Results/win_hosts') as hosts:
                 for host in hosts:
-                        print "[*] Enumerating domains on %s" %host.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating domains on %s" %host.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=host, arguments='-Pn -T4 -sU -sS --script smb-enum-domains -p U:137,T:139 -e ' + iface + ' --open -o ../Results/domains_enum')
 
@@ -89,127 +89,6 @@ def webs_prep():
             or os.path.isfile('../Results/webhosts')):
                 subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
 
-def http_title_enum(iface):
-        targets = open('../Results/targets', 'w')
-        urls = open('../Results/urls', 'w')
-        titles = open('../Results/http_titles', 'w')
-        headers = {}
-        headers['User-Agent'] = "Googlebot"
-        ports_to_check = [':80', ':8080', ':4443', ':8081', ':443', ':8181', ':9090']
-        protocols = ['http://', 'https://']
-
-        if os.path.isfile('../Results/webs') and os.stat("../Results/webs").st_size != 0:
-                print " "
-                print bcolors.OKGREEN + "      [ HTTP TITLE ENUMERATION MODULE ]\n" + bcolors.ENDC
-                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/titles_web_hosts", shell=True)
-                subprocess.call("grep -v '^$' ../Results/titles_web_hosts > ../Results/titles_webhosts", shell=True)
-                subprocess.call("sudo rm ../Results/titles_web_hosts", shell=True) #delete temp files.
-
-        if os.path.isfile('../Results/webhosts') and os.stat("../Results/webhosts").st_size != 0:
-                with open('../Results/titles_webhosts') as hosts:
-                        for host in hosts:
-                                for port in ports_to_check:
-                                        url = host.strip() + port.strip()
-                                        targets.write(url + '\n')
-                        targets.close()
-
-        if os.path.isfile('../Results/targets') and os.stat("../Results/targets").st_size != 0:
-                with open('../Results/targets') as tar:
-                        for host in tar:
-                                for protocol in protocols:
-                                        url = protocol.strip() + host.strip()
-                                        urls.write(url + '\n')
-                urls.close()
-
-        if os.path.isfile('../Results/urls') and os.stat("../Results/urls").st_size != 0:
-                with open('../Results/urls') as urls:
-                        for url in urls:
-                                print bcolors.TITLE + "[*] Searching HTTP TITLE on %s" % (url.strip()) + bcolors.ENDC
-                                try:
-                                        response = urllib2.urlopen(url, timeout=3)
-                                        html = response.read()
-                                        soup = BeautifulSoup(html)
-                                        print bcolors.OKGREEN + "[+] Obtained Title: %s" % soup.title.string + bcolors.ENDC
-                                        titles.write(url + " " + soup.title.string )
-                                except urllib2.HTTPError as e:
-                                        print bcolors.WARNING + "[!] HTTP code not 200!" + bcolors.ENDC
-                                except urllib2.URLError as e:
-                                        print bcolors.FAIL + "[!] URL is Unreachable" + bcolors.ENDC
-                                except:
-                                        print bcolors.FAIL + "[!] General Error" + bcolors.ENDC
-
-                print bcolors.TITLE + "[+] Done! Results saved in /Results/http_titles" + bcolors.ENDC
-                return "Completed Enumerating HTTP Titles\n"
-
-
-def waf_enum(iface):
-
-        if os.path.isfile('../Results/webs'):
-                print " "
-                print bcolors.OKGREEN + "      [ WAF DETECTION MODULE ]\n" + bcolors.ENDC
-        else:
-                return "../Results/webs file does not exist!\n"
-        if os.path.isfile('../Results/wafed'):
-                print bcolors.WARNING + "[!] WAF Results File Exists. Previous Results will be Overwritten\n " + bcolors.ENDC
-
-        subprocess.call("sudo cat ../Results/webserver* > ../Results/webs", shell=True)
-        subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
-        with open('../Results/web_hosts') as hosts:
-                for host in hosts:
-                        print "[*] Enumerating WAF on %s" %host.strip()
-                        nm = nmap.PortScanner()
-                        nm.scan(hosts=host, arguments='-Pn -T4 --script http-waf-detect -p80,8080,443,4443,8081,8181,9090 -e ' + iface + ' --open -o ../Results/wafed')
-
-        print bcolors.TITLE + "[+] Done! Results saved in /Results/wafed" + bcolors.ENDC
-        return "Completed WAF Enumeration\n"
-
-def robots_txt():
-
-        targets = open('../Results/targets', 'w')
-        robots_file = open('../Results/robots', 'w')
-        urls = open('../Results/urls', 'w')
-        headers = {}
-        headers['User-Agent'] = "Googlebot"
-        ports_to_check = [':80', ':8080', ':4443', ':8081', ':443', ':8181', ':9090']
-        protocols = ['http://', 'https://']
-        if os.path.isfile('../Results/webs'):
-                print " "
-                print bcolors.OKGREEN + "      [ ROBOTS.TXT ENUMERATION MODULE ]\n" + bcolors.ENDC
-                subprocess.call("sudo sort ../Results/webs | uniq > ../Results/web_hosts", shell=True)
-                subprocess.call("grep -v '^$' ../Results/web_hosts > ../Results/webhosts", shell=True)
-                subprocess.call("sudo rm ../Results/web_hosts", shell=True) #delete temp file.
-        if os.path.isfile('../Results/webhosts') and os.stat("../Results/webhosts").st_size != 0:
-                with open('../Results/webhosts') as hosts:
-                        for host in hosts:
-                                for port in ports_to_check:
-                                        url = host.strip() + port.strip()
-                                        targets.write(url + '\n')
-                        targets.close()
-
-        if os.path.isfile('../Results/targets') and os.stat("../Results/targets").st_size != 0:
-                with open('../Results/targets') as tar:
-                        for host in tar:
-                                for protocol in protocols:
-                                        url = protocol.strip() + host.strip()
-                                        urls.write(url + '/robots.txt' + '\n')
-                        urls.close()
-
-        if os.path.isfile('../Results/urls') and os.stat("../Results/urls").st_size != 0:
-                with open('../Results/urls') as urls:
-                        for url in urls:
-                                print bcolors.TITLE + "[*] Searching for robots.txt on %s" % (url.strip()) + bcolors.ENDC
-                                try:
-                                        request = urllib2.Request(url, headers=headers)
-                                        response = urllib2.urlopen(request, timeout=2)
-                                        print bcolors.OKGREEN + '[+] Found Robots.txt file on %s..' % url + bcolors.ENDC
-                                        ans = response.read()
-                                        robots_file.write('\n' + url + '\n' + '----------------' + ans)
-                                        response.close()
-                                except:
-                                        print  bcolors.FAIL + '[!] Timed out, moving along.\n' + bcolors.ENDC
-
-                print bcolors.TITLE + "[+] Done! Results saved in /Results/robots" + bcolors.ENDC
-        return "Completed Robots TXT Enumeration\n"
 
 def nfs_enum(iface):
 
@@ -224,7 +103,7 @@ def nfs_enum(iface):
         subprocess.call("sudo sort ../Results/nfs | uniq > ../Results/nfs_hosts", shell=True)
         with open('../Results/nfs_hosts') as shares:
                 for share in shares:
-                        print "[*] Enumerating NFS Shares on %s" %share.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating NFS Shares on %s" %share.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=share, arguments='-Pn -sV -T4 --script afp-showmount -p111 -e ' + iface + ' --open -o ../Results/nfs_enum')
 
@@ -284,7 +163,7 @@ def ftp_enum(iface):
         subprocess.call("sudo sort ../Results/ftp | uniq > ../Results/ftp_hosts", shell=True)
         with open('../Results/ftp_hosts') as ftps:
                 for ftp in ftps:
-                        print "[*] Enumerating FTP on %s" %ftp.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating FTP on %s" %ftp.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=ftp, arguments='-Pn -T4 -sV --script ftp-anon -p22 -e ' + iface + ' --open -o ../Results/ftp_enum')
 
@@ -304,7 +183,7 @@ def snmp_enum(iface):
         subprocess.call("sudo sort ../Results/snmp | uniq > ../Results/snmp_hosts", shell=True)
         with open('../Results/snmp_hosts') as snmps:
                 for snmp in snmps:
-                        print "[*] Enumerating SNMP on %s" %snmp.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating SNMP on %s" %snmp.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=snmp, arguments='-Pn -T4 -sV -sU -p161 -e ' + iface + ' --open -o ../Results/snmp_enum')
 
@@ -326,7 +205,7 @@ def sip_methods_enum(iface):
         subprocess.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
         with open('../Results/voip_hosts') as sips:
                 for sip in sips:
-                        print "[*] Enumerating SIP Methods on %s" %sip.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating SIP Methods on %s" %sip.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=sip, arguments='-Pn -T4 --script sip-methods -sU -e ' + iface + ' -p 5060  -o ../Results/sip_methods')
 
@@ -346,7 +225,7 @@ def sip_users_enum(iface):
         subprocess.call("sudo sort ../Results/voip | uniq > ../Results/voip_hosts", shell=True)
         with open('../Results/voip_hosts') as sips:
                 for sip in sips:
-                        print "[*] Enumerating SIP Users on %s" %sip.strip()
+                        print bcolors.TITLE + "[*] " + bcolors.ENDC + "Enumerating SIP Users on %s" %sip.strip()
                         nm = nmap.PortScanner()
                         nm.scan(hosts=sip, arguments='-Pn -T4 --script sip-enum-users -sU -e ' + iface + ' -p 5060  -o ../Results/sip_users')
 

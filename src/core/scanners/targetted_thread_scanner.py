@@ -49,8 +49,6 @@ class ScanThread(threading.Thread):
 def scan_targetted(self):
     self.output=self.output+ bcolors.TITLE + "[+] " + bcolors.ENDC + "Scanning for " + self.name  + " ..."
     scanning(self)
-    #if (os.path.isfile(self.path_file)):
-    #    self.output = self.output + bcolors.TITLE + "\n[+] Done! Results saved in /Results/"+self.result_file+"\n" + bcolors.ENDC
 
 
 def scanning(self):
@@ -60,7 +58,7 @@ def scanning(self):
     elif (self.type == "n"):
         arg = "-Pn -p" + str(self.port) + " " + self.intensity + " --open"
     elif (self.type == "yn"):
-        arg = "-Pn -p -sT -sU" + str(self.port) + " " + self.intensity + " --open"
+        arg = "-Pn -p -sS -sU" + str(self.port) + " " + self.intensity + " --open"
     arg += " -e " + self.iface
     for h in self.hostlist:
         nm.scan(hosts=h, arguments=arg)
@@ -71,8 +69,6 @@ def scanning(self):
                 hosts.write('%s\n' % host)
                 self.output = self.output + bcolors.OKGREEN + "*** " + self.name + " Found : %s via port " % host + self.port + " ***" + bcolors.ENDC
                 self.output = self.output + "\n" + bcolors.TITLE + self.message + bcolors.ENDC
-    if (os.path.isfile(self.path_file)):
-        print bcolors.TITLE + "\n[+] Done! Results saved in /Results/" + self.result_file + "\n" + bcolors.ENDC
 
 def thread_port_scanner(CIDR, intensity, iface):
     print " "

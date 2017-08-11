@@ -21,6 +21,7 @@ from random import randint
 import fcntl
 from netaddr import *
 from scapy.all import *
+from prettytable import PrettyTable
 
 def dhcp_check():
 
@@ -128,7 +129,7 @@ def set_static(CIDR, ifname):
 			return(macbypass(CIDR, ifname))
 
 
-def hostnames(CIDR):
+def hostnames(int_ip,CIDR):
 
 	print bcolors.OKGREEN + "      [ HOSTNAMES ENUMERATION MODULE ]\n" + bcolors.ENDC
 	hostname = socket.gethostname()
@@ -138,7 +139,8 @@ def hostnames(CIDR):
 	hostnames_gathered = []
 	domains_gathered = []
 	os_gathered = []
-
+	res_table = PrettyTable([bcolors.OKGREEN + '[IP]' + bcolors.ENDC,bcolors.OKGREEN +'[Hostname]' + bcolors.ENDC,bcolors.OKGREEN +'[Domain]' + bcolors.ENDC, bcolors.OKGREEN +'[Operating System]' + bcolors.ENDC], border=False, header=True)
+	res_table.align = "l"
 	print "Searching for hostnames in %s...\n" %CIDR
 	print "Current Hostname:" + bcolors.TITLE + " %s" % hostname + bcolors.ENDC
 	print " "
@@ -165,8 +167,10 @@ def hostnames(CIDR):
 		# Write the results on stdout and file
 		with open("../Results/hosts", "w") as hostnames:
 			for i in range(0, length):
-				print bcolors.TITLE + "[+] IP: " +bcolors.ENDC + ips_gathered[i].strip() + "\t" + bcolors.TITLE +"Hostname: " + bcolors.ENDC + hostnames_gathered[i].strip() + "\t" + bcolors.TITLE + "Domain: " + bcolors.ENDC + domains_gathered[i].strip() + "\t" + bcolors.TITLE + "Operating System: " + bcolors.ENDC + os_gathered[i].strip()
-				hostnames.write(ips_gathered[i].strip() + "\t" + hostnames_gathered[i].strip() + "\t" + domains_gathered[i].strip() + "\n")
+					if ips_gathered[i].strip() != int_ip.strip():
+						res_table.add_row([ips_gathered[i].strip(),hostnames_gathered[i].strip(),domains_gathered[i].strip(),os_gathered[i].strip()])
+			hostnames.write(ips_gathered[i].strip() + "\t" + hostnames_gathered[i].strip() + "\t" + domains_gathered[i].strip() + "\n")
+			print res_table
 	except:
 		print bcolors.FAIL + "No Hostnames Found" + bcolors.ENDC
 	print " "
@@ -176,7 +180,8 @@ def hostnames(CIDR):
 
 				scope = ips_in_scope.readlines()
 				for ip in scope:
-					print bcolors.TITLE + "[+] " + bcolors.ENDC + "%s " %ip.strip()  + "added to scope!"
+					if ip.strip() != int_ip.strip():
+						print bcolors.TITLE + "[+] " + bcolors.ENDC + "%s " %ip.strip()  + "added to scope!"
 	else:
 		print bcolors.WARNING + "NO LIVE IPS FOUND! THERE IS NO NEED TO CONTINUE! WARBERRY WILL NOW EXIT!" + bcolors.ENDC
 		sys.exit(1)

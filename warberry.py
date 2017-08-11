@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 
 
-import subprocess
+import subprocess, signal
 import sys, os
 from src.utils.info_banners import *
 
@@ -50,6 +50,13 @@ def main():
     print bcolors.WARNING +"Waiting for Responder to finish!!!"+bcolors.ENDC
     pid.wait()
     print bcolors.TITLE+"Responder has Finished. Results in ../Results/responder_output"+bcolors.ENDC
+    p = subprocess.Popen(['ps', '-A'], stdout=subprocess.PIPE)
+    out, err = p.communicate()
+    for line in out.splitlines():
+        if 'python' in line:
+            pid = int(line.split(None, 1)[0])
+            os.kill(pid, signal.SIGKILL)
+    print "Killing threads done"
     #atexit.register(cleanup(pid))
 
 
