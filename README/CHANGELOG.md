@@ -3,7 +3,12 @@
 - CME usage
 - Fix OS enumeration
 
-## 
+## Version 5.1b
+
+- Removed HTTP Title enumeration
+- Removed Robots txt enumeration
+
+## Version 5.1a
 
 - Fixed bug with responder
 - Fixed bug when displaying the help page
