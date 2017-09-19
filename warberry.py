@@ -20,7 +20,7 @@ from src.utils.info_banners import *
 
 
 def war(string):
-    string = "sudo python wrapper.py " + string
+    string = "sudo python2 wrapper.py " + string
     subprocess.call(string, shell=True)
 
 def main():
