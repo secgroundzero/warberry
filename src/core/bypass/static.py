@@ -21,7 +21,7 @@ def static_bypass(ifname):
 	print bcolors.OKGREEN + "      [ STATIC IP SETUP MODULE ]\n" + bcolors.ENDC
 
 	print "ARP Scanning Network for IPs\n"
-	subprocess.call("sudo netdiscover -i %s -P -l ./src/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' > ../Results/ips_discovered" %ifname, shell = True)
+	subprocess.call("sudo netdiscover -i %s -P -l ./src/discover | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*? ' | grep -P -o \'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)' > ../Results/ips_discovered" %ifname, shell = True)
 
 	if os.stat('../Results/ips_discovered').st_size !=0:
 		discover = open("../Results/ips_discovered","r")
