@@ -1,4 +1,6 @@
 mkdir /home/pi/WarBerry/Results
+apt-get update
+apt-get upgrade
 apt-get install python-pip
 apt-get install nbtscan
 apt-get install python-scapy
