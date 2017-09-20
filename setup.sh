@@ -1,5 +1,5 @@
 mkdir /home/pi/WarBerry/Results
-apt-get instal python-pip
+apt-get install python-pip
 apt-get install nbtscan
 apt-get install python-scapy
 apt-get install tcpdump
