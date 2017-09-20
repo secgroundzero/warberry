@@ -38,3 +38,4 @@ wget https://download.sysinternals.com/files/SysinternalsSuite.zip
 wget https://labs.portcullis.co.uk/download/enum4linux-0.8.9.tar.gz -O /home/pi/WarBerry/Tools/enum4linux-0.8.9.tar.gz
 tar -zxvf enum4linux-0.8.9.tar.gz
 mv enum4linux-0.8.9 enum4linux
+cd /home/pi/WarBerry
