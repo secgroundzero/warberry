@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 """
 This file is part of the WarBerry tool.
@@ -67,8 +67,8 @@ v5.1                              @sec_groundzero
 
 
     parser = OptionParser(usage= "usage: sudo %prog [options]",version=version)
-    parser.add_option("-p", "--packets", action="store", dest="packets", default=20, type=int, help="# of Network Packets to capture" + bcolors.WARNING + " Default: 20" + bcolors.ENDC)
-    parser.add_option("-x", "--expire", action="store", dest="expire", default=20, type=int,help="Time for packet capture to stop" + bcolors.WARNING + " Default: 20s" + bcolors.ENDC)
+    parser.add_option("-p", "--packets", action="store", dest="packets", default=60, type=int, help="# of Network Packets to capture" + bcolors.WARNING + " Default: 20" + bcolors.ENDC)
+    parser.add_option("-x", "--expire", action="store", dest="expire", default=60, type=int,help="Time for packet capture to stop" + bcolors.WARNING + " Default: 20s" + bcolors.ENDC)
     parser.add_option("-I", "--interface", action="store", dest="iface", default="eth0",help="Network Interface to use." + bcolors.WARNING + " Default: eth0" + bcolors.ENDC, choices=['eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'at0'])
     parser.add_option("-N", "--name", action="store", dest="name", default="WarBerry",help="Hostname to use." + bcolors.WARNING + " Default: Auto" + bcolors.ENDC)
     parser.add_option("-i", "--intensity", action="store", dest="intensity", default="-T1", help="Port scan intensity." + bcolors.WARNING + " Default: T1" + bcolors.ENDC,choices=['-T1', '-T2', '-T3', '-T4'])
