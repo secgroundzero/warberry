@@ -1,36 +1,36 @@
 apt-get update
 apt-get -y upgrade
 mkdir /home/pi/WarBerry/Results
-apt-get install python-pip
-apt-get install nbtscan
-apt-get install python-scapy
-apt-get install tcpdump
-apt-get install nmap
+apt-get install -y python-pip
+apt-get install -y nbtscan
+apt-get install -y python-scapy
+apt-get install -y tcpdump
+apt-get install -y nmap
 pip install python-nmap
-apt-get install python-bluez
+apt-get install -y python-bluez
 pip install optparse-pretty
 pip install netaddr
 pip install prettytable
 pip install ipaddress
-apt-get install ppp
-apt-get install xprobe2
-apt-get install sg3-utils
-apt-get install netdiscover
-apt-get install macchanger
-apt-get install unzip
+apt-get install -y ppp
+apt-get install -y xprobe2
+apt-get install -y sg3-utils
+apt-get install -y netdiscover
+apt-get install -y macchanger
+apt-get install -y unzip
 wget http://seclists.org/nmap-dev/2016/q2/att-201/clamav-exec.nse -O /usr/share/nmap/scripts/clamav-exec.nse
 mkdir /home/pi/WarBerry/Tools
 cd /home/pi/WarBerry/Tools
 git clone https://github.com/DanMcInerney/net-creds.git
-apt-get install onesixtyone
-apt-get install nikto
-apt-get install hydra
-apt-get install john
-apt-get install bridge-utils
-apt-get install w3af-console
-apt-get install ettercap-text-only
-apt-get install cryptcat
-apt-get install ike-scan
+apt-get install -y onesixtyone
+apt-get install -y nikto
+apt-get install -y hydra
+apt-get install -y john
+apt-get install -y bridge-utils
+apt-get install -y w3af-console
+apt-get install -y ettercap-text-only
+apt-get install -y cryptcat
+apt-get install -y ike-scan
 git clone https://github.com/sqlmapproject/sqlmap.git
 git clone https://github.com/CoreSecurity/impacket.git
 git clone https://github.com/samratashok/nishang.git
