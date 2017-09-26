@@ -21,8 +21,8 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 logging.info("finished")
 logging.captureWarnings(True)
 #Suppress Scapy IPv6 Warnings
-import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
+import urllib3
+requests.urllib3.disable_warnings()
 import os, os.path
 import signal
 #External modules
