@@ -22,7 +22,7 @@ logging.info("finished")
 logging.captureWarnings(True)
 #Suppress Scapy IPv6 Warnings
 import urllib3
-requests.urllib3.disable_warnings()
+urllib3.disable_warnings()
 import os, os.path
 import signal
 #External modules
