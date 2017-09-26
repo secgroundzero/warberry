@@ -7,6 +7,7 @@ apt-get install -y python-scapy
 apt-get install -y tcpdump
 apt-get install -y nmap
 apt-get install -y python-urllib3
+apt-get install -y cme
 pip install python-nmap
 apt-get install -y python-bluez
 pip install optparse-pretty
