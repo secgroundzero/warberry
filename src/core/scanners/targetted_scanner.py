@@ -59,7 +59,7 @@ def single_port_scanner(CIDR, intensity, iface):
                         for host in hosts:
                                 hostlist.append(host.strip())
         else:
-                with open('../Results/ips_discovered', 'r') as h:
+                with open('../Results/ips_gathered', 'r') as h:
                         hosts = h.readlines()
                         for host in hosts:
                                 hostlist.append(host.strip())
