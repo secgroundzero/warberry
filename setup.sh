@@ -38,8 +38,9 @@ git clone https://github.com/SpiderLabs/Responder.git
 git clone https://github.com/PowerShellMafia/PowerSploit.git
 git clone https://github.com/offensive-security/exploit-database.git
 wget https://download.sysinternals.com/files/SysinternalsSuite.zip
-wget https://labs.portcullis.co.uk/download/enum4linux-0.8.9.tar.gz -O /home/pi/WarBerry/Tools/enum4linux-0.8.9.tar.gz
-tar -zxvf enum4linux-0.8.9.tar.gz
-mv enum4linux-0.8.9 enum4linux
+sudo pip install requests
+git clone https://github.com/portcullislabs/enum4linux.git
+sudo apt-get install -y libssl-dev libffi-dev python-dev
+sudo pip install crackmapexec
 cd /home/pi/WarBerry
 
