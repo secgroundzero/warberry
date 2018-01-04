@@ -28,7 +28,7 @@ class bcolors:
 
 def banner():
 
-        version = "5.1b"
+        version = "5.1c"
         codename = "Apocryphon"
         print bcolors.TITLE + ( '''
 *******************************************************

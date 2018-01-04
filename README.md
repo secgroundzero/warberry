@@ -78,8 +78,6 @@ Apache is needed for the reporting tool to work. In Windows download XAMMP and i
 
 The tool in case of MAC address filtering enumerates by default the subnets specified under ***/home/pi/WarBerry/warberry/discover***.
 This is done for the tool to run quicker.
-If you want to enumerate more subnets either add the subnets in that file or change line 154 in rest_bypass.py so that it does not
-read from the file.
 
 
 ### Running Status
