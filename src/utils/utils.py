@@ -147,11 +147,11 @@ def hostnames(int_ip,CIDR):
 	print "Current Hostname:" + bcolors.TITLE + " %s" % hostname + bcolors.ENDC
 	print " "
 	try:
-		subprocess.call('sudo cme smb %s --timeout=5 | tr -cd "\11\12\15\40-\176" > ../Results/hostnames' % CIDR, shell=True)
-		subprocess.call('cat ../Results/hostnames | grep "CME" | cut -d " " -f 11 | cut -d ":" -f 1 > ../Results/ips_gathered', shell=True)
-		subprocess.call('cat ../Results/hostnames | grep "name:" | cut -d ":" -f 2 | cut -d " " -f 2 > ../Results/hostnames_gathered',shell=True)
-		subprocess.call('cat ../Results/hostnames | grep "domain:" | cut -d ":" -f 4 | cut -d ")" -f 1 > ../Results/domains_gathered',shell=True)
-		subprocess.call('cat ../Results/hostnames | grep "[*]" | cut -d "]" -f 2 | cut -d "(" -f 1 | cut -d " " -f 2,3 > ../Results/operating_systems', shell=True)
+		subprocess.call('sudo cme -t 50 --timeout=2 smb %s  > ../Results/hostnames' % CIDR, shell=True)
+		subprocess.call('cat ../Results/hostnames | grep "SMB" | cut -d " " -f 10 > ../Results/ips_gathered', shell=True)
+		subprocess.call('cat ../Results/hostnames | grep ":" | cut -d ":" -f 2 | cut -d ")" -f 1 > ../Results/hostnames_gathered',shell=True)
+		subprocess.call('cat ../Results/hostnames | grep ":" | cut -d ":" -f 3 | cut -d ")" -f 1 > ../Results/domains_gathered',shell=True)
+		subprocess.call('cat ../Results/hostnames | grep "[*]" | cut -d "]" -f 2 | cut -d "(" -f 1 | cut -d " " -f 1,2,3,4 > ../Results/operating_systems', shell=True)
 
 		# Read files into the lists
 		with open("../Results/ips_gathered", "r") as ips:
