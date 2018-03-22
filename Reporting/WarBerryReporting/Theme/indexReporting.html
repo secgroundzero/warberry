@@ -1,0 +1,268 @@
+<!doctype html>
+<html><head>
+    <meta charset="utf-8">
+    <title>WarBerryPi - Reporting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Carlos Alvarez - Alvarez.is">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/font-style.css" rel="stylesheet">
+    <link href="assets/css/flexslider.css" rel="stylesheet">
+    
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <link href="assets/css/table.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            background-color: rgb(31,31,31);
+        }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+  	<!-- Google Fonts call. Font Used Open Sans & Raleway -->
+	<link href="http://fonts.googleapis.com/css?family=Raleway:400,300" rel="stylesheet" type="text/css">
+  	<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+    $("#btn-blog-next").click(function () {
+      $('#blogCarousel').carousel('next')
+    });
+     $("#btn-blog-prev").click(function () {
+      $('#blogCarousel').carousel('prev')
+    });
+
+     $("#btn-client-next").click(function () {
+      $('#clientCarousel').carousel('next')
+    });
+     $("#btn-client-prev").click(function () {
+      $('#clientCarousel').carousel('prev')
+    });
+    
+});
+
+ $(window).load(function(){
+
+    $('.flexslider').flexslider({
+        animation: "slide",
+        slideshow: true,
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+    });  
+});
+
+</script>
+
+
+    
+  </head>
+  <body>
+  
+  	<!-- NAVIGATION MENU -->
+
+    <div class="navbar-nav navbar-inverse navbar-fixed-top">
+        <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html"><!--<img src="assets/img/logo30.png" alt="">--> WarBerryPi</a>
+        </div> 
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="../../index.html"><i class="icon-home icon-white"></i> Home</a></li>
+              <li class="active"><a href="#"><i class="icon-folder-open icon-white"></i> Reporting</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+    </div>
+    <div class="container">
+   <div class="col-sm-3 col-lg-2" style="height:300px">
+        <div id="external-events" style="background-color:#555; border-color:#555">
+          <h4 style="color:#fff">Sessions</h4>
+        </div>
+    </div>
+    
+
+	  <!-- FIRST ROW OF BLOCKS -->     
+      <div class="row">
+      <!-- USER PROFILE BLOCK -->
+        <div class="col-sm-3 col-lg-3">
+      		<div class="dash-unit">
+	      		<dtitle>Session Info</dtitle>
+	      		<hr>
+                <div id="SessionInfo">
+                </div>
+				</div>
+        </div>
+
+      <!-- DONUT CHART BLOCK -->
+        <div class="col-sm-3 col-lg-3">
+      		<div class="dash-unit">
+		  		<dtitle>Warberry Sessions</dtitle>
+		  		<hr>
+                <div id="CommonInfo">
+                </div>
+			</div>
+        </div>
+
+      <!-- DONUT CHART BLOCK -->
+        <div class="col-sm-3 col-lg-3">
+              <div class="dash-unit">
+                <dtitle>Active IPS</dtitle>
+                  <hr>
+                  <div id="activeIPS">
+              </div>
+            </div>
+            </div>
+</div>
+</div>
+<div class="container">
+<div class="col-sm-3 col-lg-2" style="height:300px">
+        <div id="external-events" style="background-color:#555; border-color:#555; display:none;">
+          <h4 style="color:#fff">Sessions</h4>
+        </div>
+    </div>
+
+          
+        <div class="row">
+            <div class="col-sm-3 col-lg-3">
+              <div class="dash-unit">
+                  <dtitle>Bluetooth Devices</dtitle>
+                  <hr>
+                  <div id="BluesInfo">
+                      <!--/END First Table -->
+                  </div>
+                  <h2></h2>
+              </div>
+          </div>
+      <div class="col-sm-3 col-lg-3">
+          <div class="dash-unit">
+          <dtitle>Wifi Networks</dtitle>
+          <hr>
+          <div id="WifisInfo">
+         </div>
+      </div>
+        </div>
+            <!-- USER PROFILE BLOCK -->
+            
+
+            <!-- DONUT CHART BLOCK -->
+             <div class="col-sm-3 col-lg-3">
+    <div class="dash-unit">
+      <dtitle>Services</dtitle>
+      <hr>
+      <div id="Services">
+       <!--/END First Table -->
+      </div>
+    </div>
+  </div>
+
+ </div>
+</div>
+<div class="container">
+  <div class="col-sm-3 col-lg-2" style="height:300px">
+        <div id="external-events" style="background-color:#555; border-color:#555; display:none;">
+          <h4 style="color:#fff">Sessions</h4>
+        </div>
+    </div>
+<div class="row">
+  <div class="col-sm-12 col-lg-9">
+              <div class="dash-unit">
+                  <dtitle>Hashes</dtitle>
+                  <hr>
+                  <div id="hashes">
+                      <!--/END First Table -->
+                  </div>
+                  <h2></h2>
+              </div>
+          </div>
+</div><!-- /row -->
+
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Host Info</h4>
+      </div>
+      <div class="modal-body">
+        <h4 id="titleHost"></h4>
+        <h5>Hostnames:</h5>
+        <div id="hostnamesInfo">
+        </div>
+        </hr>
+        <h5>Services:</h5>
+        <div id="servInfo">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="myModal1" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Services Info</h4>
+      </div>
+      <div class="modal-body">
+        <h5 id="hostTitle"></h5>
+        <div id="servicesP">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+	
+	<!-- NOTY JAVASCRIPT -->
+	<script type="text/javascript" src="assets/js/noty/jquery.noty.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/top.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/topLeft.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/topRight.js"></script>
+	<script type="text/javascript" src="assets/js/noty/layouts/topCenter.js"></script>
+	
+	<!-- You can add more layouts if you want -->
+	<script type="text/javascript" src="assets/js/noty/themes/default.js"></script>
+	<script src="assets/js/jquery.flexslider.js" type="text/javascript"></script>
+  <script type="text/javascript" src="assets/js/reporting.js"></script>
+
+</body></html>

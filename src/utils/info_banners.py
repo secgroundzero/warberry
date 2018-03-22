@@ -1,6 +1,6 @@
 """
 This file is part of the WarBerry tool.
-Copyright (c) 2016 Yiannis Ioannides (@sec_groundzero).
+Copyright (c) 2017 Yiannis Ioannides (@sec_groundzero).
 https://github.com/secgroundzero/warberry
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,24 +13,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-
-class bcolors:
-
-    HEADER   =  '\033[95m'
-    OKBLUE   =  '\033[34m'
-    OKGREEN  =  '\033[32m'
-    WARNING  =  '\033[93m'
-    FAIL     =  '\033[31m'
-    ENDC     =  '\033[0m'
-    BOLD     =  '\033[1m'
-    TITLE    =  '\033[96m'
-
+from src.utils.console_colors import *
 
 def banner():
 
-        version = "5.1c"
-        codename = "Apocryphon"
-        print bcolors.TITLE + ( '''
+        version = "6.0"
+        codename = "Revival"
+        print (bcolors.TITLE + ( '''
 *******************************************************
   _    _  ___  ____________ ___________________   __
  | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
@@ -47,13 +36,13 @@ def banner():
   Version: %s              Codename: %s
 
 ********************************************************
-''') %(version,codename) + bcolors.ENDC
+''') %(version,codename) + bcolors.ENDC)
 
 
 
 def banner_full():
 
-        print bcolors.TITLE + ( '''
+        print (bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -91,12 +80,12 @@ example usage: sudo python warberry.py -r                   Use only the recon m
                sudo python warberry.py -I eth0 -N HackerPC  Use the eth0 interface and change hostname to HackerPC
 
 
-''') + bcolors.ENDC
+''') + bcolors.ENDC)
 
 
 def banner_full_help():
 
-        print bcolors.TITLE + ( '''
+        print (bcolors.TITLE + ( '''
  _    _  ___  ____________ ___________________   __
 | |  | |/ _ \ | ___ \ ___ \  ___| ___ \ ___ \ \ / /
 | |  | / /_\ \| |_/ / |_/ / |__ | |_/ / |_/ /\ V /
@@ -207,4 +196,4 @@ MAC Address Filtering Bypass
 
 NAC Filtering Bypass
 
-''') + bcolors.ENDC
+''') + bcolors.ENDC)

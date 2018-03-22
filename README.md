@@ -60,30 +60,19 @@ example usage: sudo python warberry.py -a -T                Attack all TCP Ports
 ```
 
 
-More usage examples can be found at the '**[Examples](https://github.com/secgroundzero/warberry/wiki/examples)**' wiki page.
-
 
 ### Installation
 
-Detailed installation steps can be found at the '**[Installation](https://github.com/secgroundzero/warberry/wiki/installation)**' wiki page.
+Run ```sudo bash setup.sh```
 
 
 
 ### Reporting 
-Download the **/WarBerry/RESULTS** folder into the **REPORTING/RESULTS** folder and open reporting.html.
-Apache is needed for the reporting tool to work. In Windows download XAMMP and install Apache.
 
+Download the **/RESULTS** folder into /var/www, /Library/Webserver/Documents/  or XAMPP web directory depending on your OS and setup.
 
-### Important
+Download the warberry.db file locally and save it into **Reporting/** .
 
-The tool in case of MAC address filtering enumerates by default the subnets specified under ***/home/pi/WarBerry/warberry/discover***.
-This is done for the tool to run quicker.
+Change file Config.php under Reporting/WarberryReporting/SQLiteConnection/php to use the correct path of warberry.db
 
-
-### Running Status
-
-If you are connecting through SSH you can check the status of the attacks by checking the results_status file under Results. The file gets
-updated after each phase is completed.
-
-
-
+Run index.html under **Reporting/**

@@ -1,0 +1,79 @@
+CREATE TABLE common_war_info
+(
+    WarberryCommonID INTEGER PRIMARY KEY,
+    WarberrySession INTEGER,
+    CIDR TEXT,
+    netmask TEXT,
+    internal_IP TEXT,
+    external_ip TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES warberry_session (WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE war_blues
+(
+    Warberry_blueID INTEGER PRIMARY KEY,
+    WarberrySession INTEGER,
+    blueName TEXT,
+    blueDevice TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES warberry_session (WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+
+CREATE TABLE war_hostnames
+(
+    WarberryHostnamesID INTEGER PRIMARY KEY,
+    WarberrySession INTEGER,
+    hostname TEXT,
+    hostname_IP TEXT,
+    hostname_os TEXT,
+    hostname_domain TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES warberry_session (WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE war_ips
+(
+    WarberryIPID INTEGER PRIMARY KEY,
+    WarberrySession INTEGER,
+    ip TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES warberry_session (WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+
+CREATE TABLE war_scanners
+(
+    WarberryScannerID INTEGER PRIMARY KEY,
+    WarberrySession INTEGER,
+    scannerName TEXT,
+    host TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES warberry_session (WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+CREATE TABLE war_wifis
+(
+    Warberry_wifiID INTEGER PRIMARY KEY,
+    WarberrySession INTEGER,
+    wifiName TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES warberry_session (WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+
+CREATE TABLE warberry
+(
+    WarBerryID INTEGER PRIMARY KEY,
+    WarBerryName TEXT NOT NULL,
+    WarBerryModel TEXT NOT NULL
+);
+CREATE TABLE warberry_session
+(
+    WarberrySessionID INTEGER PRIMARY KEY,
+    WarberryID INTEGER,
+    WarberryStart INTEGER,
+    WarberryStatus TEXT,
+    WarberryEnd INTEGER
+);
+
+CREATE TABLE war_hashes
+(
+    WarberryHashID INTEGER,
+    WarberrySession TEXT,
+    client TEXT,
+    hash TEXT,
+    username TEXT,
+    FOREIGN KEY (WarberrySession) REFERENCES  warberry_session(WarberrySessionID) DEFERRABLE INITIALLY DEFERRED
+);
+
+

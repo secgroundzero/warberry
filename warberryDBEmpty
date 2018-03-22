@@ -1,0 +1,9 @@
+DROP TABLE common_war_info;
+DROP TABLE war_blues;
+DROP TABLE war_hostnames;
+DROP TABLE war_ips;
+DROP TABLE war_scanners;
+DROP TABLE war_wifis;
+DROP TABLE warberry;
+DROP TABLE warberry_session;
+DROP TABLE war_hashes;
