@@ -1,6 +1,5 @@
 *.pyc
 *.txt
-switch.py
-vlan.py
-resources.old/
-
+Tools/
+Results/
+warberry.db
