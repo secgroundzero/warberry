@@ -1,13 +1,13 @@
 apt-get update
 apt-get -y upgrade
 apt-get install -y git
+apt-get install -y python-pip 
 mkdir Results
 mkdir Tools
 pip install dnspython
 pip install setuptools
 apt-get install -y libssl-dev libffi-dev python-dev build-essential
 pip install crackmapexec
-apt-get install -y python-pip 
 apt-get install -y nbtscan 
 apt-get install -y python-scapy
 apt-get install -y wireshark-common 
