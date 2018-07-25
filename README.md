@@ -62,9 +62,12 @@ Run ```sudo bash setup.sh```
 
 #### To address the issue with ImportError: No module named dns follow these steps
 
-```git clone https://github.com/rthalley/dnspython
+```
+git clone https://github.com/rthalley/dnspython
 cd dnspython/
-python setup.py instal```
+python setup.py install
+
+```
 
 
 ### Reporting 
