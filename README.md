@@ -34,14 +34,14 @@ Options:
 
   --version                             show program's version number and exit
   -h, --help                            show this help message and exit
-  -p PACKETS, --packets=PACKETS         Number of Network Packets to capture. Default 20
-  -x TIME, --expire=TIME		Duration of packet capture. Default 20 seconds
-  -I IFACE, --interface=IFACE           Network Interface to use. Default: eth0
-  -N NAME, --name=NAME                  Hostname to use. Default: WarBerry
+  -p PACKETS,   --packets=PACKETS       Number of Network Packets to capture. Default 20
+  -x TIME,      --expire=TIME		Duration of packet capture. Default 20 seconds
+  -I IFACE,     --interface=IFACE       Network Interface to use. Default: eth0
+  -N NAME,      --name=NAME             Hostname to use. Default: WarBerry
   -i INTENSITY, --intensity=INTENSITY   Port scan intensity. Default: T4
   -Q, --quick                           Scan using threats. Default: Off
   -P, --poison                          Turn Poisoning on/off. Default: On
-  -t TIME, --time=TIME			Poisoning Duration. Default 900 seconds
+  -t TIME, 	--time=TIME		Poisoning Duration. Default 900 seconds
   -H, --hostname                        Do not Change WarBerry hostname Default: Off
   -e, --enumeration                     Disable Enumeration mode. Default: Off
   -B, --bluetooth                       Enable Bluetooth scanning. Default: Off
@@ -59,6 +59,12 @@ Options:
 
 Run ```sudo bash setup.sh```
 
+
+#### To address the issue with ImportError: No module named dns follow these steps
+
+```git clone https://github.com/rthalley/dnspython
+cd dnspython/
+python setup.py instal```
 
 
 ### Reporting 
