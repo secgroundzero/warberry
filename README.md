@@ -27,7 +27,6 @@ The author bears no responsibility for any misuse of the tool.
 To get a list of all options and switches use:
 
 ```python warberry.py -h```
-
 ```
 
 Options:
@@ -66,7 +65,6 @@ Run ```sudo bash setup.sh```
 git clone https://github.com/rthalley/dnspython
 cd dnspython/
 python setup.py install
-
 ```
 
 
