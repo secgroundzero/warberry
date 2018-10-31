@@ -40,4 +40,4 @@ mv enum4linux-0.8.9 enum4linux
 apt-get install sqlite3 libsqlite3-dev
 cd  ..
 sqlite3 warberry.db ".read warberryDBCreation"
-sudo python warberryModel.py
+python warberryModel.py
