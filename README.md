@@ -61,11 +61,17 @@ Run ```sudo bash setup.sh```
 
 #### To address the issue with ImportError: No module named dns follow these steps
 
+~~git clone https://github.com/rthalley/dnspython; 
+cd dnspython/; 
+python setup.py install~~
+
+
+#### As DNSPYTHON is now in version 2.x and it relies on python3, that cannot be used for warberry anymore. to fix that issue it is needed to deploy older version via pip (1.16.0 - the latest with python2)
+
 ```
-git clone https://github.com/rthalley/dnspython
-cd dnspython/
-python setup.py install
+pip install dnspython==1.16.0
 ```
+
 
 
 ### Reporting 
