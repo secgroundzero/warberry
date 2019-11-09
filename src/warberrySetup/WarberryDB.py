@@ -32,6 +32,7 @@ class WarberryDB:
     def insertSession(self):
         start = int(time.time())
         subprocess.call("sudo cat /proc/cpuinfo | grep Revision | awk {'print $3'} > Results/model", shell=True)
+	modelPI="Custom"
         with open('Results/model', 'r') as pi_model:
             for model in pi_model:
                 modelPI=model.strip()
